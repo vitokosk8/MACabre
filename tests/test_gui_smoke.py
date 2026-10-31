@@ -27,7 +27,7 @@ def test_main_window_builds_and_selects_dhcp_panel(qtbot=None):
     app = QApplication.instance() or QApplication([])
     window = MainWindow()
 
-    assert window.windowTitle().startswith("macabre")
+    assert window.windowTitle().startswith("MACabre")
     panel_types = [window._stack.widget(i) for i in range(window._stack.count())]
     assert any(isinstance(w, DhcpStarvationPanel) for w in panel_types)
 

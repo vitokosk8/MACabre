@@ -11,7 +11,7 @@ def main() -> int:
     from macabre.gui.main_window import MainWindow
 
     app = QApplication(sys.argv)
-    app.setApplicationName("macabre")
+    app.setApplicationName("MACabre")
     # Lets Linux desktops match the running window with macabre.desktop.
     QGuiApplication.setDesktopFileName("macabre")
     app.setWindowIcon(app_icon())

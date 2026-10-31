@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/logo.png" width="240" alt="macabre logo">
+  <img src="assets/logo.png" width="240" alt="MACabre logo">
 </p>
 
-<h1 align="center">macabre</h1>
+<h1 align="center">MACabre</h1>
 
 <p align="center"><strong>Layer 2 network auditing suite</strong></p>
 
@@ -54,6 +54,23 @@ To run the test suite (no root or display required):
 ```bash
 pytest
 ```
+
+## Lab test: DHCP starvation (Linux)
+
+`scripts/lab/dhcp_starvation_lab.sh` builds an isolated lab with two Linux network namespaces: a `dnsmasq` DHCP server and an attacker that runs the DHCP starvation attack. It never touches your real network interfaces.
+
+Requirements: Linux with root access, `iproute2`, `dnsmasq`, and the project environment.
+
+```bash
+sudo scripts/lab/dhcp_starvation_lab.sh               # 40 DISCOVER frames
+sudo FRAMES=200 scripts/lab/dhcp_starvation_lab.sh    # more frames
+```
+
+The script prints how many DISCOVER frames the server received, how many OFFERs it sent, and how many distinct addresses it offered. It also cleans up everything it created.
+
+**macOS:** the lab needs Linux network namespaces, so run it inside a Linux machine (for example, an [OrbStack](https://orbstack.dev/) Linux machine). Clone the repository inside that machine and create a new virtual environment there. Do not reuse the macOS `.venv`, because its binaries don't work on Linux.
+
+Only run the attack on networks you own or are authorized to test. Never run it on production VLANs.
 
 ## Intended use and legal notice
 

@@ -36,7 +36,7 @@ IMPLEMENTED = {("Layer 2", "DHCP", "Starvation")}
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.setWindowTitle(f"macabre {__version__}")
+        self.setWindowTitle(f"MACabre {__version__}")
         self.setWindowIcon(app_icon())
         self.resize(960, 600)
 
@@ -107,8 +107,8 @@ class MainWindow(QMainWindow):
     def _show_about(self) -> None:
         QMessageBox.about(
             self,
-            "About macabre",
-            f"macabre {__version__}\n\n"
+            "About MACabre",
+            f"MACabre {__version__}\n\n"
             "Layer 2 network auditing suite.\n"
             "Use only with explicit authorization.",
         )
