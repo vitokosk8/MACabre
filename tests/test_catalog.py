@@ -30,9 +30,11 @@ def test_catalog_has_expected_size():
     assert len({t.name for t in techniques}) == 126
 
 
-def test_implemented_flags_match_available_panels():
-    from macabre.catalog import FAMILIES
+def test_status_matches_available_panels():
+    from macabre.catalog import FAMILIES, Status
     from macabre.gui.main_window import PANELS
 
-    implemented = {t.name for f in FAMILIES for t in f.techniques if t.implemented}
-    assert implemented == set(PANELS)
+    with_code = {
+        t.name for f in FAMILIES for t in f.techniques if t.status is not Status.TO_IMPLEMENT
+    }
+    assert with_code == set(PANELS)
