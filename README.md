@@ -1,4 +1,10 @@
-# macabre
+<p align="center">
+  <img src="assets/logo.png" width="240" alt="macabre logo">
+</p>
+
+<h1 align="center">macabre</h1>
+
+<p align="center"><strong>Layer 2 network auditing suite</strong></p>
 
 A **layer 2** network auditing suite written in Python with [Scapy](https://scapy.net/) and a desktop graphical interface, targeting Linux.
 
