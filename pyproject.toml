@@ -23,5 +23,8 @@ macabre = "macabre.__main__:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+macabre = ["resources/icons/*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

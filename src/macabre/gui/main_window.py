@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from macabre import __version__
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
+from macabre.gui.icons import app_icon
 
 # Menu structure: category > protocol > attack. Attacks without a panel are
 # shown disabled until they are implemented.
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle(f"macabre {__version__}")
+        self.setWindowIcon(app_icon())
         self.resize(960, 600)
 
         self._pages: dict[tuple[str, ...], int] = {}

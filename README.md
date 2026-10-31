@@ -35,6 +35,12 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
+## Icons and desktop integration
+
+- `src/macabre/resources/icons/` contains the icon set used by the window and the application (PNG sizes and `.ico`).
+- `packaging/linux/macabre.desktop` is the desktop entry, and `packaging/linux/icons/hicolor/` has the icon theme files it refers to. Copy them to `~/.local/share/applications/` and `~/.local/share/icons/hicolor/` (or the system equivalents) to add macabre to the application menu.
+- To regenerate all icons from `assets/logo.png`: `python scripts/generate_icons.py` (requires Pillow).
+
 ## Running
 
 Sending raw frames requires root privileges:

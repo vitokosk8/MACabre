@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=macabre
+GenericName=Layer 2 network auditing
+Comment=Layer 2 network auditing suite
+Exec=macabre
+Icon=macabre
+Terminal=false
+Categories=Network;Security;
+Keywords=network;layer2;audit;dhcp;lldp;cdp;stp;
+StartupWMClass=macabre

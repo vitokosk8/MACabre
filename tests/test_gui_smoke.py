@@ -6,6 +6,18 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 pytest.importorskip("PySide6")
 
 
+def test_app_icon_has_all_sizes():
+    from PySide6.QtWidgets import QApplication
+
+    from macabre.gui.icons import ICON_SIZES, app_icon
+
+    QApplication.instance() or QApplication([])
+    icon = app_icon()
+
+    assert not icon.isNull()
+    assert {s.width() for s in icon.availableSizes()} >= set(ICON_SIZES)
+
+
 def test_main_window_builds_and_selects_dhcp_panel(qtbot=None):
     from PySide6.QtWidgets import QApplication
 
