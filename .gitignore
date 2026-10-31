@@ -7,12 +7,12 @@ venv/
 build/
 dist/
 
-# Editores / sistema
+# Editors / OS
 .vscode/
 .idea/
 .DS_Store
 
-# Capturas y salidas de pruebas
+# Captures and test output
 *.pcap
 *.pcapng
 captures/

@@ -1,38 +1,62 @@
 # macabre
 
-Suite de auditoría de red de **capa 2** escrita en Python con [Scapy](https://scapy.net/) y una interfaz gráfica de escritorio, pensada para Linux.
+A **layer 2** network auditing suite written in Python with [Scapy](https://scapy.net/) and a desktop graphical interface, targeting Linux.
 
-Inspirada en Yersinia, pero desarrollada desde cero (sin código GPL heredado) y orientada a:
+Inspired by Yersinia, but written from scratch (no GPL-licensed code inherited) and aimed at:
 
-- Construir tramas a medida (*handcrafted*) de forma sencilla.
-- Ejecutar pruebas de estrés y validación de protocolos de capa 2 en laboratorios y auditorías autorizadas.
-- Complementar otras herramientas como `iperf` y `hping3`.
-- Ser instalable como aplicación de escritorio y, en el futuro, integrarse en distribuciones de seguridad como Kali Linux.
+- Building custom (handcrafted) frames in a simple way.
+- Running stress tests and protocol validation for layer 2 in labs and authorized audits.
+- Complementing other tools such as `iperf` and `hping3`.
+- Being installable as a desktop application and, in the future, integrated into security distributions such as Kali Linux.
 
-## Estado
+## Status
 
-🚧 Fase inicial. Sin código funcional todavía.
+🚧 MVP in development.
 
-Hoja de ruta prevista:
+- ✅ PySide6 interface with an attack menu organized by category, protocol and attack (Layer 2 > DHCP > Starvation).
+- ✅ **DHCP starvation**: generates DHCPDISCOVER frames with random MAC addresses. Includes a "generate frames only" mode for testing without sending anything.
+- ⏳ LLDP, CDP and Spanning Tree attacks appear in the menu, disabled, until implemented.
+- ⏳ Handcrafted frame builder with preview.
+- ⏳ Packaging as an installable / executable application.
 
-1. **MVP**: interfaz gráfica con menús y submenús por tipo de ataque, con un único ataque implementado: **DHCP starvation**.
-2. Ataques de capa 2 adicionales: LLDP exhaustion, CDP, manipulación de BPDU (Spanning Tree), entre otros.
-3. Constructor de tramas handcrafted con vista previa.
-4. Empaquetado como aplicación instalable / ejecutable.
+Note on DHCP starvation: this version only sends DHCPDISCOVER messages. Exhausting the full pool also requires answering DHCPOFFER messages with DHCPREQUEST, which is planned as the next improvement.
 
-## Uso previsto y advertencia legal
+## Installation
 
-Esta herramienta genera tráfico que puede interrumpir el funcionamiento de una red (agotamiento de direcciones DHCP, inundación de tablas, cambios de topología STP, etc.).
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
-**Úsala únicamente en redes propias o en entornos para los que tengas autorización explícita por escrito.** El autor no se responsabiliza del uso indebido.
+## Running
 
-## Requisitos (previstos)
+Sending raw frames requires root privileges:
+
+```bash
+sudo .venv/bin/macabre
+```
+
+To run the test suite (no root or display required):
+
+```bash
+pytest
+```
+
+## Intended use and legal notice
+
+This tool generates traffic that can disrupt a network (DHCP address exhaustion, table flooding, STP topology changes, etc.).
+
+**Use it only on networks you own or for which you have explicit written authorization.** The author is not responsible for misuse.
+
+## Requirements
 
 - Linux
 - Python 3.10+
-- Scapy
-- Privilegios de root o `CAP_NET_RAW` para enviar tramas en crudo
+- [Scapy](https://scapy.net/) 2.5+
+- [PySide6](https://doc.qt.io/qtforpython-6/) 6.6+
+- Root privileges or `CAP_NET_RAW` to send raw frames
 
-## Licencia
+## License
 
-Pendiente de definir.
+Undecided.

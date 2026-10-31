@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "macabre"
+version = "0.1.0"
+description = "Layer 2 network auditing suite with Scapy and a PySide6 GUI"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Undecided" }
+dependencies = [
+    "scapy>=2.5",
+    "PySide6>=6.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+macabre = "macabre.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
