@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
 
 from macabre import __version__
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
+from macabre.gui.mac_flapping_panel import MacFlappingPanel
 from macabre.gui.mac_flooding_panel import MacFloodingPanel
 from macabre.gui.icons import app_icon
 
@@ -26,7 +27,7 @@ from macabre.gui.icons import app_icon
 ATTACK_TREE = {
     "Layer 2": {
         "DHCP": ["Starvation"],
-        "MAC / CAM": ["Flooding"],
+        "MAC / CAM": ["Flooding", "Flapping"],
         "LLDP": ["Exhaustion"],
         "CDP": ["Flooding"],
         "Spanning Tree": ["BPDU manipulation"],
@@ -37,6 +38,7 @@ ATTACK_TREE = {
 PANELS = {
     ("Layer 2", "DHCP", "Starvation"): DhcpStarvationPanel,
     ("Layer 2", "MAC / CAM", "Flooding"): MacFloodingPanel,
+    ("Layer 2", "MAC / CAM", "Flapping"): MacFlappingPanel,
 }
 IMPLEMENTED = set(PANELS)
 

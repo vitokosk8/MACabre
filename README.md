@@ -24,6 +24,7 @@ Goals:
 - ✅ Desktop interface with an attack menu organized by category, protocol and attack.
 - ✅ **DHCP starvation** (P1): full handshake (DISCOVER → OFFER → REQUEST). Validated in the lab: 20 of 20 addresses leased, and a legitimate client gets no offer. It also has a "discover only" option and a "generate frames only" mode.
 - ✅ **MAC flooding** (P1): sends frames with random source MACs to fill the switch address table. Validated in the lab: 500 of 500 addresses learned, and 500 of 500 unknown-unicast frames received on the victim port. See [docs/specs/P1.md](docs/specs/P1.md).
+- ✅ **MAC flapping** (P1): alternates frames with the same source MAC between two switch ports. Validated in the lab: the switch moved the target MAC 500 times for 500 frames, across 2 ports.
 - ⏳ All other techniques in the catalog (see [Roadmap](#roadmap)).
 - ⏳ Handcrafted frame builder with preview.
 - ⏳ Operating modes and safety controls (see [Operating modes](#operating-modes)).
@@ -37,7 +38,7 @@ Priorities are the order in which techniques are developed within the roadmap:
 
 | Phase | Focus | Techniques | Implemented |
 | --- | --- | ---: | ---: |
-| **P1** | Core: initial functionality | 41 | 2 |
+| **P1** | Core: initial functionality | 41 | 3 |
 | **P2** | Expansion | 45 | 0 |
 | **P3** | Specialized features | 40 | 0 |
 
@@ -112,6 +113,8 @@ The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and
 The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
 
 A MAC flooding lab is also available: `sudo scripts/lab/mac_flooding_lab.sh`. It uses a Linux bridge as the switch and reports the addresses it learns and the flooded frames received by the victim port.
+
+A MAC flapping lab is available too: `sudo scripts/lab/mac_flapping_lab.sh`. It attaches two attacker ports to the same bridge and counts how many times the switch moves the target MAC between them.
 
 **macOS:** the lab needs Linux network namespaces, so run it inside a Linux machine (for example, an [OrbStack](https://orbstack.dev/) Linux machine). Clone the repository inside that machine and create a new virtual environment there. Do not reuse the macOS `.venv`, because its binaries don't work on Linux.
 

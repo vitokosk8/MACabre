@@ -154,12 +154,16 @@ class AttackPanel(QWidget):
         if not self._confirm_authorization():
             return
 
-        config = self._make_config(
-            self.iface_combo.currentText(),
-            self.count_spin.value(),
-            self.interval_spin.value(),
-            self.dry_run_check.isChecked(),
-        )
+        try:
+            config = self._make_config(
+                self.iface_combo.currentText(),
+                self.count_spin.value(),
+                self.interval_spin.value(),
+                self.dry_run_check.isChecked(),
+            )
+        except ValueError as exc:
+            QMessageBox.warning(self, "Invalid parameters", str(exc))
+            return
         self._worker = _AttackWorker(self._run_attack, config)
         self._worker.progress.connect(self._on_progress)
         self._worker.failed.connect(self._on_failed)
