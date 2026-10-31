@@ -110,7 +110,9 @@ class MainWindow(QMainWindow):
             "About MACabre",
             f"MACabre {__version__}\n\n"
             "Layer 2 network auditing suite.\n"
-            "Use only with explicit authorization.",
+            "Use only with explicit authorization.\n\n"
+            "Author: vitokosk8 Victor Bolaños Guerra\n"
+            "Copyright (c) 2026. See the LICENSE file for terms.",
         )
 
     # --- helpers ----------------------------------------------------------

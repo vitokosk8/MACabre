@@ -136,4 +136,4 @@ This tool generates traffic that can disrupt a network (DHCP address exhaustion,
 
 ## License
 
-Undecided.
+Copyright (c) 2026 vitokosk8 Victor Bolaños Guerra. Copying and distribution are free, with attribution to the author. Modifications require prior written permission. See [LICENSE](LICENSE) for the full terms.

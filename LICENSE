@@ -1,0 +1,51 @@
+MACabre License
+
+Copyright (c) 2026 vitokosk8 Victor Bolaños Guerra. All rights reserved.
+
+1. Grant
+
+Permission is granted, free of charge, to any person to copy and distribute
+the Software, in source or binary form, including for commercial purposes,
+subject to the conditions below.
+
+2. Attribution
+
+Every copy or distribution of the Software, in whole or in part, must:
+
+  a) retain this license text and the copyright notice above, and
+  b) credit the author as "vitokosk8 Victor Bolaños Guerra" as the author
+     of MACabre, in a visible place such as the README, the documentation,
+     the About dialog, or the package metadata.
+
+Attribution must be kept whenever the Software or any substantial part of
+it is distributed, including as part of another product or package.
+
+3. Modifications
+
+Copying and distribution are permitted for the Software as provided by the
+author. Modifications and derivative works are not permitted without prior
+written permission from the author.
+
+4. Authorized use
+
+The Software is a network auditing tool. It may only be used on networks
+that you own or for which you have explicit written authorization to test.
+Any other use is outside the scope of this license.
+
+5. No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+6. Limitation of liability
+
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE, INCLUDING ANY DISRUPTION
+OF NETWORK SERVICES CAUSED BY THE SOFTWARE.
+
+7. Termination
+
+Your rights under this license terminate automatically if you fail to comply
+with its conditions.
