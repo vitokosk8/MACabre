@@ -112,7 +112,9 @@ class MainWindow(QMainWindow):
             "Layer 2 network auditing suite.\n"
             "Use only with explicit authorization.\n\n"
             "Author: vitokosk8 Victor Bolaños Guerra\n"
-            "Copyright (c) 2026. See the LICENSE file for terms.",
+            "Original repository: https://github.com/vitokosk8/MACabre\n"
+            "Inspired by Yersinia: https://github.com/tomac/yersinia\n\n"
+            "Licensed under the Apache License 2.0. Copyright 2026.",
         )
 
     # --- helpers ----------------------------------------------------------

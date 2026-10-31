@@ -232,4 +232,5 @@ Wi-Fi deserves a separate module: deauthentication, disassociation, Evil Twin, W
 
 - MITRE ATT&CK T1557, Adversary-in-the-Middle: https://attack.mitre.org/techniques/T1557/
 - Cisco Layer 2 security documentation
+- Yersinia, layer 2 attack framework: https://github.com/tomac/yersinia
 - Allied Telesis, LAN Security Guide: https://www.alliedtelesis.com/sites/default/files/file/2022-02/lan_security_guide__andrew_riddell_revc3.pdf

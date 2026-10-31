@@ -1,0 +1,12 @@
+MACabre
+Copyright 2026 vitokosk8 Victor Bolaños Guerra
+
+Original repository: https://github.com/vitokosk8/MACabre
+
+MACabre is inspired by Yersinia, a layer 2 attack framework:
+https://github.com/tomac/yersinia
+
+If you distribute MACabre, or a work that is based on it, you must keep this
+NOTICE file (or an equivalent attribution in the documentation or the
+application's About screen) and credit the original author:
+"vitokosk8 Victor Bolaños Guerra, MACabre".

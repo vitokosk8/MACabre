@@ -8,7 +8,7 @@
 
 MACabre is a **layer 2** network auditing suite written in Python with [Scapy](https://scapy.net/) and a desktop graphical interface (PySide6), targeting Linux.
 
-It is inspired by Yersinia, but written from scratch (no GPL-licensed code inherited) and designed as a modular framework: discovery, passive analysis, validation of existing protections, and authorized active tests.
+It is inspired by [Yersinia](https://github.com/tomac/yersinia), but written from scratch (no code from Yersinia is included) and designed as a modular framework: discovery, passive analysis, validation of existing protections, and authorized active tests.
 
 Goals:
 
@@ -136,4 +136,14 @@ This tool generates traffic that can disrupt a network (DHCP address exhaustion,
 
 ## License
 
-Copyright (c) 2026 vitokosk8 Victor Bolaños Guerra. Copying and distribution are free, with attribution to the author. Modifications require prior written permission. See [LICENSE](LICENSE) for the full terms.
+MACabre is licensed under the [Apache License 2.0](LICENSE). You may use, copy, modify and distribute it, including commercially.
+
+Copyright 2026 vitokosk8 Victor Bolaños Guerra.
+
+If you distribute MACabre or a derivative work, keep the [NOTICE](NOTICE) file (or equivalent attribution) and credit the original author: **vitokosk8 Victor Bolaños Guerra, MACabre**. Apache 2.0 requires this for derivative works. Projects that are only inspired by MACabre are encouraged, but not required, to credit it.
+
+## Acknowledgements
+
+- [Yersinia](https://github.com/tomac/yersinia), the layer 2 attack framework that inspired this project.
+- [Scapy](https://scapy.net/), for packet crafting and sending.
+- [Qt for Python (PySide6)](https://doc.qt.io/qtforpython-6/), for the graphical interface.
