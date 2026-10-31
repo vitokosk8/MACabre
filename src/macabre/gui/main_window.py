@@ -1,4 +1,8 @@
-"""Main window: attack tree on the left, attack panel on the right."""
+"""Main window: attack menu on the left, attack panel on the right.
+
+The menu is generated from the attack catalog (macabre.catalog), so families
+and techniques always match docs/attack-catalog.md.
+"""
 
 from __future__ import annotations
 
@@ -17,30 +21,18 @@ from PySide6.QtWidgets import (
 )
 
 from macabre import __version__
+from macabre.catalog import FAMILIES
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
+from macabre.gui.icons import app_icon
 from macabre.gui.mac_flapping_panel import MacFlappingPanel
 from macabre.gui.mac_flooding_panel import MacFloodingPanel
-from macabre.gui.icons import app_icon
 
-# Menu structure: category > protocol > attack. Attacks without a panel are
-# shown disabled until they are implemented.
-ATTACK_TREE = {
-    "Layer 2": {
-        "DHCP": ["Starvation"],
-        "MAC / CAM": ["Flooding", "Flapping"],
-        "LLDP": ["Exhaustion"],
-        "CDP": ["Flooding"],
-        "Spanning Tree": ["BPDU manipulation"],
-    },
-}
-
-# Panels for implemented attacks, keyed by menu path.
+# Panels for implemented techniques, keyed by technique name from the catalog.
 PANELS = {
-    ("Layer 2", "DHCP", "Starvation"): DhcpStarvationPanel,
-    ("Layer 2", "MAC / CAM", "Flooding"): MacFloodingPanel,
-    ("Layer 2", "MAC / CAM", "Flapping"): MacFlappingPanel,
+    "DHCP Starvation": DhcpStarvationPanel,
+    "MAC Flooding / CAM Overflow": MacFloodingPanel,
+    "MAC Flapping": MacFlappingPanel,
 }
-IMPLEMENTED = set(PANELS)
 
 
 class MainWindow(QMainWindow):
@@ -50,7 +42,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(app_icon())
         self.resize(960, 600)
 
-        self._pages: dict[tuple[str, ...], int] = {}
+        self._pages: dict[str, int] = {}
         self._stack = QStackedWidget()
         self._tree = QTreeWidget()
         self._tree.setHeaderHidden(True)
@@ -71,29 +63,25 @@ class MainWindow(QMainWindow):
     def _build_tree(self) -> None:
         self._stack.addWidget(QLabel("Select an attack from the menu on the left."))
 
-        for category, protocols in ATTACK_TREE.items():
-            cat_item = QTreeWidgetItem([category])
-            self._tree.addTopLevelItem(cat_item)
-            for protocol, attacks in protocols.items():
-                proto_item = QTreeWidgetItem([protocol])
-                cat_item.addChild(proto_item)
-                for attack in attacks:
-                    key = (category, protocol, attack)
-                    attack_item = QTreeWidgetItem([attack])
-                    attack_item.setData(0, Qt.ItemDataRole.UserRole, key)
-                    proto_item.addChild(attack_item)
-                    if key in IMPLEMENTED:
-                        page = self._create_page(key)
-                        self._pages[key] = self._stack.addWidget(page)
-                    else:
-                        attack_item.setDisabled(True)
-                        attack_item.setText(0, f"{attack} (coming soon)")
+        for family in FAMILIES:
+            family_item = QTreeWidgetItem([family.name])
+            self._tree.addTopLevelItem(family_item)
+            for technique in family.techniques:
+                item = QTreeWidgetItem([technique.name])
+                item.setData(0, Qt.ItemDataRole.UserRole, technique.name)
+                family_item.addChild(item)
+                if technique.name in PANELS:
+                    self._pages[technique.name] = self._stack.addWidget(
+                        self._create_page(technique.name)
+                    )
+                else:
+                    item.setDisabled(True)
+                    item.setText(0, f"{technique.name} (planned)")
 
         self._tree.expandAll()
 
-    def _create_page(self, key: tuple[str, ...]) -> QWidget:
-        panel_class = PANELS.get(key)
-        return panel_class() if panel_class else QLabel("Coming soon.")
+    def _create_page(self, name: str) -> QWidget:
+        return PANELS[name]()
 
     def _build_menus(self) -> None:
         file_menu = self.menuBar().addMenu("&File")
@@ -109,9 +97,9 @@ class MainWindow(QMainWindow):
     def _on_selection_changed(self, current: QTreeWidgetItem | None, _previous) -> None:
         if current is None:
             return
-        key = current.data(0, Qt.ItemDataRole.UserRole)
-        if key in self._pages:
-            self._stack.setCurrentIndex(self._pages[key])
+        name = current.data(0, Qt.ItemDataRole.UserRole)
+        if name in self._pages:
+            self._stack.setCurrentIndex(self._pages[name])
 
     def _show_about(self) -> None:
         QMessageBox.about(
