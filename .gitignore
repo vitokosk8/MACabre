@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Editores / sistema
+.vscode/
+.idea/
+.DS_Store
+
+# Capturas y salidas de pruebas
+*.pcap
+*.pcapng
+captures/
