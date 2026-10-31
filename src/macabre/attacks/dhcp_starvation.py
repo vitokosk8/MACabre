@@ -19,7 +19,8 @@ from typing import Any
 from scapy.all import BOOTP, DHCP, UDP, IP, AsyncSniffer, Ether, sendp
 from scapy.packet import Packet
 
-BROADCAST_MAC = "ff:ff:ff:ff:ff:ff"
+from macabre.attacks.common import BROADCAST_MAC, random_mac
+
 CLIENT_PORT = 68
 SERVER_PORT = 67
 GRACE_PERIOD = 10.0         # max seconds to wait for late OFFERs after the last frame
@@ -48,13 +49,6 @@ class Offer:
     mac: str
     yiaddr: str
     server_id: str
-
-
-def random_mac(rng: random.Random) -> str:
-    """Random unicast, locally administered MAC address (LAA bit set)."""
-    octets = [rng.randrange(256) for _ in range(6)]
-    octets[0] = (octets[0] & 0xFE) | 0x02
-    return ":".join(f"{o:02x}" for o in octets)
 
 
 def _chaddr_to_mac(chaddr: bytes) -> str:

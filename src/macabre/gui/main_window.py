@@ -13,10 +13,12 @@ from PySide6.QtWidgets import (
     QStackedWidget,
     QTreeWidget,
     QTreeWidgetItem,
+    QWidget,
 )
 
 from macabre import __version__
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
+from macabre.gui.mac_flooding_panel import MacFloodingPanel
 from macabre.gui.icons import app_icon
 
 # Menu structure: category > protocol > attack. Attacks without a panel are
@@ -24,13 +26,19 @@ from macabre.gui.icons import app_icon
 ATTACK_TREE = {
     "Layer 2": {
         "DHCP": ["Starvation"],
+        "MAC / CAM": ["Flooding"],
         "LLDP": ["Exhaustion"],
         "CDP": ["Flooding"],
         "Spanning Tree": ["BPDU manipulation"],
     },
 }
 
-IMPLEMENTED = {("Layer 2", "DHCP", "Starvation")}
+# Panels for implemented attacks, keyed by menu path.
+PANELS = {
+    ("Layer 2", "DHCP", "Starvation"): DhcpStarvationPanel,
+    ("Layer 2", "MAC / CAM", "Flooding"): MacFloodingPanel,
+}
+IMPLEMENTED = set(PANELS)
 
 
 class MainWindow(QMainWindow):
@@ -81,10 +89,9 @@ class MainWindow(QMainWindow):
 
         self._tree.expandAll()
 
-    def _create_page(self, key: tuple[str, ...]) -> QLabel | DhcpStarvationPanel:
-        if key == ("Layer 2", "DHCP", "Starvation"):
-            return DhcpStarvationPanel()
-        return QLabel("Coming soon.")
+    def _create_page(self, key: tuple[str, ...]) -> QWidget:
+        panel_class = PANELS.get(key)
+        return panel_class() if panel_class else QLabel("Coming soon.")
 
     def _build_menus(self) -> None:
         file_menu = self.menuBar().addMenu("&File")
