@@ -20,12 +20,12 @@ Inspired by Yersinia, but written from scratch (no GPL-licensed code inherited) 
 🚧 MVP in development.
 
 - ✅ PySide6 interface with an attack menu organized by category, protocol and attack (Layer 2 > DHCP > Starvation).
-- ✅ **DHCP starvation**: generates DHCPDISCOVER frames with random MAC addresses. Includes a "generate frames only" mode for testing without sending anything.
+- ✅ **DHCP starvation**: sends DHCPDISCOVER frames with random MAC addresses, answers each DHCPOFFER with a DHCPREQUEST, and so creates leases until the pool is exhausted. Validated in the lab: 20 of 20 addresses leased, and a legitimate client gets no offer. It also has a "discover only" option and a "generate frames only" mode for testing without sending anything.
 - ⏳ LLDP, CDP and Spanning Tree attacks appear in the menu, disabled, until implemented.
 - ⏳ Handcrafted frame builder with preview.
 - ⏳ Packaging as an installable / executable application.
 
-Note on DHCP starvation: this version only sends DHCPDISCOVER messages. Exhausting the full pool also requires answering DHCPOFFER messages with DHCPREQUEST, which is planned as the next improvement.
+Note on DHCP starvation: a server can take several seconds to send an OFFER (for example, after an ARP check), so the attack keeps answering OFFERs for up to 10 seconds after the last DISCOVER.
 
 ## Installation
 
@@ -57,7 +57,7 @@ pytest
 
 ## Lab test: DHCP starvation (Linux)
 
-`scripts/lab/dhcp_starvation_lab.sh` builds an isolated lab with two Linux network namespaces: a `dnsmasq` DHCP server and an attacker that runs the DHCP starvation attack. It never touches your real network interfaces.
+`scripts/lab/dhcp_starvation_lab.sh` builds an isolated lab with two Linux network namespaces: a `dnsmasq` DHCP server with a pool of 20 addresses, and an attacker that runs the full DHCP starvation handshake. It never touches your real network interfaces.
 
 Requirements: Linux with root access, `iproute2`, `dnsmasq`, and the project environment.
 
@@ -66,7 +66,9 @@ sudo scripts/lab/dhcp_starvation_lab.sh               # 40 DISCOVER frames
 sudo FRAMES=200 scripts/lab/dhcp_starvation_lab.sh    # more frames
 ```
 
-The script prints how many DISCOVER frames the server received, how many OFFERs it sent, and how many distinct addresses it offered. It also cleans up everything it created.
+The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and what the server did (DISCOVER, OFFER, REQUEST, ACK, distinct addresses leased). Then a legitimate client sends a DISCOVER, and the script reports whether it received an offer. It cleans up everything it created.
+
+The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
 
 **macOS:** the lab needs Linux network namespaces, so run it inside a Linux machine (for example, an [OrbStack](https://orbstack.dev/) Linux machine). Clone the repository inside that machine and create a new virtual environment there. Do not reuse the macOS `.venv`, because its binaries don't work on Linux.
 

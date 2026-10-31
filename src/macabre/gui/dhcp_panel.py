@@ -22,7 +22,11 @@ from PySide6.QtWidgets import (
 )
 from scapy.all import get_if_list
 
-from macabre.attacks.dhcp_starvation import DhcpStarvationConfig, run_starvation
+from macabre.attacks.dhcp_starvation import (
+    DhcpStarvationConfig,
+    StarvationStats,
+    run_starvation,
+)
 
 AUTHORIZATION_TEXT = (
     "I confirm that I have explicit authorization to run DHCP stress tests "
@@ -31,7 +35,7 @@ AUTHORIZATION_TEXT = (
 
 
 class _StarvationWorker(QThread):
-    progress = Signal(int)
+    progress = Signal(object)  # StarvationStats
     failed = Signal(str)
 
     def __init__(self, config: DhcpStarvationConfig) -> None:
@@ -85,6 +89,8 @@ class DhcpStarvationPanel(QWidget):
         self.interval_spin.setSuffix(" s")
         self.interval_spin.setValue(0.05)
 
+        self.request_check = QCheckBox("Complete handshake (send REQUEST for each OFFER)")
+        self.request_check.setChecked(True)
         self.dry_run_check = QCheckBox("Generate frames only (do not send)")
 
         params = QGroupBox("Parameters")
@@ -92,6 +98,7 @@ class DhcpStarvationPanel(QWidget):
         form.addRow("Interface:", iface_row)
         form.addRow("Number of DISCOVER frames:", self.count_spin)
         form.addRow("Interval between frames:", self.interval_spin)
+        form.addRow("", self.request_check)
         form.addRow("", self.dry_run_check)
 
         self.start_button = QPushButton("Start")
@@ -138,6 +145,7 @@ class DhcpStarvationPanel(QWidget):
             iface=self.iface_combo.currentText(),
             count=self.count_spin.value(),
             interval=self.interval_spin.value(),
+            request=self.request_check.isChecked(),
             dry_run=self.dry_run_check.isChecked(),
         )
         self._worker = _StarvationWorker(config)
@@ -167,8 +175,10 @@ class DhcpStarvationPanel(QWidget):
 
     # --- worker signals ---------------------------------------------------
 
-    def _on_progress(self, generated: int) -> None:
-        self.status_label.setText(f"DISCOVER frames generated: {generated}")
+    def _on_progress(self, stats: StarvationStats) -> None:
+        self.status_label.setText(
+            f"DISCOVER: {stats.discovers}   OFFER: {stats.offers}   REQUEST: {stats.requests}"
+        )
 
     def _on_failed(self, message: str) -> None:
         self._log(f"Error: {message}")
@@ -187,6 +197,7 @@ class DhcpStarvationPanel(QWidget):
         self.iface_combo.setEnabled(not running)
         self.count_spin.setEnabled(not running)
         self.interval_spin.setEnabled(not running)
+        self.request_check.setEnabled(not running)
         self.dry_run_check.setEnabled(not running)
 
     def _log(self, message: str) -> None:
