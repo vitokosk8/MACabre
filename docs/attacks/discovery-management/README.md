@@ -7,9 +7,11 @@ Back to the [attack theory index](../README.md).
 | Technique | Priority | Theory |
 | --- | --- | --- |
 | CDP Spoofing | P1 | [cdp-spoofing](cdp-spoofing.md) |
-| CDP Flooding | P2 | [cdp-flooding](cdp-flooding.md) |
+| CDP Flooding | P1 | [cdp-flooding](cdp-flooding.md) |
 | LLDP Spoofing | P1 | [lldp-spoofing](lldp-spoofing.md) |
-| LLDP Flooding | P2 | [lldp-flooding](lldp-flooding.md) |
+| LLDP Flooding | P1 | [lldp-flooding](lldp-flooding.md) |
+| MNDP Spoofing | P1 | [mndp-spoofing](mndp-spoofing.md) |
+| MNDP Flooding | P1 | [mndp-flooding](mndp-flooding.md) |
 | LLDP-MED Policy Spoofing | P2 | [lldp-med-policy-spoofing](lldp-med-policy-spoofing.md) |
 | VTP Spoofing | P2 | [vtp-spoofing](vtp-spoofing.md) |
 | VTP Revision Abuse | P2 | [vtp-revision-abuse](vtp-revision-abuse.md) |

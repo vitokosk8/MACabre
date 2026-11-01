@@ -8,8 +8,8 @@ Priorities are the order in which techniques are developed:
 
 | Phase | Focus | Techniques |
 | --- | --- | ---: |
-| **P1** | Core: initial functionality | 41 |
-| **P2** | Expansion | 45 |
+| **P1** | Core: initial functionality | 37 |
+| **P2** | Expansion | 51 |
 | **P3** | Specialized features | 40 |
 
 Specifications are written one phase at a time under [specs/](specs/), starting with [P1](specs/P1.md). Each technique documents its protocol, technical reference, requirements, compatibility, expected behavior, evidence, impact, mitigations and execution risk. Its theory lives in [attacks/](attacks/README.md).
@@ -20,7 +20,7 @@ Releases group the attack families by milestone. A release can contain P1, P2 an
 
 | Release | Families |
 | --- | --- |
-| **MVP** | MAC address & CAM table, ARP, VLAN & 802.1Q, Spanning Tree, Discovery (CDP, LLDP) |
+| **MVP** | MAC address & CAM table, ARP, VLAN & 802.1Q, Spanning Tree, Discovery (CDP, LLDP, MNDP) |
 | **v0.2** | DHCPv4 & DHCPv6, IPv6 Neighbor Discovery & SLAAC |
 | **v0.3** | 802.1X / EAPOL / NAC, Link Aggregation (LACP), L2 Multicast (IGMP) |
 | **v0.4** | MACsec, Carrier Ethernet (PPPoE, QinQ) and Provider OAM |

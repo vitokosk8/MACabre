@@ -94,7 +94,7 @@ DHCP gives hosts their addresses and configuration. Its trust model is based on 
 | DHCP Option Manipulation | P2 | [dhcp-option-manipulation](dhcpv4-dhcpv6/dhcp-option-manipulation.md) |
 | DHCP Relay / Option 82 Abuse | P2 | [dhcp-relay-option-82-abuse](dhcpv4-dhcpv6/dhcp-relay-option-82-abuse.md) |
 | DHCP Snooping Binding Abuse | P3 | [dhcp-snooping-binding-abuse](dhcpv4-dhcpv6/dhcp-snooping-binding-abuse.md) |
-| Rogue DHCPv6 Server | P1 | [rogue-dhcpv6-server](dhcpv4-dhcpv6/rogue-dhcpv6-server.md) |
+| Rogue DHCPv6 Server | P2 | [rogue-dhcpv6-server](dhcpv4-dhcpv6/rogue-dhcpv6-server.md) |
 | DHCPv6 Starvation | P2 | [dhcpv6-starvation](dhcpv4-dhcpv6/dhcpv6-starvation.md) |
 | DHCPv6 Prefix Delegation Abuse | P3 | [dhcpv6-prefix-delegation-abuse](dhcpv4-dhcpv6/dhcpv6-prefix-delegation-abuse.md) |
 
@@ -104,14 +104,14 @@ IPv6 uses Neighbor Discovery in place of ARP, and router advertisements for addr
 
 | Technique | Priority | Theory |
 | --- | --- | --- |
-| Neighbor Advertisement Spoofing | P1 | [neighbor-advertisement-spoofing](ipv6-nd-slaac/neighbor-advertisement-spoofing.md) |
-| Neighbor Solicitation Spoofing | P1 | [neighbor-solicitation-spoofing](ipv6-nd-slaac/neighbor-solicitation-spoofing.md) |
-| NDP Cache Poisoning | P1 | [ndp-cache-poisoning](ipv6-nd-slaac/ndp-cache-poisoning.md) |
-| Rogue Router Advertisement | P1 | [rogue-router-advertisement](ipv6-nd-slaac/rogue-router-advertisement.md) |
-| Router Advertisement Flooding | P1 | [router-advertisement-flooding](ipv6-nd-slaac/router-advertisement-flooding.md) |
+| Neighbor Advertisement Spoofing | P2 | [neighbor-advertisement-spoofing](ipv6-nd-slaac/neighbor-advertisement-spoofing.md) |
+| Neighbor Solicitation Spoofing | P2 | [neighbor-solicitation-spoofing](ipv6-nd-slaac/neighbor-solicitation-spoofing.md) |
+| NDP Cache Poisoning | P2 | [ndp-cache-poisoning](ipv6-nd-slaac/ndp-cache-poisoning.md) |
+| Rogue Router Advertisement | P2 | [rogue-router-advertisement](ipv6-nd-slaac/rogue-router-advertisement.md) |
+| Router Advertisement Flooding | P2 | [router-advertisement-flooding](ipv6-nd-slaac/router-advertisement-flooding.md) |
 | Router Solicitation Flooding | P2 | [router-solicitation-flooding](ipv6-nd-slaac/router-solicitation-flooding.md) |
-| SLAAC Prefix Spoofing | P1 | [slaac-prefix-spoofing](ipv6-nd-slaac/slaac-prefix-spoofing.md) |
-| SLAAC Configuration Abuse | P1 | [slaac-configuration-abuse](ipv6-nd-slaac/slaac-configuration-abuse.md) |
+| SLAAC Prefix Spoofing | P2 | [slaac-prefix-spoofing](ipv6-nd-slaac/slaac-prefix-spoofing.md) |
+| SLAAC Configuration Abuse | P2 | [slaac-configuration-abuse](ipv6-nd-slaac/slaac-configuration-abuse.md) |
 | Duplicate Address Detection DoS | P2 | [duplicate-address-detection-dos](ipv6-nd-slaac/duplicate-address-detection-dos.md) |
 | NDP Neighbor Cache Exhaustion | P2 | [ndp-neighbor-cache-exhaustion](ipv6-nd-slaac/ndp-neighbor-cache-exhaustion.md) |
 | Redirect Spoofing | P2 | [redirect-spoofing](ipv6-nd-slaac/redirect-spoofing.md) |
@@ -142,9 +142,11 @@ Protocols that announce devices, settings and link health to their neighbors.
 | Technique | Priority | Theory |
 | --- | --- | --- |
 | CDP Spoofing | P1 | [cdp-spoofing](discovery-management/cdp-spoofing.md) |
-| CDP Flooding | P2 | [cdp-flooding](discovery-management/cdp-flooding.md) |
+| CDP Flooding | P1 | [cdp-flooding](discovery-management/cdp-flooding.md) |
 | LLDP Spoofing | P1 | [lldp-spoofing](discovery-management/lldp-spoofing.md) |
-| LLDP Flooding | P2 | [lldp-flooding](discovery-management/lldp-flooding.md) |
+| LLDP Flooding | P1 | [lldp-flooding](discovery-management/lldp-flooding.md) |
+| MNDP Spoofing | P1 | [mndp-spoofing](discovery-management/mndp-spoofing.md) |
+| MNDP Flooding | P1 | [mndp-flooding](discovery-management/mndp-flooding.md) |
 | LLDP-MED Policy Spoofing | P2 | [lldp-med-policy-spoofing](discovery-management/lldp-med-policy-spoofing.md) |
 | VTP Spoofing | P2 | [vtp-spoofing](discovery-management/vtp-spoofing.md) |
 | VTP Revision Abuse | P2 | [vtp-revision-abuse](discovery-management/vtp-revision-abuse.md) |

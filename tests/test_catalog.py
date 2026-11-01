@@ -26,8 +26,8 @@ def test_catalog_has_expected_size():
 
     techniques = [t for f in FAMILIES for t in f.techniques]
     assert len(FAMILIES) == 13
-    assert len(techniques) == 126
-    assert len({t.name for t in techniques}) == 126
+    assert len(techniques) == 128
+    assert len({t.name for t in techniques}) == 128
 
 
 def test_status_matches_available_panels():

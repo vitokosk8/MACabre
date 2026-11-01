@@ -1,6 +1,6 @@
 # CDP Flooding
 
-**Family**: Discovery & Management Protocols · **Priority**: P2
+**Family**: Discovery & Management Protocols · **Priority**: P1
 
 ## What it abuses
 

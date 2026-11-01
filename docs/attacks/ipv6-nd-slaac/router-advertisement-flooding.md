@@ -1,6 +1,6 @@
 # Router Advertisement Flooding
 
-**Family**: IPv6 Neighbor Discovery & SLAAC · **Priority**: P1
+**Family**: IPv6 Neighbor Discovery & SLAAC · **Priority**: P2
 
 ## What it abuses
 

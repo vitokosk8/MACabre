@@ -1,6 +1,6 @@
 # Rogue DHCPv6 Server
 
-**Family**: DHCPv4 & DHCPv6 · **Priority**: P1
+**Family**: DHCPv4 & DHCPv6 · **Priority**: P2
 
 ## What it abuses
 

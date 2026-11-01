@@ -10,8 +10,8 @@ There is no closed, universal list of attacks. Variants depend on vendor, implem
 
 | Priority | Meaning | Techniques |
 | --- | --- | ---: |
-| P1 | Core: initial functionality | 41 |
-| P2 | Expansion | 45 |
+| P1 | Core: initial functionality | 37 |
+| P2 | Expansion | 51 |
 | P3 | Specialized features | 40 |
 
 Not every technique is reproducible on every device, and not every technique has a public implementation. Many modules will detect a vulnerable configuration, verify existing protections or reproduce the behavior in an isolated lab, instead of running the attack.
@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only, 99 to implement (126 techniques; P1: 18 of 41 tested).
+Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only, 101 to implement (128 techniques; P1: 18 of 37 tested).
 
 ## Techniques by category
 
@@ -103,7 +103,7 @@ Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only
 | DHCP Option Manipulation | Manipulating configuration options | P2 | 📋 To implement |
 | DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 📋 To implement |
 | DHCP Snooping Binding Abuse | Manipulating snooping bindings | P3 | 📋 To implement |
-| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P1 | 📋 To implement |
+| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 📋 To implement |
 | DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 📋 To implement |
 | DHCPv6 Prefix Delegation Abuse | Abusing prefix delegation | P3 | 📋 To implement |
 
@@ -111,14 +111,14 @@ Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| Neighbor Advertisement Spoofing | Forging NA messages | P1 | 📋 To implement |
-| Neighbor Solicitation Spoofing | Fraudulent NS requests | P1 | 📋 To implement |
-| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P1 | 📋 To implement |
-| Rogue Router Advertisement | Unauthorized RA messages | P1 | 📋 To implement |
-| Router Advertisement Flooding | Flooding with RA messages | P1 | 📋 To implement |
+| Neighbor Advertisement Spoofing | Forging NA messages | P2 | 📋 To implement |
+| Neighbor Solicitation Spoofing | Fraudulent NS requests | P2 | 📋 To implement |
+| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P2 | 📋 To implement |
+| Rogue Router Advertisement | Unauthorized RA messages | P2 | 📋 To implement |
+| Router Advertisement Flooding | Flooding with RA messages | P2 | 📋 To implement |
 | Router Solicitation Flooding | Flooding with RS requests | P2 | 📋 To implement |
-| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P1 | 📋 To implement |
-| SLAAC Configuration Abuse | Manipulating stateless autoconfiguration | P1 | 📋 To implement |
+| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P2 | 📋 To implement |
+| SLAAC Configuration Abuse | Manipulating stateless autoconfiguration | P2 | 📋 To implement |
 | Duplicate Address Detection DoS | Interfering with duplicate address detection | P2 | 📋 To implement |
 | NDP Neighbor Cache Exhaustion | Exhausting the neighbor cache | P2 | 📋 To implement |
 | Redirect Spoofing | Forged ICMPv6 Redirect messages | P2 | 📋 To implement |
@@ -140,14 +140,16 @@ Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only
 | Post-Authentication Session Hijacking | Abusing an already authorized session | P3 | 📋 To implement |
 | NAC VLAN Assignment Abuse | Manipulating authorization VLAN assignment | P3 | 📋 To implement |
 
-### Discovery & Management Protocols (11)
+### Discovery & Management Protocols (13)
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
 | CDP Spoofing | Forged CDP advertisements | P1 | 📋 To implement |
-| CDP Flooding | Flooding with CDP messages | P2 | 📋 To implement |
+| CDP Flooding | Flooding with CDP messages | P1 | 📋 To implement |
 | LLDP Spoofing | Spoofing LLDP information | P1 | 📋 To implement |
-| LLDP Flooding | Flooding with LLDP advertisements | P2 | 📋 To implement |
+| LLDP Flooding | Flooding with LLDP advertisements | P1 | 📋 To implement |
+| MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 📋 To implement |
+| MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 📋 To implement |
 | LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 📋 To implement |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
