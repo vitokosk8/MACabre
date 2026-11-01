@@ -64,7 +64,7 @@ FAMILIES: tuple[Family, ...] = (
     Family(
         name='VLAN & IEEE 802.1Q',
         techniques=(
-            Technique(name='Switch Spoofing / DTP Spoofing', description='Improper trunk negotiation', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='Switch Spoofing / DTP Spoofing', description='Improper trunk negotiation', priority='P1', status=Status.IMPLEMENTED),
             Technique(name='VLAN Hopping', description='Unauthorized access between VLANs', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='Double-Tagging', description='Double 802.1Q tag insertion', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='Native VLAN Abuse', description='Exploiting the native VLAN', priority='P1', status=Status.TO_IMPLEMENT),

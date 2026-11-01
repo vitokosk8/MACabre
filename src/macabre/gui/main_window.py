@@ -24,6 +24,7 @@ from macabre import __version__
 from macabre.catalog import FAMILIES
 from macabre.gui.arp_gateway_impersonation_panel import ArpGatewayImpersonationPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
+from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.arp_request_flooding_panel import ArpRequestFloodingPanel
 from macabre.gui.arp_poisoning_panel import ArpPoisoningPanel
 from macabre.gui.arp_spoofing_panel import ArpSpoofingPanel
@@ -48,6 +49,7 @@ PANELS = {
     "ARP Request Flooding": ArpRequestFloodingPanel,
     "ARP Reply Flooding": ArpReplyFloodingPanel,
     "ARP-Based Gateway Impersonation": ArpGatewayImpersonationPanel,
+    "Switch Spoofing / DTP Spoofing": SwitchSpoofingPanel,
 }
 
 
