@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 12 tested, 0 tested in GUI, 0 not working yet, 5 implemented only, 109 to implement (126 techniques; P1: 12 of 41 tested).
+Current count: 13 tested, 0 tested in GUI, 0 not working yet, 5 implemented only, 108 to implement (126 techniques; P1: 13 of 41 tested).
 
 ## Techniques by category
 
@@ -77,7 +77,7 @@ Current count: 12 tested, 0 tested in GUI, 0 not working yet, 5 implemented only
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
 | BPDU Spoofing | Forging BPDUs | P1 | 🧪 Tested |
-| Root Bridge Takeover | Malicious root bridge election | P1 | 📋 To implement |
+| Root Bridge Takeover | Malicious root bridge election | P1 | 🧪 Tested |
 | Root Bridge Impersonation | Impersonating the root bridge | P1 | 📋 To implement |
 | Topology Change Flooding | Flooding topology change notifications | P1 | 📋 To implement |
 | TCN Spoofing | Fraudulent topology change notifications | P1 | 📋 To implement |
