@@ -65,7 +65,7 @@ def test_menu_is_built_from_catalog():
         tree.topLevelItem(i).child(j)
         for i, f in enumerate(FAMILIES)
         for j, t in enumerate(f.techniques)
-        if t.name == "MAC Cloning"
+        if t.name == "Static MAC Impersonation"
     )
     assert cloning.isDisabled()
 

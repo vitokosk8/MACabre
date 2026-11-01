@@ -55,6 +55,8 @@ class AttackPanel(QWidget):
     title: str = ""
     description: str = ""
     default_interval: float = 0.05
+    show_frame_controls: bool = True  # hide the frame count and interval rows if False
+    dry_run_label: str = "Generate frames only (do not send)"
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -105,7 +107,7 @@ class AttackPanel(QWidget):
         self.interval_spin.setSuffix(" s")
         self.interval_spin.setValue(self.default_interval)
 
-        self.dry_run_check = QCheckBox("Generate frames only (do not send)")
+        self.dry_run_check = QCheckBox(self.dry_run_label)
 
         params = QGroupBox("Parameters")
         form = QFormLayout(params)
@@ -114,6 +116,10 @@ class AttackPanel(QWidget):
         form.addRow("Interval between frames:", self.interval_spin)
         self._add_extra_controls(form)
         form.addRow("", self.dry_run_check)
+        if not self.show_frame_controls:
+            for widget in (self.count_spin, self.interval_spin):
+                form.labelForField(widget).setVisible(False)
+                widget.setVisible(False)
 
         self.start_button = QPushButton("Start")
         self.stop_button = QPushButton("Stop")
@@ -169,7 +175,7 @@ class AttackPanel(QWidget):
         self._worker.failed.connect(self._on_failed)
         self._worker.finished.connect(self._on_finished)
 
-        mode = "frame generation only" if config.dry_run else "live sending"
+        mode = "dry run" if config.dry_run else "live"
         self._log(f"Starting on {config.iface} ({mode}).")
         self._set_running(True)
         self._worker.start()

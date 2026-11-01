@@ -26,6 +26,7 @@ Goals:
 - ✅ **MAC flooding** (P1): sends frames with random source MACs to fill the switch address table. Validated in the lab: 500 of 500 addresses learned, and 500 of 500 unknown-unicast frames received on the victim port. See [docs/specs/P1.md](docs/specs/P1.md).
 - ✅ **MAC flapping** (P1): alternates frames with the same source MAC between two switch ports. Validated in the lab: the switch moved the target MAC 500 times for 500 frames, across 2 ports.
 - ✅ **MAC address spoofing** (P1): sends frames with a target's source MAC, so the switch moves that address to the attacker's port. Validated in the lab: the switch port changed from `sw-t` to `sw-a`, and the attacker received 20 of 20 frames the target would have received.
+- ✅ **MAC cloning** (P1): changes this interface's MAC address to an authorized device's, and restores it when stopped. Validated in the lab: with a port that admits only the authorized MAC, the attacker's own frames were dropped (0 of 20) and the cloned frames were delivered (20 of 20).
 - ⏳ All other techniques in the catalog (see [Roadmap](#roadmap)).
 - ⏳ Handcrafted frame builder with preview.
 - ⏳ Operating modes and safety controls (see [Operating modes](#operating-modes)).
@@ -39,7 +40,7 @@ Priorities are the order in which techniques are developed within the roadmap:
 
 | Phase | Focus | Techniques | Implemented |
 | --- | --- | ---: | ---: |
-| **P1** | Core: initial functionality | 41 | 4 |
+| **P1** | Core: initial functionality | 41 | 5 |
 | **P2** | Expansion | 45 | 0 |
 | **P3** | Specialized features | 40 | 0 |
 
@@ -114,6 +115,8 @@ The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and
 The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
 
 A MAC flooding lab is also available: `sudo scripts/lab/mac_flooding_lab.sh`. It uses a Linux bridge as the switch and reports the addresses it learns and the flooded frames received by the victim port.
+
+A MAC cloning lab is available too: `sudo scripts/lab/mac_cloning_lab.sh`. It emulates port security with one allowed MAC and checks the frames before and after cloning.
 
 A MAC spoofing lab is available too: `sudo scripts/lab/mac_spoofing_lab.sh`. It shows the switch port of the target MAC before and after the spoofing.
 

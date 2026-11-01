@@ -26,6 +26,7 @@ from macabre.gui.dhcp_panel import DhcpStarvationPanel
 from macabre.gui.icons import app_icon
 from macabre.gui.mac_flapping_panel import MacFlappingPanel
 from macabre.gui.mac_flooding_panel import MacFloodingPanel
+from macabre.gui.mac_cloning_panel import MacCloningPanel
 from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -34,6 +35,7 @@ PANELS = {
     "MAC Flooding / CAM Overflow": MacFloodingPanel,
     "MAC Flapping": MacFlappingPanel,
     "MAC Address Spoofing": MacSpoofingPanel,
+    "MAC Cloning": MacCloningPanel,
 }
 
 

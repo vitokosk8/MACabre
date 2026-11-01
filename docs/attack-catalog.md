@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 4 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 122 to implement (126 techniques; P1: 4 of 41 tested).
+Current count: 5 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 121 to implement (126 techniques; P1: 5 of 41 tested).
 
 ## Techniques by category
 
@@ -37,7 +37,7 @@ Current count: 4 tested, 0 tested in GUI, 0 not working yet, 0 implemented only,
 | MAC Address Spoofing | Forging MAC addresses | P1 | 🧪 Tested |
 | MAC Flooding / CAM Overflow | Saturating the switch learning table | P1 | 🧪 Tested |
 | MAC Flapping | Repeated changes of a MAC address location | P1 | 🧪 Tested |
-| MAC Cloning | Cloning the identity of a device | P1 | 📋 To implement |
+| MAC Cloning | Cloning the identity of a device | P1 | 🧪 Tested |
 | Static MAC Impersonation | Impersonating a statically registered MAC | P2 | 📋 To implement |
 | Port Security Exhaustion | Exhausting port security learning limits | P2 | 📋 To implement |
 | MAC Move / Mobility Abuse | Abusing MAC mobility mechanisms | P2 | 📋 To implement |
