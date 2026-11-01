@@ -24,6 +24,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Gratuitous ARP spoofing](attacks/arp/gratuitous-arp-spoofing.md) | `gratuitous_arp_lab.sh` | Two victims' ARP caches changed by one broadcast announcement |
 | [ARP request flooding](attacks/arp/arp-request-flooding.md) | `arp_request_flooding_lab.sh` | Flooded requests received by the victim, and the gateway's neighbor table growth |
 | [ARP reply flooding](attacks/arp/arp-reply-flooding.md) | `arp_reply_flooding_lab.sh` | Replies received by the victim, and whether its neighbor table changes |
+| [ARP-based gateway impersonation](attacks/arp/arp-based-gateway-impersonation.md) | `arp_gateway_impersonation_lab.sh` | Both victims' cached MAC for the gateway, before and after, and the attacker's forwarding setting |
 
 Run any of them with `sudo`, from the project root:
 
