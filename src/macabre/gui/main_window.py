@@ -38,6 +38,8 @@ from macabre.gui.cdp_spoofing_panel import CdpSpoofingPanel
 from macabre.gui.cdp_flooding_panel import CdpFloodingPanel
 from macabre.gui.lldp_spoofing_panel import LldpSpoofingPanel
 from macabre.gui.lldp_flooding_panel import LldpFloodingPanel
+from macabre.gui.mndp_spoofing_panel import MndpSpoofingPanel
+from macabre.gui.mndp_flooding_panel import MndpFloodingPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -88,6 +90,8 @@ PANELS = {
     "CDP Flooding": CdpFloodingPanel,
     "LLDP Spoofing": LldpSpoofingPanel,
     "LLDP Flooding": LldpFloodingPanel,
+    "MNDP Spoofing": MndpSpoofingPanel,
+    "MNDP Flooding": MndpFloodingPanel,
 }
 
 
