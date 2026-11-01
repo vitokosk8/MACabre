@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 11 tested, 0 tested in GUI, 0 not working yet, 4 implemented only, 111 to implement (126 techniques; P1: 11 of 41 tested).
+Current count: 11 tested, 0 tested in GUI, 0 not working yet, 5 implemented only, 110 to implement (126 techniques; P1: 11 of 41 tested).
 
 ## Techniques by category
 
@@ -65,7 +65,7 @@ Current count: 11 tested, 0 tested in GUI, 0 not working yet, 4 implemented only
 | VLAN Hopping | Unauthorized access between VLANs | P1 | 🔨 Implemented |
 | Double-Tagging | Double 802.1Q tag insertion | P1 | 🔨 Implemented |
 | Native VLAN Abuse | Exploiting the native VLAN | P1 | 🔨 Implemented |
-| VLAN Tag Injection | Injecting tagged frames | P1 | 📋 To implement |
+| VLAN Tag Injection | Injecting tagged frames | P1 | 🔨 Implemented |
 | VLAN Translation Abuse | Abusing VLAN translation | P3 | 📋 To implement |
 | QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 📋 To implement |
 | VLAN Pruning Abuse | Exploiting VLAN propagation | P2 | 📋 To implement |
