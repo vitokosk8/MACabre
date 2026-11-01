@@ -49,4 +49,4 @@ class MacCloningPanel(AttackPanel):
         return run_cloning(config, stop_event, on_progress)
 
     def _format_status(self, stats: CloningStats) -> str:
-        return stats.status
+        return stats.status or "MAC cloning not started"
