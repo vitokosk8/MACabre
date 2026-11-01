@@ -4,10 +4,15 @@ from __future__ import annotations
 
 import random
 import re
+import subprocess
+from collections.abc import Callable
 
 BROADCAST_MAC = "ff:ff:ff:ff:ff:ff"
 
+Runner = Callable[[list[str]], str]
+
 _MAC_RE = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
+_LINK_RE = re.compile(r"link/ether ([0-9a-f:]{17})")
 
 
 def random_mac(rng: random.Random) -> str:
@@ -27,3 +32,18 @@ def normalize_unicast_mac(value: str) -> str:
     if int(mac.split(":")[0], 16) & 0x01:
         raise ValueError("Target MAC must be unicast (not multicast or broadcast).")
     return mac
+
+
+def run_command(argv: list[str]) -> str:
+    """Run a system command and return its standard output; raises on failure."""
+    result = subprocess.run(argv, check=True, capture_output=True, text=True)
+    return result.stdout
+
+
+def read_interface_mac(iface: str, run: Runner | None = None) -> str:
+    """Current hardware address of `iface`, read with `ip` (Scapy caches it)."""
+    output = (run or run_command)(["ip", "-o", "link", "show", "dev", iface])
+    match = _LINK_RE.search(output)
+    if not match:
+        raise RuntimeError(f"Cannot read the MAC address of {iface}.")
+    return match.group(1)

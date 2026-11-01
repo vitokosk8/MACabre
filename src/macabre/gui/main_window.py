@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
 
 from macabre import __version__
 from macabre.catalog import FAMILIES
+from macabre.gui.arp_spoofing_panel import ArpSpoofingPanel
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
 from macabre.gui.icons import app_icon
 from macabre.gui.mac_flapping_panel import MacFlappingPanel
@@ -36,6 +37,7 @@ PANELS = {
     "MAC Flapping": MacFlappingPanel,
     "MAC Address Spoofing": MacSpoofingPanel,
     "MAC Cloning": MacCloningPanel,
+    "ARP Spoofing": ArpSpoofingPanel,
 }
 
 

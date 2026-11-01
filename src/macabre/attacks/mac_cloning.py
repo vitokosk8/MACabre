@@ -12,17 +12,11 @@ changes the real interface, so use a lab or a dedicated test adapter.
 
 from __future__ import annotations
 
-import re
-import subprocess
 import threading
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 
-from macabre.attacks.common import normalize_unicast_mac
-
-_LINK_RE = re.compile(r"link/ether ([0-9a-f:]{17})")
-
-Runner = Callable[[list[str]], str]
+from macabre.attacks.common import Runner, normalize_unicast_mac, read_interface_mac, run_command
 
 
 @dataclass(frozen=True)
@@ -43,20 +37,6 @@ class CloningStats:
     status: str = ""
 
 
-def _run_command(argv: list[str]) -> str:
-    result = subprocess.run(argv, check=True, capture_output=True, text=True)
-    return result.stdout
-
-
-def read_mac(iface: str, run: Runner) -> str:
-    """Current hardware address of `iface`, read from `ip -o link`."""
-    output = run(["ip", "-o", "link", "show", "dev", iface])
-    match = _LINK_RE.search(output)
-    if not match:
-        raise RuntimeError(f"Cannot read the MAC address of {iface}.")
-    return match.group(1)
-
-
 def set_mac_commands(iface: str, mac: str) -> list[list[str]]:
     """Commands that change the hardware address; the interface is down while changed."""
     return [
@@ -73,7 +53,7 @@ def run_cloning(
     run: Runner | None = None,
 ) -> CloningStats:
     """Clone the target MAC until `stop_event` is set, then restore the original MAC."""
-    run = run or _run_command
+    run = run or run_command
     target = normalize_unicast_mac(config.target_mac)
 
     if config.dry_run:
@@ -84,7 +64,7 @@ def run_cloning(
         on_progress(replace(stats))
         return stats
 
-    original = read_mac(config.iface, run)
+    original = read_interface_mac(config.iface, run)
     stats = CloningStats(original_mac=original, cloned_mac=target)
     try:
         for command in set_mac_commands(config.iface, target):

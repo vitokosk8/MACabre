@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 5 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 121 to implement (126 techniques; P1: 5 of 41 tested).
+Current count: 6 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 120 to implement (126 techniques; P1: 6 of 41 tested).
 
 ## Techniques by category
 
@@ -47,7 +47,7 @@ Current count: 5 tested, 0 tested in GUI, 0 not working yet, 0 implemented only,
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| ARP Spoofing | Forging ARP replies | P1 | 📋 To implement |
+| ARP Spoofing | Forging ARP replies | P1 | 🧪 Tested |
 | ARP Cache Poisoning | Poisoning ARP caches | P1 | 📋 To implement |
 | Gratuitous ARP Spoofing | Fraudulent gratuitous ARP announcements | P1 | 📋 To implement |
 | ARP Request Flooding | Flooding with ARP requests | P1 | 📋 To implement |
