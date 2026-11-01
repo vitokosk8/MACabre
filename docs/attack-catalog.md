@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 24 tested, 0 tested in GUI, 0 not working yet, 11 implemented only, 93 to implement (128 techniques; P1: 24 of 37 tested).
+Current count: 25 tested, 0 tested in GUI, 0 not working yet, 12 implemented only, 91 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -135,7 +135,7 @@ Current count: 24 tested, 0 tested in GUI, 0 not working yet, 11 implemented onl
 | 802.1X Identity Spoofing | Spoofing client identity | P2 | 📋 To implement |
 | EAP Downgrade / Weak Method Abuse | Exploiting weak authentication methods | P3 | 📋 To implement |
 | EAP Relay / Evil Authenticator | Relay or rogue authenticator | P3 | 📋 To implement |
-| MAB Bypass / MAC Spoofing | Abusing MAC-based authentication | P1 | 📋 To implement |
+| MAB Bypass / MAC Spoofing | Abusing MAC-based authentication | P1 | 🧪 Tested |
 | Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 📋 To implement |
 | Post-Authentication Session Hijacking | Abusing an already authorized session | P3 | 📋 To implement |
 | NAC VLAN Assignment Abuse | Manipulating authorization VLAN assignment | P3 | 📋 To implement |
@@ -153,7 +153,7 @@ Current count: 24 tested, 0 tested in GUI, 0 not working yet, 11 implemented onl
 | LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 📋 To implement |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
-| DTP Negotiation Abuse | Improper trunk negotiation | P1 | 📋 To implement |
+| DTP Negotiation Abuse | Improper trunk negotiation | P1 | 🔨 Implemented |
 | UDLD Spoofing | Manipulating unidirectional link detection | P3 | 📋 To implement |
 | Ethernet OAM Spoofing | Spoofing IEEE 802.3ah messages | P3 | 📋 To implement |
 | CFM / 802.1ag Spoofing | Manipulating connectivity fault management messages | P3 | 📋 To implement |

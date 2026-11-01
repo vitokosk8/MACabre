@@ -58,6 +58,8 @@ from macabre.gui.mac_flapping_panel import MacFlappingPanel
 from macabre.gui.mac_flooding_panel import MacFloodingPanel
 from macabre.gui.mac_cloning_panel import MacCloningPanel
 from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
+from macabre.gui.dtp_audit_panel import DtpAuditPanel
+from macabre.gui.mab_bypass_panel import MabBypassPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
 PANELS = {
@@ -78,6 +80,8 @@ PANELS = {
     "Native VLAN Abuse": NativeVlanPanel,
     "VLAN Tag Injection": VlanTagInjectionPanel,
     "BPDU Spoofing": BpduSpoofingPanel,
+    "DTP Negotiation Abuse": DtpAuditPanel,
+    "MAB Bypass / MAC Spoofing": MabBypassPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,

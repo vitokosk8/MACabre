@@ -26,6 +26,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [ARP reply flooding](attacks/arp/arp-reply-flooding.md) | `arp_reply_flooding_lab.sh` | Replies received by the victim, and whether its neighbor table changes |
 | [ARP-based gateway impersonation](attacks/arp/arp-based-gateway-impersonation.md) | `arp_gateway_impersonation_lab.sh` | Both victims' cached MAC for the gateway, before and after, and the attacker's forwarding setting |
 | [Switch spoofing (DTP)](attacks/vlan-802-1q/switch-spoofing-dtp-spoofing.md) | `switch_spoofing_lab.sh` | DTP frames seen on the monitor port, and whether they are well formed. The trunk decision needs a real switch |
+| [DTP negotiation abuse](attacks/discovery-management/dtp-negotiation-abuse.md) | `dtp_audit_lab.sh` | Trunk and access statuses advertised by a simulated port, and whether the audit's verdict follows the simulated mode. The status values and a real switch's decision are not tested |
 | [VLAN hopping](attacks/vlan-802-1q/vlan-hopping.md) | `vlan_hopping_lab.sh` | Tagged probes for VLAN 20 reaching the monitor, before and after the port carries that VLAN (the trunk outcome is simulated) |
 | [Double-tagging](attacks/vlan-802-1q/double-tagging.md) | `double_tagging_lab.sh` | Frames with both tags reaching the monitor, before and after the port passes tagged frames (the switch's tag removal is not tested) |
 | [Native VLAN abuse](attacks/vlan-802-1q/native-vlan-abuse.md) | `native_vlan_lab.sh` | Untagged probes reaching the monitor. The mismatch between trunk ends needs two real switches |
@@ -49,6 +50,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Broadcast storm](attacks/l2-multicast-broadcast/broadcast-storm.md) | `broadcast_storm_lab.sh` | Broadcasts the receiver gets from a flood on one link, whether STP stops a loop to one copy, and, with `LOOP_TEST=1`, how many copies one broadcast makes in a loop without STP |
 | [Multicast flooding](attacks/l2-multicast-broadcast/multicast-flooding.md) | `multicast_flooding_lab.sh` | Frames a host that joined no group receives from a flood to random groups, and whether turning off flooding of unknown multicast on its port stops them |
 | [VLAN tag injection](attacks/vlan-802-1q/vlan-tag-injection.md) | `vlan_tag_injection_lab.sh` | Injected-tag frames reaching the monitor, and whether their VLAN ID and priority are unchanged (the switch's decision is simulated) |
+| [MAB bypass / MAC spoofing](attacks/802-1x-eapol-nac/mab-bypass-mac-spoofing.md) | `mab_bypass_lab.sh` | Whether a port with a MAC allow list replies to a probe sent with the attacker's own MAC and with the allowed MAC, and whether the attacker's MAC is restored. Models an allow list only, not RADIUS or 802.1X |
 
 Run any of them with `sudo`, from the project root:
 
