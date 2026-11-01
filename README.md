@@ -1,170 +1,85 @@
 <p align="center">
-  <img src="assets/logo.png" width="240" alt="MACabre logo">
+  <img src="assets/logo.png" width="220" alt="MACabre logo">
 </p>
 
 <h1 align="center">MACabre</h1>
 
-<p align="center"><strong>Layer 2 network auditing suite</strong></p>
+<p align="center">
+  <strong>A Layer 2 network auditing suite with a desktop interface.</strong><br>
+  Find out what your switches and hosts trust before someone else does.
+</p>
 
-MACabre is a **layer 2** network auditing suite written in Python with [Scapy](https://scapy.net/) and a desktop graphical interface (PySide6), targeting Linux.
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License: Apache 2.0"></a>
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/platform-Linux-lightgrey" alt="Linux">
+</p>
 
-It is inspired by [Yersinia](https://github.com/tomac/yersinia), but written from scratch (no code from Yersinia is included) and designed as a modular framework: discovery, passive analysis, validation of existing protections, and authorized active tests.
+---
 
-Goals:
+MACabre sends the frames that Ethernet, ARP and DHCP take for granted, so you can check how your network reacts when something misbehaves. It is written in Python with [Scapy](https://scapy.net/) and a [PySide6](https://doc.qt.io/qtforpython-6/) interface, and it is inspired by [Yersinia](https://github.com/tomac/yersinia), written from scratch.
 
-- Build custom (handcrafted) frames in a simple way.
-- Run stress tests and protocol validation for layer 2 in labs and authorized audits.
-- Complement other tools such as `iperf` and `hping3`.
-- Be installable as a desktop application and, in the future, integrate into security distributions such as Kali Linux.
+It is made for labs, authorized audits, and anyone who has ever wondered why a switch without port security is such a trusting friend.
 
-## Status
+## What's inside
 
-🚧 MVP in development.
+- **Handcrafted frames.** Build and send Ethernet, ARP and DHCP frames from the desktop interface or from Python.
+- **An attack menu** organized by family, with one panel per attack, a log, and a "generate frames only" mode to see what will be sent first.
+- **Isolated labs.** Every attack has a script that builds a lab with Linux network namespaces, runs the attack and reports what the switch and the hosts did. Your real interfaces are never touched.
+- **Documentation for every attack:** the theory, the protocols involved, and an audit specification with expected behavior, evidence, mitigations and execution risk.
 
-- ✅ Desktop interface with an attack menu organized by category, protocol and attack.
-- ✅ **DHCP starvation** (P1): full handshake (DISCOVER → OFFER → REQUEST). Validated in the lab: 20 of 20 addresses leased, and a legitimate client gets no offer. It also has a "discover only" option and a "generate frames only" mode.
-- ✅ **MAC flooding** (P1): sends frames with random source MACs to fill the switch address table. Validated in the lab: 500 of 500 addresses learned, and 500 of 500 unknown-unicast frames received on the victim port. See [docs/specs/P1.md](docs/specs/P1.md).
-- ✅ **MAC flapping** (P1): alternates frames with the same source MAC between two switch ports. Validated in the lab: the switch moved the target MAC 500 times for 500 frames, across 2 ports.
-- ✅ **MAC address spoofing** (P1): sends frames with a target's source MAC, so the switch moves that address to the attacker's port. Validated in the lab: the switch port changed from `sw-t` to `sw-a`, and the attacker received 20 of 20 frames the target would have received.
-- ✅ **MAC cloning** (P1): changes this interface's MAC address to an authorized device's, and restores it when stopped. Validated in the lab: with a port that admits only the authorized MAC, the attacker's own frames were dropped (0 of 20) and the cloned frames were delivered (20 of 20).
-- ✅ **ARP spoofing** (P1): sends forged ARP replies that bind an IP address to this interface's MAC. Validated in the lab: the victim's ARP cache for the gateway changed from the gateway's MAC to the attacker's after 10 forged replies.
-- ✅ **ARP cache poisoning** (P1): poisons the ARP caches of a victim and its gateway in both directions, and keeps them poisoned. Validated in the lab: both caches changed from the real MACs to the attacker's.
-- ✅ **Gratuitous ARP spoofing** (P1): broadcasts announcements that bind an IP address to this interface's MAC, affecting every host that caches it. Validated in the lab: both victims' caches for the gateway changed to the attacker's MAC from one broadcast.
-- ✅ **ARP request flooding** (P1): broadcasts ARP requests from random senders, optionally all asking for one IP. Validated in the lab: the victim received 200 of 200 flooded requests, and the gateway's neighbor table grew from 1 entry to 133.
-- ⏳ All other techniques in the catalog (see [Roadmap](#roadmap)).
-- ⏳ Handcrafted frame builder with preview.
-- ⏳ Operating modes and safety controls (see [Operating modes](#operating-modes)).
-- ⏳ Packaging as an installable / executable application.
+## Where to look
 
-## Roadmap
+| I want to know... | Read |
+| --- | --- |
+| Which attacks exist, and how far each one has come | [Attack catalog](docs/attack-catalog.md) |
+| What an attack abuses, and why it works | [Attack theory](docs/attacks/README.md) |
+| What an audit should check, step by step | [P1 specifications](docs/specs/P1.md) |
+| How to run the labs | [Labs](docs/labs.md) |
+| Where the project is going | [Roadmap](docs/roadmap.md) |
 
-The full catalog of techniques, with priorities and descriptions, is in [docs/attack-catalog.md](docs/attack-catalog.md). It currently lists 126 techniques in 13 families.
+## Quick start
 
-Priorities are the order in which techniques are developed within the roadmap:
-
-| Phase | Focus | Techniques | Implemented |
-| --- | --- | ---: | ---: |
-| **P1** | Core: initial functionality | 41 | 9 |
-| **P2** | Expansion | 45 | 0 |
-| **P3** | Specialized features | 40 | 0 |
-
-Specifications are written one phase at a time under `docs/specs/` (P1, then P2, then P3). The P1 specification is in [docs/specs/P1.md](docs/specs/P1.md). Each technique will document: protocol, technical reference, requirements, compatibility, expected behavior, evidence, impact, mitigations and execution risk level.
-
-### Releases
-
-Releases group the attack families by milestone. A release can contain P1, P2 and P3 techniques of its families.
-
-| Release | Families | Status |
-| --- | --- | --- |
-| **MVP** | MAC address & CAM table, ARP, VLAN & 802.1Q, Spanning Tree, Discovery (CDP, LLDP) | In progress. DHCP starvation ships first as the initial attack (P1, DHCPv4 family). |
-| **v0.2** | DHCPv4 & DHCPv6, IPv6 Neighbor Discovery & SLAAC | Planned |
-| **v0.3** | 802.1X / EAPOL / NAC, Link Aggregation (LACP), L2 Multicast (IGMP) | Planned |
-| **v0.4** | MACsec, Carrier Ethernet (PPPoE, QinQ) and Provider OAM | Planned |
-| **v1.0** | Fuzzing, resilience testing and reporting; extensible framework | Planned |
-
-Industrial protocols (PROFINET, EtherCAT, IEC 61850, PTP) and EVPN/VXLAN are specialized extensions, planned after v1.0.
-
-### Extended scope (not yet scheduled)
-
-Some scenarios are not pure Ethernet attacks but belong to the extended scope: LLMNR/NBT-NS/mDNS poisoning, VRRP/HSRP/CARP spoofing, IPv6-first attacks, Wake-on-LAN abuse, EtherType and malformed-frame fuzzing, jumbo frame and pause frame abuse, Priority Flow Control, 802.1p/PCP manipulation, and MACsec downgrade testing.
-
-Wi-Fi (deauthentication, Evil Twin, WPA attacks) will be a separate module, because it is 802.11 and not IEEE 802.3 Ethernet.
-
-## Operating modes
-
-MACabre plans four operating modes, to avoid running disruptive tests by accident in production:
-
-- **Passive**: observe and analyze traffic only. No frames are sent.
-- **Safe Validation**: check configuration and existing protections without disrupting service.
-- **Active Test**: send test frames within controlled limits.
-- **Destructive Lab**: disruptive techniques. Available only when explicitly enabled, and intended for isolated lab networks.
-
-The current MVP includes a confirmation dialog before sending frames and a "generate frames only" mode. The full mode system is part of the roadmap.
-
-## Installation
+You need Linux, Python 3.10 or newer, and root privileges (or `CAP_NET_RAW`) to send frames.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-```
-
-## Running
-
-Sending raw frames requires root privileges:
-
-```bash
 sudo .venv/bin/macabre
 ```
 
-To run the test suite (no root or display required):
+To run the test suite, which needs neither root nor a display:
 
 ```bash
 pytest
 ```
 
-## Lab test: DHCP starvation (Linux)
+> **macOS users:** the labs need Linux network namespaces. Run them inside a Linux machine, for example an [OrbStack](https://orbstack.dev/) Linux machine, and create a fresh virtual environment there. Do not reuse the macOS `.venv`, its binaries do not run on Linux.
 
-`scripts/lab/dhcp_starvation_lab.sh` builds an isolated lab with two Linux network namespaces: a `dnsmasq` DHCP server with a pool of 20 addresses, and an attacker that runs the full DHCP starvation handshake. It never touches your real network interfaces.
+## Use it responsibly
 
-Requirements: Linux with root access, `iproute2`, `dnsmasq`, and the project environment.
+MACabre can disrupt a network on purpose. That is the point of an audit, and also the reason for a few rules:
 
-```bash
-sudo scripts/lab/dhcp_starvation_lab.sh               # 40 DISCOVER frames
-sudo FRAMES=200 scripts/lab/dhcp_starvation_lab.sh    # more frames
-```
+- Only use it on networks you own, or on networks where you have **written authorization** to test.
+- Never run an active attack on a production VLAN without a plan and a rollback.
+- Start with "generate frames only" to see what will leave your interface.
 
-The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and what the server did (DISCOVER, OFFER, REQUEST, ACK, distinct addresses leased). Then a legitimate client sends a DISCOVER, and the script reports whether it received an offer. It cleans up everything it created.
-
-The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
-
-A MAC flooding lab is also available: `sudo scripts/lab/mac_flooding_lab.sh`. It uses a Linux bridge as the switch and reports the addresses it learns and the flooded frames received by the victim port.
-
-An ARP request flooding lab is available too: `sudo scripts/lab/arp_request_flooding_lab.sh`. It counts the flooded requests the victim receives and the growth of the gateway's neighbor table.
-
-A gratuitous ARP lab is available too: `sudo scripts/lab/gratuitous_arp_lab.sh`. It shows two victims' caches before and after one broadcast announcement.
-
-An ARP cache poisoning lab is available too: `sudo scripts/lab/arp_poisoning_lab.sh`. It shows both caches, of the victim and of the gateway, before and after the attack.
-
-An ARP spoofing lab is available too: `sudo scripts/lab/arp_spoofing_lab.sh`. It shows the victim's ARP cache for the gateway before and after the attack.
-
-A MAC cloning lab is available too: `sudo scripts/lab/mac_cloning_lab.sh`. It emulates port security with one allowed MAC and checks the frames before and after cloning.
-
-A MAC spoofing lab is available too: `sudo scripts/lab/mac_spoofing_lab.sh`. It shows the switch port of the target MAC before and after the spoofing.
-
-A MAC flapping lab is available too: `sudo scripts/lab/mac_flapping_lab.sh`. It attaches two attacker ports to the same bridge and counts how many times the switch moves the target MAC between them.
-
-**macOS:** the lab needs Linux network namespaces, so run it inside a Linux machine (for example, an [OrbStack](https://orbstack.dev/) Linux machine). Clone the repository inside that machine and create a new virtual environment there. Do not reuse the macOS `.venv`, because its binaries don't work on Linux.
-
-Only run the attack on networks you own or are authorized to test. Never run it on production VLANs.
+The author is not responsible for misuse.
 
 ## Icons and desktop integration
 
-- `src/macabre/resources/icons/` contains the icon set used by the window and the application (PNG sizes and `.ico`).
-- `packaging/linux/macabre.desktop` is the desktop entry, and `packaging/linux/icons/hicolor/` has the icon theme files it refers to. Copy them to `~/.local/share/applications/` and `~/.local/share/icons/hicolor/` (or the system equivalents) to add MACabre to the application menu.
-- To regenerate all icons from `assets/logo.png`: `python scripts/generate_icons.py` (requires Pillow).
-
-## Intended use and legal notice
-
-This tool generates traffic that can disrupt a network (DHCP address exhaustion, table flooding, STP topology changes, etc.).
-
-**Use it only on networks you own or for which you have explicit written authorization.** The author is not responsible for misuse.
-
-## Requirements
-
-- Linux
-- Python 3.10+
-- [Scapy](https://scapy.net/) 2.5+
-- [PySide6](https://doc.qt.io/qtforpython-6/) 6.6+
-- Root privileges or `CAP_NET_RAW` to send raw frames
+- `src/macabre/resources/icons/` holds the icon set used by the window and the application (PNG sizes and `.ico`).
+- `packaging/linux/macabre.desktop` is the desktop entry, and `packaging/linux/icons/hicolor/` holds the icon theme files it refers to. Copy them to `~/.local/share/applications/` and `~/.local/share/icons/hicolor/` (or the system equivalents) to add MACabre to your application menu.
+- To regenerate the icons from `assets/logo.png`, run `python scripts/generate_icons.py` (requires Pillow).
 
 ## License
 
 MACabre is licensed under the [Apache License 2.0](LICENSE). You may use, copy, modify and distribute it, including commercially.
 
-Copyright 2026 vitokosk8 Victor Bolaños Guerra.
+If you distribute MACabre or a derivative work, keep the [NOTICE](NOTICE) file (or an equivalent attribution) and credit the original author: **vitokosk8 Victor Bolaños Guerra, MACabre**. Projects that are only inspired by MACabre are welcome to credit it too.
 
-If you distribute MACabre or a derivative work, keep the [NOTICE](NOTICE) file (or equivalent attribution) and credit the original author: **vitokosk8 Victor Bolaños Guerra, MACabre**. Apache 2.0 requires this for derivative works. Projects that are only inspired by MACabre are encouraged, but not required, to credit it.
+Copyright 2026 vitokosk8 Victor Bolaños Guerra.
 
 ## Acknowledgements
 

@@ -1,0 +1,46 @@
+# Roadmap
+
+The full catalog of techniques, with their priorities and descriptions, is in [attack-catalog.md](attack-catalog.md). The catalog also tracks how far each technique has come.
+
+## Phases
+
+Priorities are the order in which techniques are developed:
+
+| Phase | Focus | Techniques |
+| --- | --- | ---: |
+| **P1** | Core: initial functionality | 41 |
+| **P2** | Expansion | 45 |
+| **P3** | Specialized features | 40 |
+
+Specifications are written one phase at a time under [specs/](specs/), starting with [P1](specs/P1.md). Each technique documents its protocol, technical reference, requirements, compatibility, expected behavior, evidence, impact, mitigations and execution risk. Its theory lives in [attacks/](attacks/README.md).
+
+## Releases
+
+Releases group the attack families by milestone. A release can contain P1, P2 and P3 techniques of its families.
+
+| Release | Families |
+| --- | --- |
+| **MVP** | MAC address & CAM table, ARP, VLAN & 802.1Q, Spanning Tree, Discovery (CDP, LLDP) |
+| **v0.2** | DHCPv4 & DHCPv6, IPv6 Neighbor Discovery & SLAAC |
+| **v0.3** | 802.1X / EAPOL / NAC, Link Aggregation (LACP), L2 Multicast (IGMP) |
+| **v0.4** | MACsec, Carrier Ethernet (PPPoE, QinQ) and Provider OAM |
+| **v1.0** | Fuzzing, resilience testing and reporting; extensible framework |
+
+Industrial protocols (PROFINET, EtherCAT, IEC 61850, PTP) and EVPN/VXLAN are specialized extensions, planned after v1.0.
+
+## Extended scope (not yet scheduled)
+
+Some scenarios are not pure Ethernet attacks but belong to the extended scope: LLMNR/NBT-NS/mDNS poisoning, VRRP/HSRP/CARP spoofing, IPv6-first attacks, Wake-on-LAN abuse, EtherType and malformed-frame fuzzing, jumbo frame and pause frame abuse, Priority Flow Control, 802.1p/PCP manipulation, and MACsec downgrade testing.
+
+Wi-Fi (deauthentication, Evil Twin, WPA attacks) will be a separate module, because it is 802.11 and not IEEE 802.3 Ethernet.
+
+## Operating modes (planned)
+
+MACabre will have four operating modes, so that disruptive tests cannot run by accident in production:
+
+- **Passive**: observe and analyze traffic only. No frames are sent.
+- **Safe Validation**: check configuration and existing protections without disrupting service.
+- **Active Test**: send test frames within controlled limits.
+- **Destructive Lab**: disruptive techniques. Available only when explicitly enabled, and intended for isolated lab networks.
+
+Each attack specification already names the mode it may run in.
