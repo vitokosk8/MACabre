@@ -67,12 +67,6 @@ MACabre can disrupt a network on purpose. That is the point of an audit, and als
 
 The author is not responsible for misuse.
 
-## Icons and desktop integration
-
-- `src/macabre/resources/icons/` holds the icon set used by the window and the application (PNG sizes and `.ico`).
-- `packaging/linux/macabre.desktop` is the desktop entry, and `packaging/linux/icons/hicolor/` holds the icon theme files it refers to. Copy them to `~/.local/share/applications/` and `~/.local/share/icons/hicolor/` (or the system equivalents) to add MACabre to your application menu.
-- To regenerate the icons from `assets/logo.png`, run `python scripts/generate_icons.py` (requires Pillow).
-
 ## License
 
 MACabre is licensed under the [Apache License 2.0](LICENSE). You may use, copy, modify and distribute it, including commercially.
