@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 3 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 123 to implement (126 techniques; P1: 3 of 41 tested).
+Current count: 4 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 122 to implement (126 techniques; P1: 4 of 41 tested).
 
 ## Techniques by category
 
@@ -34,7 +34,7 @@ Current count: 3 tested, 0 tested in GUI, 0 not working yet, 0 implemented only,
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| MAC Address Spoofing | Forging MAC addresses | P1 | 📋 To implement |
+| MAC Address Spoofing | Forging MAC addresses | P1 | 🧪 Tested |
 | MAC Flooding / CAM Overflow | Saturating the switch learning table | P1 | 🧪 Tested |
 | MAC Flapping | Repeated changes of a MAC address location | P1 | 🧪 Tested |
 | MAC Cloning | Cloning the identity of a device | P1 | 📋 To implement |

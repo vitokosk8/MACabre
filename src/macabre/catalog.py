@@ -37,7 +37,7 @@ FAMILIES: tuple[Family, ...] = (
     Family(
         name='MAC Address & CAM Table',
         techniques=(
-            Technique(name='MAC Address Spoofing', description='Forging MAC addresses', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='MAC Address Spoofing', description='Forging MAC addresses', priority='P1', status=Status.TESTED),
             Technique(name='MAC Flooding / CAM Overflow', description='Saturating the switch learning table', priority='P1', status=Status.TESTED),
             Technique(name='MAC Flapping', description='Repeated changes of a MAC address location', priority='P1', status=Status.TESTED),
             Technique(name='MAC Cloning', description='Cloning the identity of a device', priority='P1', status=Status.TO_IMPLEMENT),
