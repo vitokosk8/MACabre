@@ -55,7 +55,28 @@ To run the test suite, which needs neither root nor a display:
 pytest
 ```
 
-> **Platforms:** MACabre is tested on Linux today. macOS and Windows support is planned, and it will send frames on the physical interface of the machine it runs on. See the [roadmap](docs/roadmap.md).
+> **Platforms:** Linux is the primary platform, and the laboratory scripts run only there. The release builds for macOS and Windows open the desktop app. On macOS, the DHCP starvation and MAC flooding attacks have been run successfully. Attacks that depend on Linux tools (`ip`, network namespaces, `nft`) are not yet supported on macOS or Windows. See the [roadmap](docs/roadmap.md).
+
+## Install a release build
+
+Release builds are published on the [Releases page](https://github.com/vitokosk8/MACabre/releases). They are not signed, so your operating system will warn you the first time you open them.
+
+### macOS (Apple silicon)
+
+1. Download `MACabre-<version>-macos-arm64.dmg`, open it and drag **MACabre** to **Applications**.
+2. macOS blocks unsigned apps on first launch. Open **System Settings → Privacy & Security**, find the message about MACabre and click **Open Anyway**. Or run `xattr -dr com.apple.quarantine /Applications/MACabre.app` in Terminal.
+3. Sending frames needs root. Start the app from Terminal with `sudo /Applications/MACabre.app/Contents/MacOS/MACabre`.
+
+### Windows (x64)
+
+1. Download `MACabre-<version>-windows-x64.zip` and extract it.
+2. If SmartScreen blocks the app, choose **More info → Run anyway**.
+3. Sending frames needs [Npcap](https://npcap.com/) installed, with WinPcap API compatibility enabled.
+
+### Linux (x86_64)
+
+1. Download `MACabre-<version>-linux-x86_64.tar.gz` and extract it: `tar -xzf MACabre-<version>-linux-x86_64.tar.gz`.
+2. Run it with root: `sudo ./MACabre/MACabre`.
 
 ## Use it responsibly
 
