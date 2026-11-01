@@ -149,8 +149,8 @@ FAMILIES: tuple[Family, ...] = (
         techniques=(
             Technique(name='CDP Spoofing', description='Forged CDP advertisements', priority='P1', status=Status.TESTED),
             Technique(name='CDP Flooding', description='Flooding with CDP messages', priority='P1', status=Status.TESTED),
-            Technique(name='LLDP Spoofing', description='Spoofing LLDP information', priority='P1', status=Status.TO_IMPLEMENT),
-            Technique(name='LLDP Flooding', description='Flooding with LLDP advertisements', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='LLDP Spoofing', description='Spoofing LLDP information', priority='P1', status=Status.TESTED),
+            Technique(name='LLDP Flooding', description='Flooding with LLDP advertisements', priority='P1', status=Status.TESTED),
             Technique(name='MNDP Spoofing', description='Forged MikroTik Neighbor Discovery advertisements', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='MNDP Flooding', description='Flooding with MikroTik Neighbor Discovery advertisements', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='LLDP-MED Policy Spoofing', description='Forging LLDP-MED policies', priority='P2', status=Status.TO_IMPLEMENT),
