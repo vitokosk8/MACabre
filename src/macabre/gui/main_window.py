@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
 
 from macabre import __version__
 from macabre.catalog import FAMILIES
+from macabre.gui.arp_request_flooding_panel import ArpRequestFloodingPanel
 from macabre.gui.arp_poisoning_panel import ArpPoisoningPanel
 from macabre.gui.arp_spoofing_panel import ArpSpoofingPanel
 from macabre.gui.gratuitous_arp_panel import GratuitousArpPanel
@@ -42,6 +43,7 @@ PANELS = {
     "ARP Spoofing": ArpSpoofingPanel,
     "ARP Cache Poisoning": ArpPoisoningPanel,
     "Gratuitous ARP Spoofing": GratuitousArpPanel,
+    "ARP Request Flooding": ArpRequestFloodingPanel,
 }
 
 

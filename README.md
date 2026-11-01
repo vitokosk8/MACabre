@@ -30,6 +30,7 @@ Goals:
 - ✅ **ARP spoofing** (P1): sends forged ARP replies that bind an IP address to this interface's MAC. Validated in the lab: the victim's ARP cache for the gateway changed from the gateway's MAC to the attacker's after 10 forged replies.
 - ✅ **ARP cache poisoning** (P1): poisons the ARP caches of a victim and its gateway in both directions, and keeps them poisoned. Validated in the lab: both caches changed from the real MACs to the attacker's.
 - ✅ **Gratuitous ARP spoofing** (P1): broadcasts announcements that bind an IP address to this interface's MAC, affecting every host that caches it. Validated in the lab: both victims' caches for the gateway changed to the attacker's MAC from one broadcast.
+- ✅ **ARP request flooding** (P1): broadcasts ARP requests from random senders, optionally all asking for one IP. Validated in the lab: the victim received 200 of 200 flooded requests, and the gateway's neighbor table grew from 1 entry to 133.
 - ⏳ All other techniques in the catalog (see [Roadmap](#roadmap)).
 - ⏳ Handcrafted frame builder with preview.
 - ⏳ Operating modes and safety controls (see [Operating modes](#operating-modes)).
@@ -43,7 +44,7 @@ Priorities are the order in which techniques are developed within the roadmap:
 
 | Phase | Focus | Techniques | Implemented |
 | --- | --- | ---: | ---: |
-| **P1** | Core: initial functionality | 41 | 8 |
+| **P1** | Core: initial functionality | 41 | 9 |
 | **P2** | Expansion | 45 | 0 |
 | **P3** | Specialized features | 40 | 0 |
 
@@ -118,6 +119,8 @@ The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and
 The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
 
 A MAC flooding lab is also available: `sudo scripts/lab/mac_flooding_lab.sh`. It uses a Linux bridge as the switch and reports the addresses it learns and the flooded frames received by the victim port.
+
+An ARP request flooding lab is available too: `sudo scripts/lab/arp_request_flooding_lab.sh`. It counts the flooded requests the victim receives and the growth of the gateway's neighbor table.
 
 A gratuitous ARP lab is available too: `sudo scripts/lab/gratuitous_arp_lab.sh`. It shows two victims' caches before and after one broadcast announcement.
 
