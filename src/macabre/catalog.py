@@ -98,7 +98,7 @@ FAMILIES: tuple[Family, ...] = (
         techniques=(
             Technique(name='DHCP Starvation', description='Exhausting the address pool', priority='P1', status=Status.TESTED),
             Technique(name='Rogue DHCP Server', description='Unauthorized DHCP server', priority='P1', status=Status.TESTED),
-            Technique(name='DHCP Spoofing', description='Forging DHCP responses', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='DHCP Spoofing', description='Forging DHCP responses', priority='P1', status=Status.TESTED),
             Technique(name='DHCP Offer Flooding', description='Flooding with DHCP offers', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='DHCP Discover Flooding', description='Flooding with DHCP discover requests', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='DHCP NAK Injection', description='Fraudulent DHCP denials', priority='P1', status=Status.TO_IMPLEMENT),
