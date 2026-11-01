@@ -30,7 +30,7 @@ ZERO_MAC = "00:00:00:00:00:00"
 ARP_REPLY = 2
 
 
-def _ipv4(value: str, label: str) -> str:
+def parse_ipv4(value: str, label: str) -> str:
     text = value.strip()
     if not text:
         raise ValueError(f"{label} is required.")
@@ -51,8 +51,8 @@ class ArpSpoofingConfig:
     dry_run: bool = False     # build replies but do not send them
 
     def __post_init__(self) -> None:
-        _ipv4(self.spoofed_ip, "spoofed IP")
-        _ipv4(self.victim_ip, "victim IP")
+        parse_ipv4(self.spoofed_ip, "spoofed IP")
+        parse_ipv4(self.victim_ip, "victim IP")
         if self.victim_mac.strip():
             normalize_unicast_mac(self.victim_mac)
 
@@ -92,8 +92,8 @@ def run_arp_spoofing(
     send = send or sendp
     sender_mac = read_interface_mac(config.iface, run)
     victim_mac = normalize_unicast_mac(config.victim_mac) if config.victim_mac.strip() else ""
-    spoofed = _ipv4(config.spoofed_ip, "spoofed IP")
-    victim = _ipv4(config.victim_ip, "victim IP")
+    spoofed = parse_ipv4(config.spoofed_ip, "spoofed IP")
+    victim = parse_ipv4(config.victim_ip, "victim IP")
 
     stats = ArpSpoofingStats(sender_mac=sender_mac)
     while not stop_event.is_set() and (config.count == 0 or stats.frames < config.count):

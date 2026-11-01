@@ -28,6 +28,7 @@ Goals:
 - ✅ **MAC address spoofing** (P1): sends frames with a target's source MAC, so the switch moves that address to the attacker's port. Validated in the lab: the switch port changed from `sw-t` to `sw-a`, and the attacker received 20 of 20 frames the target would have received.
 - ✅ **MAC cloning** (P1): changes this interface's MAC address to an authorized device's, and restores it when stopped. Validated in the lab: with a port that admits only the authorized MAC, the attacker's own frames were dropped (0 of 20) and the cloned frames were delivered (20 of 20).
 - ✅ **ARP spoofing** (P1): sends forged ARP replies that bind an IP address to this interface's MAC. Validated in the lab: the victim's ARP cache for the gateway changed from the gateway's MAC to the attacker's after 10 forged replies.
+- ✅ **ARP cache poisoning** (P1): poisons the ARP caches of a victim and its gateway in both directions, and keeps them poisoned. Validated in the lab: both caches changed from the real MACs to the attacker's.
 - ⏳ All other techniques in the catalog (see [Roadmap](#roadmap)).
 - ⏳ Handcrafted frame builder with preview.
 - ⏳ Operating modes and safety controls (see [Operating modes](#operating-modes)).
@@ -41,7 +42,7 @@ Priorities are the order in which techniques are developed within the roadmap:
 
 | Phase | Focus | Techniques | Implemented |
 | --- | --- | ---: | ---: |
-| **P1** | Core: initial functionality | 41 | 6 |
+| **P1** | Core: initial functionality | 41 | 7 |
 | **P2** | Expansion | 45 | 0 |
 | **P3** | Specialized features | 40 | 0 |
 
@@ -116,6 +117,8 @@ The script prints what the attacker sent (DISCOVER, OFFER answered, REQUEST) and
 The lab sets `dnsmasq --no-ping` (no ARP check before each offer) and puts the attacker's interface in promiscuous mode. Both settings only speed up and simplify the lab, and are not part of the attack.
 
 A MAC flooding lab is also available: `sudo scripts/lab/mac_flooding_lab.sh`. It uses a Linux bridge as the switch and reports the addresses it learns and the flooded frames received by the victim port.
+
+An ARP cache poisoning lab is available too: `sudo scripts/lab/arp_poisoning_lab.sh`. It shows both caches, of the victim and of the gateway, before and after the attack.
 
 An ARP spoofing lab is available too: `sudo scripts/lab/arp_spoofing_lab.sh`. It shows the victim's ARP cache for the gateway before and after the attack.
 
