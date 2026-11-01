@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 14 tested, 0 tested in GUI, 0 not working yet, 8 implemented only, 104 to implement (126 techniques; P1: 14 of 41 tested).
+Current count: 15 tested, 0 tested in GUI, 0 not working yet, 8 implemented only, 103 to implement (126 techniques; P1: 15 of 41 tested).
 
 ## Techniques by category
 
@@ -94,7 +94,7 @@ Current count: 14 tested, 0 tested in GUI, 0 not working yet, 8 implemented only
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
 | DHCP Starvation | Exhausting the address pool | P1 | 🧪 Tested |
-| Rogue DHCP Server | Unauthorized DHCP server | P1 | 📋 To implement |
+| Rogue DHCP Server | Unauthorized DHCP server | P1 | 🧪 Tested |
 | DHCP Spoofing | Forging DHCP responses | P1 | 📋 To implement |
 | DHCP Offer Flooding | Flooding with DHCP offers | P1 | 📋 To implement |
 | DHCP Discover Flooding | Flooding with DHCP discover requests | P1 | 📋 To implement |

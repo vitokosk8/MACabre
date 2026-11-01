@@ -35,6 +35,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Topology change flooding](attacks/spanning-tree/topology-change-flooding.md) | `topology_change_flooding_lab.sh` | Whether the monitor's MAC is flushed from the switch's table with and without the TC flag, against a control run. This kernel does not flush on the flag, so the effect needs a real switch |
 | [TCN spoofing](attacks/spanning-tree/tcn-spoofing.md) | `tcn_spoofing_lab.sh` | Whether the switch acknowledges the TCNs, detects a topology change, and flushes a learned MAC (on this kernel: acknowledged and detected, no flush) |
 | [BPDU flooding](attacks/spanning-tree/bpdu-flooding.md) | `bpdu_flooding_lab.sh` | Frames received by the switch at the requested rate, and whether the topology holds. The control-plane load and the delay to real updates are not measured |
+| [Rogue DHCP server](attacks/dhcpv4-dhcpv6/rogue-dhcp-server.md) | `rogue_dhcp_server_lab.sh` | Which server's offer the client takes first, with the legitimate server running and stopped, and whether the rogue's ACK is accepted |
 | [VLAN tag injection](attacks/vlan-802-1q/vlan-tag-injection.md) | `vlan_tag_injection_lab.sh` | Injected-tag frames reaching the monitor, and whether their VLAN ID and priority are unchanged (the switch's decision is simulated) |
 
 Run any of them with `sudo`, from the project root:
