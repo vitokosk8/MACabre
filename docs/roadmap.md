@@ -46,7 +46,7 @@ MACabre is developed and tested on Linux today. The goal is one installable prog
 
 Wi-Fi is excluded from the Layer 2 attacks on every platform, because access points drop frames whose MAC address is not associated.
 
-The packaging tool is not chosen yet. PyInstaller and Briefcase are the candidates, and each one needs testing on all three platforms.
+Packaging will use PyInstaller. It comes after the attacks are complete, and the package has to be tested on all three platforms.
 
 ## Operating modes (planned)
 
