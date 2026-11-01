@@ -177,8 +177,8 @@ FAMILIES: tuple[Family, ...] = (
     Family(
         name='L2 Multicast & Broadcast',
         techniques=(
-            Technique(name='Broadcast Storm', description='Broadcast traffic storm', priority='P1', status=Status.TO_IMPLEMENT),
-            Technique(name='Multicast Flooding', description='Multicast flooding', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='Broadcast Storm', description='Broadcast traffic storm', priority='P1', status=Status.TESTED),
+            Technique(name='Multicast Flooding', description='Multicast flooding', priority='P1', status=Status.TESTED),
             Technique(name='IGMP Spoofing', description='Spoofing IGMP memberships', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='IGMP Query Spoofing', description='Fraudulent multicast queries', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='IGMP Leave Spoofing', description='Fraudulent group leave', priority='P2', status=Status.TO_IMPLEMENT),
