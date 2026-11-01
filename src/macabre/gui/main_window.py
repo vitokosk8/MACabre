@@ -24,6 +24,7 @@ from macabre import __version__
 from macabre.catalog import FAMILIES
 from macabre.gui.arp_poisoning_panel import ArpPoisoningPanel
 from macabre.gui.arp_spoofing_panel import ArpSpoofingPanel
+from macabre.gui.gratuitous_arp_panel import GratuitousArpPanel
 from macabre.gui.dhcp_panel import DhcpStarvationPanel
 from macabre.gui.icons import app_icon
 from macabre.gui.mac_flapping_panel import MacFlappingPanel
@@ -40,6 +41,7 @@ PANELS = {
     "MAC Cloning": MacCloningPanel,
     "ARP Spoofing": ArpSpoofingPanel,
     "ARP Cache Poisoning": ArpPoisoningPanel,
+    "Gratuitous ARP Spoofing": GratuitousArpPanel,
 }
 
 

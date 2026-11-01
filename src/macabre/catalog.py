@@ -52,7 +52,7 @@ FAMILIES: tuple[Family, ...] = (
         techniques=(
             Technique(name='ARP Spoofing', description='Forging ARP replies', priority='P1', status=Status.TESTED),
             Technique(name='ARP Cache Poisoning', description='Poisoning ARP caches', priority='P1', status=Status.TESTED),
-            Technique(name='Gratuitous ARP Spoofing', description='Fraudulent gratuitous ARP announcements', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='Gratuitous ARP Spoofing', description='Fraudulent gratuitous ARP announcements', priority='P1', status=Status.TESTED),
             Technique(name='ARP Request Flooding', description='Flooding with ARP requests', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='ARP Reply Flooding', description='Flooding with ARP replies', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='ARP Table Exhaustion', description='Exhausting the ARP table', priority='P2', status=Status.TO_IMPLEMENT),
