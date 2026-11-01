@@ -33,6 +33,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Root bridge takeover](attacks/spanning-tree/root-bridge-takeover.md) | `root_bridge_takeover_lab.sh` | Which switch port is the root port while the attacker keeps its root claim refreshed, and when the switch returns to the legitimate root (uses the Linux kernel's Spanning Tree) |
 | [Root bridge impersonation](attacks/spanning-tree/root-bridge-impersonation.md) | `root_bridge_impersonation_lab.sh` | Which switch port leads to the root while an impostor sends the real root's ID, and when the switch returns to the real root (uses the Linux kernel's Spanning Tree) |
 | [Topology change flooding](attacks/spanning-tree/topology-change-flooding.md) | `topology_change_flooding_lab.sh` | Whether the monitor's MAC is flushed from the switch's table with and without the TC flag, against a control run. This kernel does not flush on the flag, so the effect needs a real switch |
+| [TCN spoofing](attacks/spanning-tree/tcn-spoofing.md) | `tcn_spoofing_lab.sh` | Whether the switch acknowledges the TCNs, detects a topology change, and flushes a learned MAC (on this kernel: acknowledged and detected, no flush) |
 | [VLAN tag injection](attacks/vlan-802-1q/vlan-tag-injection.md) | `vlan_tag_injection_lab.sh` | Injected-tag frames reaching the monitor, and whether their VLAN ID and priority are unchanged (the switch's decision is simulated) |
 
 Run any of them with `sudo`, from the project root:
