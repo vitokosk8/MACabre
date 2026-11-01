@@ -28,6 +28,7 @@ from macabre.gui.root_bridge_takeover_panel import RootBridgeTakeoverPanel
 from macabre.gui.root_bridge_impersonation_panel import RootBridgeImpersonationPanel
 from macabre.gui.topology_change_flooding_panel import TopologyChangeFloodingPanel
 from macabre.gui.tcn_spoofing_panel import TcnSpoofingPanel
+from macabre.gui.bpdu_flooding_panel import BpduFloodingPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -68,6 +69,7 @@ PANELS = {
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
     "TCN Spoofing": TcnSpoofingPanel,
+    "BPDU Flooding": BpduFloodingPanel,
 }
 
 
