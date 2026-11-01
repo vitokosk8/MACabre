@@ -28,6 +28,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Switch spoofing (DTP)](attacks/vlan-802-1q/switch-spoofing-dtp-spoofing.md) | `switch_spoofing_lab.sh` | DTP frames seen on the monitor port, and whether they are well formed. The trunk decision needs a real switch |
 | [VLAN hopping](attacks/vlan-802-1q/vlan-hopping.md) | `vlan_hopping_lab.sh` | Tagged probes for VLAN 20 reaching the monitor, before and after the port carries that VLAN (the trunk outcome is simulated) |
 | [Double-tagging](attacks/vlan-802-1q/double-tagging.md) | `double_tagging_lab.sh` | Frames with both tags reaching the monitor, before and after the port passes tagged frames (the switch's tag removal is not tested) |
+| [Native VLAN abuse](attacks/vlan-802-1q/native-vlan-abuse.md) | `native_vlan_lab.sh` | Untagged probes reaching the monitor. The mismatch between trunk ends needs two real switches |
 
 Run any of them with `sudo`, from the project root:
 

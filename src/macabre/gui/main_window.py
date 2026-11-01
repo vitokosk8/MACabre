@@ -26,6 +26,7 @@ from macabre.gui.arp_gateway_impersonation_panel import ArpGatewayImpersonationP
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
+from macabre.gui.native_vlan_panel import NativeVlanPanel
 from macabre.gui.vlan_hopping_panel import VlanHoppingPanel
 from macabre.gui.arp_request_flooding_panel import ArpRequestFloodingPanel
 from macabre.gui.arp_poisoning_panel import ArpPoisoningPanel
@@ -54,6 +55,7 @@ PANELS = {
     "Switch Spoofing / DTP Spoofing": SwitchSpoofingPanel,
     "VLAN Hopping": VlanHoppingPanel,
     "Double-Tagging": DoubleTaggingPanel,
+    "Native VLAN Abuse": NativeVlanPanel,
 }
 
 
