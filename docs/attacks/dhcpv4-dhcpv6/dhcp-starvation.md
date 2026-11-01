@@ -37,4 +37,4 @@ Empty the pool. If every address is leased to a fake client, a legitimate device
 
 ## Related
 
-[MAC flooding](mac-flooding.md) also fills a table with fake identities, but in the switch instead of the DHCP server.
+[MAC flooding](../mac-address-cam-table/mac-flooding.md) also fills a table with fake identities, but in the switch instead of the DHCP server.

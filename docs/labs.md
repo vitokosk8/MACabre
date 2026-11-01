@@ -1,6 +1,8 @@
 # Labs
 
-Every attack has a lab script under `scripts/lab/`. A lab builds a small network out of Linux network namespaces, runs the attack inside it, and reports what the switch and the hosts did. Nothing in a lab touches your real network interfaces, and the script removes everything it created when it ends.
+The labs are MACabre's development test harness. Every attack has a lab script under `scripts/lab/` that builds a small test network on one Linux machine, runs the attack inside it, and reports what the switch and the hosts did. The labs exist so that each attack can be checked the same way, every time.
+
+The labs are not how MACabre runs. The tool sends frames on the physical interface you choose, and the lab harness is only a way to test without a real switch. Nothing in a lab touches your real network interfaces, and the script removes everything it created when it ends.
 
 ## Requirements
 
@@ -12,15 +14,15 @@ Every attack has a lab script under `scripts/lab/`. A lab builds a small network
 
 | Attack | Script | What it shows |
 | --- | --- | --- |
-| [DHCP starvation](attacks/dhcp-starvation.md) | `dhcp_starvation_lab.sh` | Leases granted to the attacker, and whether a legitimate client still gets an address |
-| [MAC flooding](attacks/mac-flooding.md) | `mac_flooding_lab.sh` | Addresses the switch learns, and flooded frames received by a victim port |
-| [MAC flapping](attacks/mac-flapping.md) | `mac_flapping_lab.sh` | How many times the switch moves one MAC between two ports |
-| [MAC address spoofing](attacks/mac-address-spoofing.md) | `mac_spoofing_lab.sh` | The switch port of the target MAC before and after, and who receives its frames |
-| [MAC cloning](attacks/mac-cloning.md) | `mac_cloning_lab.sh` | Frames dropped by a port that admits one MAC, then delivered after cloning |
-| [ARP spoofing](attacks/arp-spoofing.md) | `arp_spoofing_lab.sh` | The victim's ARP cache for the gateway, before and after |
-| [ARP cache poisoning](attacks/arp-cache-poisoning.md) | `arp_poisoning_lab.sh` | Both ARP caches, of the victim and of the gateway, before and after |
-| [Gratuitous ARP spoofing](attacks/gratuitous-arp-spoofing.md) | `gratuitous_arp_lab.sh` | Two victims' ARP caches changed by one broadcast announcement |
-| [ARP request flooding](attacks/arp-request-flooding.md) | `arp_request_flooding_lab.sh` | Flooded requests received by the victim, and the gateway's neighbor table growth |
+| [DHCP starvation](attacks/dhcpv4-dhcpv6/dhcp-starvation.md) | `dhcp_starvation_lab.sh` | Leases granted to the attacker, and whether a legitimate client still gets an address |
+| [MAC flooding](attacks/mac-address-cam-table/mac-flooding.md) | `mac_flooding_lab.sh` | Addresses the switch learns, and flooded frames received by a victim port |
+| [MAC flapping](attacks/mac-address-cam-table/mac-flapping.md) | `mac_flapping_lab.sh` | How many times the switch moves one MAC between two ports |
+| [MAC address spoofing](attacks/mac-address-cam-table/mac-address-spoofing.md) | `mac_spoofing_lab.sh` | The switch port of the target MAC before and after, and who receives its frames |
+| [MAC cloning](attacks/mac-address-cam-table/mac-cloning.md) | `mac_cloning_lab.sh` | Frames dropped by a port that admits one MAC, then delivered after cloning |
+| [ARP spoofing](attacks/arp/arp-spoofing.md) | `arp_spoofing_lab.sh` | The victim's ARP cache for the gateway, before and after |
+| [ARP cache poisoning](attacks/arp/arp-cache-poisoning.md) | `arp_poisoning_lab.sh` | Both ARP caches, of the victim and of the gateway, before and after |
+| [Gratuitous ARP spoofing](attacks/arp/gratuitous-arp-spoofing.md) | `gratuitous_arp_lab.sh` | Two victims' ARP caches changed by one broadcast announcement |
+| [ARP request flooding](attacks/arp/arp-request-flooding.md) | `arp_request_flooding_lab.sh` | Flooded requests received by the victim, and the gateway's neighbor table growth |
 
 Run any of them with `sudo`, from the project root:
 

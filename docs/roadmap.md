@@ -34,6 +34,20 @@ Some scenarios are not pure Ethernet attacks but belong to the extended scope: L
 
 Wi-Fi (deauthentication, Evil Twin, WPA attacks) will be a separate module, because it is 802.11 and not IEEE 802.3 Ethernet.
 
+## Platforms (planned)
+
+MACabre is developed and tested on Linux today. The goal is one installable program for Linux, macOS and Windows that sends attacks on the physical network interface of the machine it runs on. The labs are a development harness and are not part of how the tool runs.
+
+| Platform | Frames sent through | Known constraints |
+| --- | --- | --- |
+| Linux | AF_PACKET on the physical interface | Root or `CAP_NET_RAW` required. |
+| macOS | BPF on the physical interface | Root required. Ethernet only. Frames from a virtual machine's network adapter have not been shown to reach a physical switch, so field tests use the physical interface. |
+| Windows | Npcap on the physical interface | Npcap must be installed. Its license restricts redistribution, so the terms must be checked before MACabre ships with it. Administrator rights required. Changing an adapter's MAC address depends on its driver, usually through registry settings. |
+
+Wi-Fi is excluded from the Layer 2 attacks on every platform, because access points drop frames whose MAC address is not associated.
+
+The packaging tool is not chosen yet. PyInstaller and Briefcase are the candidates, and each one needs testing on all three platforms.
+
 ## Operating modes (planned)
 
 MACabre will have four operating modes, so that disruptive tests cannot run by accident in production:

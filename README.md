@@ -25,7 +25,7 @@ It is made for labs, authorized audits, and anyone who has ever wondered why a s
 
 - **Handcrafted frames.** Build and send Ethernet, ARP and DHCP frames from the desktop interface or from Python.
 - **An attack menu** organized by family, with one panel per attack, a log, and a "generate frames only" mode to see what will be sent first.
-- **Isolated labs.** Every attack has a script that builds a lab with Linux network namespaces, runs the attack and reports what the switch and the hosts did. Your real interfaces are never touched.
+- **Lab scripts.** Every attack has a script that reproduces it on a small test network, runs it and reports what the switch and the hosts did. The labs are how each attack is checked the same way every time.
 - **Documentation for every attack:** the theory, the protocols involved, and an audit specification with expected behavior, evidence, mitigations and execution risk.
 
 ## Where to look
@@ -55,7 +55,7 @@ To run the test suite, which needs neither root nor a display:
 pytest
 ```
 
-> **macOS users:** the labs need Linux network namespaces. Run them inside a Linux machine, for example an [OrbStack](https://orbstack.dev/) Linux machine, and create a fresh virtual environment there. Do not reuse the macOS `.venv`, its binaries do not run on Linux.
+> **Platforms:** MACabre is tested on Linux today. macOS and Windows support is planned, and it will send frames on the physical interface of the machine it runs on. See the [roadmap](docs/roadmap.md).
 
 ## Use it responsibly
 

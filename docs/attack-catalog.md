@@ -22,7 +22,7 @@ The Status column shows how far each technique has come in MACabre:
 
 - 📋 To implement: planned, no code yet.
 - 🔨 Implemented: attack module and GUI panel exist, not tested yet.
-- 🧪 Tested: validated with a lab script in isolated namespaces.
+- 🧪 Tested: validated with a lab script on a test network.
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
