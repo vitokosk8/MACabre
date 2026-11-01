@@ -34,6 +34,8 @@ from macabre.gui.dhcp_spoofing_panel import DhcpSpoofingPanel
 from macabre.gui.dhcp_offer_flooding_panel import DhcpOfferFloodingPanel
 from macabre.gui.dhcp_discover_flooding_panel import DhcpDiscoverFloodingPanel
 from macabre.gui.dhcp_nak_injection_panel import DhcpNakInjectionPanel
+from macabre.gui.cdp_spoofing_panel import CdpSpoofingPanel
+from macabre.gui.cdp_flooding_panel import CdpFloodingPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -80,6 +82,8 @@ PANELS = {
     "DHCP Offer Flooding": DhcpOfferFloodingPanel,
     "DHCP Discover Flooding": DhcpDiscoverFloodingPanel,
     "DHCP NAK Injection": DhcpNakInjectionPanel,
+    "CDP Spoofing": CdpSpoofingPanel,
+    "CDP Flooding": CdpFloodingPanel,
 }
 
 

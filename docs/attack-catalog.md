@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only, 101 to implement (128 techniques; P1: 18 of 37 tested).
+Current count: 20 tested, 0 tested in GUI, 0 not working yet, 9 implemented only, 99 to implement (128 techniques; P1: 20 of 37 tested).
 
 ## Techniques by category
 
@@ -144,8 +144,8 @@ Current count: 18 tested, 0 tested in GUI, 0 not working yet, 9 implemented only
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| CDP Spoofing | Forged CDP advertisements | P1 | 📋 To implement |
-| CDP Flooding | Flooding with CDP messages | P1 | 📋 To implement |
+| CDP Spoofing | Forged CDP advertisements | P1 | 🧪 Tested |
+| CDP Flooding | Flooding with CDP messages | P1 | 🧪 Tested |
 | LLDP Spoofing | Spoofing LLDP information | P1 | 📋 To implement |
 | LLDP Flooding | Flooding with LLDP advertisements | P1 | 📋 To implement |
 | MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 📋 To implement |
