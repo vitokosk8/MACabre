@@ -32,6 +32,8 @@ PRIORITY_STEP = 4096
 MAX_PORT_ID = 0xFFFF
 MAX_PATH_COST = 0xFFFFFFFF
 DEFAULT_PORT_ID = 0x8001
+TC_FLAG = 0x01                    # topology change: switches flush learned addresses
+TCA_FLAG = 0x80                   # topology change acknowledgment
 # BPDU timers are in units of 1/256 second.
 MAX_AGE = 20 * 256
 HELLO_TIME = 2 * 256
@@ -91,10 +93,11 @@ def bpdu_body(
     bridge_priority: int,
     bridge_mac: str,
     port_id: int = DEFAULT_PORT_ID,
+    flags: int = 0,
 ) -> bytes:
     """The 35-byte configuration BPDU that follows the LLC header."""
     return (
-        struct.pack("!HBBB", 0, 0, 0, 0)                 # protocol ID, version, type (config), flags
+        struct.pack("!HBBB", 0, 0, 0, flags)            # protocol ID, version, type (config), flags
         + _bridge_id(root_priority, root_mac)            # root identifier
         + struct.pack("!I", root_path_cost)              # root path cost
         + _bridge_id(bridge_priority, bridge_mac)        # bridge identifier
@@ -110,6 +113,7 @@ def build_bpdu_frame(
     root_path_cost: int = 0,
     bridge_priority: int = 0,
     port_id: int = DEFAULT_PORT_ID,
+    flags: int = 0,
 ) -> Packet:
     """Configuration BPDU from `sender_mac` to the STP group address, with an 802.3 length field.
 
@@ -125,6 +129,7 @@ def build_bpdu_frame(
         bridge_priority,
         sender,
         port_id,
+        flags,
     )
     payload = LLC_STP + body
     return Ether(src=sender, dst=STP_MAC, type=len(payload)) / Raw(payload)

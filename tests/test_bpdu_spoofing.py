@@ -132,3 +132,12 @@ def test_dry_run_sends_nothing_and_reads_nothing():
                                   run=lambda argv: calls.append(argv) or "", send=capture(sent))
     assert calls == [] and sent == []
     assert stats.status.startswith("Dry run")
+
+
+def test_topology_change_flag_is_set_only_when_requested():
+    plain = bytes(stp.build_bpdu_frame(ATTACKER).load)[3:]
+    flagged = bytes(stp.build_bpdu_frame(ATTACKER, flags=stp.TC_FLAG).load)[3:]
+    # Body layout: protocol ID (2), version (1), type (1), flags (1), ...
+    assert plain[4] == 0
+    assert flagged[4] == 0x01
+    assert plain[:4] == flagged[:4] and plain[5:] == flagged[5:]
