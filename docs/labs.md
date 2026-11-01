@@ -38,6 +38,7 @@ The labs are not how MACabre runs. The tool sends frames on the physical interfa
 | [Rogue DHCP server](attacks/dhcpv4-dhcpv6/rogue-dhcp-server.md) | `rogue_dhcp_server_lab.sh` | Which server's offer the client takes first, with the legitimate server running and stopped, and whether the rogue's ACK is accepted |
 | [DHCP spoofing](attacks/dhcpv4-dhcpv6/dhcp-spoofing.md) | `dhcp_spoofing_lab.sh` | Whether a client accepts an offer and an ACK in the legitimate server's name, with the attacker's gateway, with the server running and stopped |
 | [DHCP offer flooding](attacks/dhcpv4-dhcpv6/dhcp-offer-flooding.md) | `dhcp_offer_flooding_lab.sh` | Offers the client receives per round, how many come from the flood, and whether the client's first offer comes from an invented server, with the legitimate server running and stopped |
+| [DHCP discover flooding](attacks/dhcpv4-dhcpv6/dhcp-discover-flooding.md) | `dhcp_discover_flooding_lab.sh` | DISCOVERs the server logs against the number sent, and whether a probe still gets an offer during the flood. No denial of service was seen at 2000 per second. CPU use is not measured |
 | [VLAN tag injection](attacks/vlan-802-1q/vlan-tag-injection.md) | `vlan_tag_injection_lab.sh` | Injected-tag frames reaching the monitor, and whether their VLAN ID and priority are unchanged (the switch's decision is simulated) |
 
 Run any of them with `sudo`, from the project root:

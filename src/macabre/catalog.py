@@ -100,7 +100,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='Rogue DHCP Server', description='Unauthorized DHCP server', priority='P1', status=Status.TESTED),
             Technique(name='DHCP Spoofing', description='Forging DHCP responses', priority='P1', status=Status.TESTED),
             Technique(name='DHCP Offer Flooding', description='Flooding with DHCP offers', priority='P1', status=Status.TESTED),
-            Technique(name='DHCP Discover Flooding', description='Flooding with DHCP discover requests', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='DHCP Discover Flooding', description='Flooding with DHCP discover requests', priority='P1', status=Status.IMPLEMENTED),
             Technique(name='DHCP NAK Injection', description='Fraudulent DHCP denials', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='DHCP Release Spoofing', description='Fraudulent lease releases', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='DHCP Option Manipulation', description='Manipulating configuration options', priority='P2', status=Status.TO_IMPLEMENT),
