@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 9 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 117 to implement (126 techniques; P1: 9 of 41 tested).
+Current count: 10 tested, 0 tested in GUI, 0 not working yet, 0 implemented only, 116 to implement (126 techniques; P1: 10 of 41 tested).
 
 ## Techniques by category
 
@@ -51,7 +51,7 @@ Current count: 9 tested, 0 tested in GUI, 0 not working yet, 0 implemented only,
 | ARP Cache Poisoning | Poisoning ARP caches | P1 | 🧪 Tested |
 | Gratuitous ARP Spoofing | Fraudulent gratuitous ARP announcements | P1 | 🧪 Tested |
 | ARP Request Flooding | Flooding with ARP requests | P1 | 🧪 Tested |
-| ARP Reply Flooding | Flooding with ARP replies | P1 | 📋 To implement |
+| ARP Reply Flooding | Flooding with ARP replies | P1 | 🧪 Tested |
 | ARP Table Exhaustion | Exhausting the ARP table | P2 | 📋 To implement |
 | Proxy ARP Abuse | Abusing proxy ARP responses | P2 | 📋 To implement |
 | ARP-Based Gateway Impersonation | Impersonating the default gateway | P1 | 📋 To implement |
