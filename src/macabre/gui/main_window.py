@@ -25,6 +25,7 @@ from macabre.catalog import FAMILIES
 from macabre.gui.arp_gateway_impersonation_panel import ArpGatewayImpersonationPanel
 from macabre.gui.bpdu_spoofing_panel import BpduSpoofingPanel
 from macabre.gui.root_bridge_takeover_panel import RootBridgeTakeoverPanel
+from macabre.gui.root_bridge_impersonation_panel import RootBridgeImpersonationPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -62,6 +63,7 @@ PANELS = {
     "VLAN Tag Injection": VlanTagInjectionPanel,
     "BPDU Spoofing": BpduSpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
+    "Root Bridge Impersonation": RootBridgeImpersonationPanel,
 }
 
 

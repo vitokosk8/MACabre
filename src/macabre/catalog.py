@@ -81,7 +81,7 @@ FAMILIES: tuple[Family, ...] = (
         techniques=(
             Technique(name='BPDU Spoofing', description='Forging BPDUs', priority='P1', status=Status.TESTED),
             Technique(name='Root Bridge Takeover', description='Malicious root bridge election', priority='P1', status=Status.TESTED),
-            Technique(name='Root Bridge Impersonation', description='Impersonating the root bridge', priority='P1', status=Status.TO_IMPLEMENT),
+            Technique(name='Root Bridge Impersonation', description='Impersonating the root bridge', priority='P1', status=Status.TESTED),
             Technique(name='Topology Change Flooding', description='Flooding topology change notifications', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='TCN Spoofing', description='Fraudulent topology change notifications', priority='P1', status=Status.TO_IMPLEMENT),
             Technique(name='BPDU Flooding', description='Flooding with BPDUs', priority='P1', status=Status.TO_IMPLEMENT),
