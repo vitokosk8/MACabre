@@ -5,6 +5,7 @@ from __future__ import annotations
 import random
 import re
 import subprocess
+import sys
 from collections.abc import Callable
 
 BROADCAST_MAC = "ff:ff:ff:ff:ff:ff"
@@ -13,6 +14,8 @@ Runner = Callable[[list[str]], str]
 
 _MAC_RE = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
 _LINK_RE = re.compile(r"link/ether ([0-9a-f:]{17})")
+# macOS ifconfig prints each octet without its leading zero, e.g. "ether 0:e0:4c:f8:d1:a8".
+_IFCONFIG_RE = re.compile(r"\bether ((?:[0-9a-f]{1,2}:){5}[0-9a-f]{1,2})\b")
 
 
 def random_mac(rng: random.Random) -> str:
@@ -41,8 +44,18 @@ def run_command(argv: list[str]) -> str:
 
 
 def read_interface_mac(iface: str, run: Runner | None = None) -> str:
-    """Current hardware address of `iface`, read with `ip` (Scapy caches it)."""
-    output = (run or run_command)(["ip", "-o", "link", "show", "dev", iface])
+    """Current hardware address of `iface` (Scapy caches it).
+
+    Linux reads it with `ip`; macOS reads it with `ifconfig`.
+    """
+    runner = run or run_command
+    if sys.platform == "darwin":
+        output = runner(["ifconfig", iface])
+        match = _IFCONFIG_RE.search(output)
+        if not match:
+            raise RuntimeError(f"Cannot read the MAC address of {iface}.")
+        return ":".join(f"{int(octet, 16):02x}" for octet in match.group(1).split(":"))
+    output = runner(["ip", "-o", "link", "show", "dev", iface])
     match = _LINK_RE.search(output)
     if not match:
         raise RuntimeError(f"Cannot read the MAC address of {iface}.")
