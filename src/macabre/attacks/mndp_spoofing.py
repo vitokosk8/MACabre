@@ -5,9 +5,9 @@ platform, board, version, uptime, interface and addresses in UDP broadcasts on p
 RouterOS lists the devices it hears in its neighbor list. The announcements are not
 authenticated, so a host can announce itself as a router with any identity and address.
 
-Format (from a third-party description of MNDP, not yet checked against a RouterOS capture):
-a 4-byte header (type 0x0000 and a sequence number, little-endian), then type-length-value
-records. Type and length are little-endian 16-bit fields; the value encoding depends on the type.
+Format (checked against a RouterOS 7.26beta3 announcement; the neighbor-list effect is not yet tested):
+a 4-byte header (type 0x0000 and a sequence number), then type-length-value
+records. Type and length are big-endian 16-bit fields; the value encoding depends on the type.
 
 Intended only for networks you own or are explicitly authorized to test.
 """
@@ -33,15 +33,18 @@ TLV_MAC = 0x0001
 TLV_IDENTITY = 0x0005
 TLV_VERSION = 0x0007
 TLV_PLATFORM = 0x0008
-TLV_BOARD = 0x000A
-TLV_UPTIME = 0x000B
-TLV_SOFTWARE_ID = 0x000C
+# Field types as seen in a RouterOS 7.26beta3 capture: uptime is 4 bytes (little-endian),
+# software ID and board are text.
+TLV_UPTIME = 0x000A
+TLV_SOFTWARE_ID = 0x000B
+TLV_BOARD = 0x000C
 TLV_INTERFACE_NAME = 0x0010
 TLV_IPV4 = 0x0011
 
 
 def _tlv(kind: int, value: bytes) -> bytes:
-    return struct.pack("<HH", kind, len(value)) + value
+    # Type and length are big-endian in RouterOS announcements.
+    return struct.pack(">HH", kind, len(value)) + value
 
 
 def _text(value: str, name: str) -> bytes:
@@ -131,7 +134,7 @@ def parse_mndp(payload: bytes) -> dict[int, bytes]:
     while pos < len(payload):
         if pos + 4 > len(payload):
             raise ValueError("Truncated TLV header.")
-        kind, length = struct.unpack("<HH", payload[pos:pos + 4])
+        kind, length = struct.unpack(">HH", payload[pos:pos + 4])
         if pos + 4 + length > len(payload):
             raise ValueError("TLV runs past the end of the payload.")
         fields[kind] = payload[pos + 4:pos + 4 + length]
