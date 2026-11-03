@@ -31,6 +31,16 @@ Frames with many different source addresses arrive on one port. The port learns 
 - Violation action that restricts traffic instead of shutting the port, when availability matters.
 - Monitoring of violation counters.
 
+## Implementation status
+
+The module sends frames from one port, each with a new random source MAC, at a rate up to 100 frames per second. The GUI panel exposes the rate.
+
+## Lab validation
+
+`scripts/lab/port_security_exhaustion_lab.sh` builds a Linux bridge with an attacker port and a victim port. The victim sends one frame first, so the switch learns its MAC. The attacker then sends frames with new source MACs. The lab checks that the attacker's port learns one address per frame, and that the victim's entry stays on its own port.
+
+A Linux bridge has no per-port MAC limit, so the lab cannot reach a violation action. The result shows what the sender controls, not what a switch does when its limit is reached. The status stays 🔨 Implemented until a real switch with port security configured is tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
