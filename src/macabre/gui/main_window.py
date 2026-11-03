@@ -60,6 +60,7 @@ from macabre.gui.mac_cloning_panel import MacCloningPanel
 from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 from macabre.gui.dtp_audit_panel import DtpAuditPanel
 from macabre.gui.mab_bypass_panel import MabBypassPanel
+from macabre.gui.mac_move_panel import MacMovePanel
 from macabre.gui.port_security_exhaustion_panel import PortSecurityExhaustionPanel
 from macabre.gui.static_mac_impersonation_panel import StaticMacImpersonationPanel
 
@@ -86,6 +87,7 @@ PANELS = {
     "MAB Bypass / MAC Spoofing": MabBypassPanel,
     "Static MAC Impersonation": StaticMacImpersonationPanel,
     "Port Security Exhaustion": PortSecurityExhaustionPanel,
+    "MAC Move / Mobility Abuse": MacMovePanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
