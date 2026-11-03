@@ -60,6 +60,7 @@ from macabre.gui.mac_cloning_panel import MacCloningPanel
 from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 from macabre.gui.dtp_audit_panel import DtpAuditPanel
 from macabre.gui.mab_bypass_panel import MabBypassPanel
+from macabre.gui.static_mac_impersonation_panel import StaticMacImpersonationPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
 PANELS = {
@@ -82,6 +83,7 @@ PANELS = {
     "BPDU Spoofing": BpduSpoofingPanel,
     "DTP Negotiation Abuse": DtpAuditPanel,
     "MAB Bypass / MAC Spoofing": MabBypassPanel,
+    "Static MAC Impersonation": StaticMacImpersonationPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
