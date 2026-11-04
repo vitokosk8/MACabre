@@ -61,10 +61,20 @@ from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 from macabre.gui.dtp_audit_panel import DtpAuditPanel
 from macabre.gui.mab_bypass_panel import MabBypassPanel
 from macabre.gui.arp_table_exhaustion_panel import ArpTableExhaustionPanel
+from macabre.gui.proxy_arp_abuse_panel import ProxyArpAbusePanel
 from macabre.gui.mac_move_panel import MacMovePanel
 from macabre.gui.unknown_unicast_flooding_panel import UnknownUnicastFloodingPanel
 from macabre.gui.port_security_exhaustion_panel import PortSecurityExhaustionPanel
 from macabre.gui.static_mac_impersonation_panel import StaticMacImpersonationPanel
+from macabre.gui.dhcp_release_spoofing_panel import DhcpReleaseSpoofingPanel
+from macabre.gui.dhcp_option_manipulation_panel import DhcpOptionManipulationPanel
+from macabre.gui.dhcp_relay_option82_panel import DhcpRelayOption82Panel
+from macabre.gui.rogue_dhcpv6_server_panel import RogueDhcpv6ServerPanel
+from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
+from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
+from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
+from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
+from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
 PANELS = {
@@ -92,6 +102,16 @@ PANELS = {
     "MAC Move / Mobility Abuse": MacMovePanel,
     "Unknown Unicast Flooding": UnknownUnicastFloodingPanel,
     "ARP Table Exhaustion": ArpTableExhaustionPanel,
+    "Proxy ARP Abuse": ProxyArpAbusePanel,
+    "QinQ / VLAN Stacking Abuse": QinQStackingPanel,
+    "DHCP Release Spoofing": DhcpReleaseSpoofingPanel,
+    "DHCP Option Manipulation": DhcpOptionManipulationPanel,
+    "DHCP Relay / Option 82 Abuse": DhcpRelayOption82Panel,
+    "Rogue DHCPv6 Server": RogueDhcpv6ServerPanel,
+    "DHCPv6 Starvation": Dhcpv6StarvationPanel,
+    "IGMP Spoofing": IgmpSpoofingPanel,
+    "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
+    "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,

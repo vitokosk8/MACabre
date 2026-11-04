@@ -34,3 +34,13 @@ A host asks for an address on another subnet. A router with proxy ARP enabled re
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
+
+## Implementation status
+
+The probe sends ARP requests from this segment for addresses outside it, and records which ones get an answer and the MAC that answers. It sends requests only and changes nothing on the router. The GUI panel exposes the sender address, the segment prefix and the targets. Targets inside the segment are refused, because a normal reply there is not proxy ARP.
+
+## Lab validation
+
+`scripts/lab/proxy_arp_abuse_lab.sh` puts the attacker on one segment, a host on another, and a Linux router between them. Phase 0 turns proxy ARP off on the router's segment-facing interface, and the probe gets no answer. Phase 1 turns it on, and the router answers for the host with its own MAC.
+
+The lab shows the router's behavior on this Linux setup. Other routers have their own defaults and policies, so the audit must also run against the target device.

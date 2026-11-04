@@ -34,3 +34,13 @@ The customer sends frames that already carry a provider tag, or several tags, an
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
+
+## Implementation status
+
+- Module: `src/macabre/attacks/qinq_stacking_abuse.py` (one-shot send of frames with an 802.1ad outer tag, TPID 0x88A8, around an 802.1Q inner tag).
+- GUI panel: "QinQ / VLAN Stacking Abuse".
+- Status: 🔨 Implemented. Not yet validated by the lab on this kernel.
+
+## Lab validation
+
+`scripts/lab/qinq_stacking_lab.sh` builds a VLAN-filtering bridge with an 802.1ad outer tag as the provider edge. Phase 0 drops the stacked frame when the customer port is not a member of the service VLAN; phase 1 forwards it with outer and inner tags intact. The lab needs bridge VLAN filtering in the kernel. On the sandbox kernel that option is unavailable, so the lab reports inconclusive (exit 2) and the attack is not yet validated here. It must be run on a kernel with bridge VLAN filtering, or on a real provider edge.
