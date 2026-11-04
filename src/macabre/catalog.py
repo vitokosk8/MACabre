@@ -181,7 +181,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='Multicast Flooding', description='Multicast flooding', priority='P1', status=Status.TESTED),
             Technique(name='IGMP Spoofing', description='Spoofing IGMP memberships', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='IGMP Query Spoofing', description='Fraudulent multicast queries', priority='P2', status=Status.TO_IMPLEMENT),
-            Technique(name='IGMP Leave Spoofing', description='Fraudulent group leave', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='IGMP Leave Spoofing', description='Fraudulent group leave', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='IGMP Snooping Table Exhaustion', description='Exhausting the group table', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='Unknown Multicast Flooding', description='Exploiting unknown multicast traffic', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='L2 Loop Amplification', description='Amplifying traffic through loops', priority='P2', status=Status.TO_IMPLEMENT),
