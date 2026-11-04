@@ -30,6 +30,16 @@ The attacker sends a release that carries the victim's client identity and addre
 - Monitoring of lease and address conflicts.
 - Duplicate address detection on clients.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/dhcp_release_spoofing.py` (sends DHCPRELEASE messages with the victim's MAC, leased address and server identifier, once each).
+- GUI panel: "DHCP Release Spoofing".
+- Status: 🔨 Implemented. The lab validates the server's behavior with dnsmasq; a real server is not tested yet.
+
+## Lab validation
+
+`scripts/lab/dhcp_release_spoofing_lab.sh` runs dnsmasq as the server and a client that takes a lease. A release with another MAC for the same address leaves the lease in place; a release with the victim's MAC removes it from the server's lease file. The MikroTik DHCP server and other servers are not tested by the lab.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

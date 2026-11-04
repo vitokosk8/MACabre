@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented only, 86 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented only, 76 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -53,7 +53,7 @@ Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented onl
 | ARP Request Flooding | Flooding with ARP requests | P1 | 🧪 Tested |
 | ARP Reply Flooding | Flooding with ARP replies | P1 | 🧪 Tested |
 | ARP Table Exhaustion | Exhausting the ARP table | P2 | 🔨 Implemented |
-| Proxy ARP Abuse | Abusing proxy ARP responses | P2 | 📋 To implement |
+| Proxy ARP Abuse | Abusing proxy ARP responses | P2 | 🧪 Tested |
 | ARP-Based Gateway Impersonation | Impersonating the default gateway | P1 | 🧪 Tested |
 | ARP Inspection Evasion | Attempts to evade Dynamic ARP Inspection | P3 | 📋 To implement |
 
@@ -67,7 +67,7 @@ Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented onl
 | Native VLAN Abuse | Exploiting the native VLAN | P1 | 🔨 Implemented |
 | VLAN Tag Injection | Injecting tagged frames | P1 | 🔨 Implemented |
 | VLAN Translation Abuse | Abusing VLAN translation | P3 | 📋 To implement |
-| QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 📋 To implement |
+| QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 🔨 Implemented |
 | VLAN Pruning Abuse | Exploiting VLAN propagation | P2 | 📋 To implement |
 | Private VLAN Isolation Bypass | Bypassing private VLAN isolation | P2 | 📋 To implement |
 | VLAN ID Exhaustion | Exhausting VLAN resources | P3 | 📋 To implement |
@@ -99,12 +99,12 @@ Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented onl
 | DHCP Offer Flooding | Flooding with DHCP offers | P1 | 🧪 Tested |
 | DHCP Discover Flooding | Flooding with DHCP discover requests | P1 | 🔨 Implemented |
 | DHCP NAK Injection | Fraudulent DHCP denials | P1 | 🧪 Tested |
-| DHCP Release Spoofing | Fraudulent lease releases | P2 | 📋 To implement |
-| DHCP Option Manipulation | Manipulating configuration options | P2 | 📋 To implement |
-| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 📋 To implement |
+| DHCP Release Spoofing | Fraudulent lease releases | P2 | 🔨 Implemented |
+| DHCP Option Manipulation | Manipulating configuration options | P2 | 🔨 Implemented |
+| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 🔨 Implemented |
 | DHCP Snooping Binding Abuse | Manipulating snooping bindings | P3 | 📋 To implement |
-| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 📋 To implement |
-| DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 📋 To implement |
+| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 🔨 Implemented |
+| DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 🔨 Implemented |
 | DHCPv6 Prefix Delegation Abuse | Abusing prefix delegation | P3 | 📋 To implement |
 
 ### IPv6 Neighbor Discovery & SLAAC (13)
@@ -150,7 +150,7 @@ Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented onl
 | LLDP Flooding | Flooding with LLDP advertisements | P1 | 🧪 Tested |
 | MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
 | MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
-| LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 📋 To implement |
+| LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 🔨 Implemented |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
 | DTP Negotiation Abuse | Improper trunk negotiation | P1 | 🔨 Implemented |
@@ -176,9 +176,9 @@ Current count: 28 tested, 0 tested in GUI, 0 not working yet, 14 implemented onl
 | --- | --- | --- | --- |
 | Broadcast Storm | Broadcast traffic storm | P1 | 🧪 Tested |
 | Multicast Flooding | Multicast flooding | P1 | 🧪 Tested |
-| IGMP Spoofing | Spoofing IGMP memberships | P2 | 📋 To implement |
+| IGMP Spoofing | Spoofing IGMP memberships | P2 | 🔨 Implemented |
 | IGMP Query Spoofing | Fraudulent multicast queries | P2 | 📋 To implement |
-| IGMP Leave Spoofing | Fraudulent group leave | P2 | 📋 To implement |
+| IGMP Leave Spoofing | Fraudulent group leave | P2 | 🔨 Implemented |
 | IGMP Snooping Table Exhaustion | Exhausting the group table | P3 | 📋 To implement |
 | Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 📋 To implement |
 | L2 Loop Amplification | Amplifying traffic through loops | P2 | 📋 To implement |

@@ -47,6 +47,7 @@ class RogueDhcpConfig:
     dns: str = ""                    # DNS server offered; empty = server_ip
     lease_time: int = LEASE_SECONDS
     dry_run: bool = False            # validate and describe, but do not listen or send
+    extra_options: tuple = ()       # (code, value) options added to every OFFER and ACK
 
     def __post_init__(self) -> None:
         _ipv4(self.server_ip, "Server address")
@@ -120,6 +121,7 @@ def build_offer(config: RogueDhcpConfig, sender_mac: str, discover: Packet) -> P
         ("subnet_mask", config.subnet_mask),
         ("router", config.effective_router),
         ("name_server", config.effective_dns),
+        *config.extra_options,
         "end",
     ])
 
@@ -133,6 +135,7 @@ def build_ack(config: RogueDhcpConfig, sender_mac: str, request: Packet, granted
         ("subnet_mask", config.subnet_mask),
         ("router", config.effective_router),
         ("name_server", config.effective_dns),
+        *config.extra_options,
         "end",
     ])
 

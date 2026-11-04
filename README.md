@@ -55,7 +55,7 @@ To run the test suite, which needs neither root nor a display:
 pytest
 ```
 
-> **Platforms:** MACabre is tested on Linux today. macOS and Windows support is planned, and it will send frames on the physical interface of the machine it runs on. See the [roadmap](docs/roadmap.md).
+> **Platforms:** MACabre is tested on Linux today, and each release also publishes Windows and macOS builds. Attacks send frames on the physical interface of the machine they run on. The macOS build needs root: see [running on macOS](docs/macos.md). See the [roadmap](docs/roadmap.md).
 
 ## Use it responsibly
 
