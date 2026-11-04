@@ -66,6 +66,7 @@ from macabre.gui.mac_move_panel import MacMovePanel
 from macabre.gui.unknown_unicast_flooding_panel import UnknownUnicastFloodingPanel
 from macabre.gui.port_security_exhaustion_panel import PortSecurityExhaustionPanel
 from macabre.gui.static_mac_impersonation_panel import StaticMacImpersonationPanel
+from macabre.gui.dhcp_release_spoofing_panel import DhcpReleaseSpoofingPanel
 from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -96,6 +97,7 @@ PANELS = {
     "ARP Table Exhaustion": ArpTableExhaustionPanel,
     "Proxy ARP Abuse": ProxyArpAbusePanel,
     "QinQ / VLAN Stacking Abuse": QinQStackingPanel,
+    "DHCP Release Spoofing": DhcpReleaseSpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
