@@ -32,6 +32,16 @@ The attacker sends an LLDP-MED frame with a network policy that names a voice VL
 - Static voice VLAN configuration.
 - Monitoring of policy changes.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/lldp_med_policy_spoofing.py` (sends LLDP frames with the mandatory TLVs, the LLDP-MED capabilities TLV and a network policy TLV for a chosen application, VLAN, Layer 2 priority and DSCP).
+- GUI panel: "LLDP-MED Policy Spoofing".
+- Status: 🔨 Implemented. The lab validates that lldpd stores the forged voice policy and decodes it to the VLAN, priority and DSCP sent. Whether an endpoint applies the policy is not validated.
+
+## Lab validation
+
+`scripts/lab/lldp_med_policy_spoofing_lab.sh` runs lldpd in receive-only mode as the endpoint and sends three voice advertisements (VLAN 20, priority 5, DSCP 46). Before the advertisements there is no stored policy. After them the receiver stores the same values. The network policy field layout was checked against lldpd's decoder with several bit positions.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
