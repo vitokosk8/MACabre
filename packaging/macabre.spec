@@ -52,6 +52,7 @@ if sys.platform == "darwin":
     app = BUNDLE(
         coll,
         name="MACabre.app",
+        icon=str(ROOT / "packaging" / "macabre.icns"),
         bundle_identifier="es.lo0.macabre",
         info_plist={
             "CFBundleName": "MACabre",
