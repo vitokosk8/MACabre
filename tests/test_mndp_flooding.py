@@ -25,7 +25,7 @@ def test_each_announcement_carries_its_own_address_and_sequence():
     frames = flood.flood_frames(random.Random(2), 5, first_sequence=10)
     for n, frame in enumerate(frames):
         payload = bytes(frame.load)
-        assert payload[2:4] == (10 + n).to_bytes(2, "little")
+        assert payload[:2] == (10 + n).to_bytes(2, "little")
         assert parse_mndp(payload)[TLV_IPV4] == bytes(int(o) for o in frame["IP"].src.split("."))
 
 

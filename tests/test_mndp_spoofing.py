@@ -25,9 +25,9 @@ def test_frame_is_a_broadcast_to_udp_5678_from_the_sender():
     assert (frame[UDP].sport, frame[UDP].dport) == (5678, 5678)
 
 
-def test_header_is_zero_type_and_sequence_little_endian():
+def test_header_is_little_endian_sequence_then_zeros():
     payload = mndp.mndp_payload(ATTACKER, "R", "7", "p", "b", "s", "ether1", sequence=258)
-    assert struct.unpack("<HH", payload[:4]) == (0, 258)
+    assert struct.unpack("<HH", payload[:4]) == (258, 0)
 
 
 def test_round_trip_through_the_parser_keeps_every_field():
