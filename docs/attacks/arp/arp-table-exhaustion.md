@@ -34,3 +34,13 @@ The attacker sends replies or requests that create entries for many distinct add
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
+
+## Implementation status
+
+The module sends ARP requests for the victim's address, each from a new random sender in a chosen subnet, at up to 100 requests per second. Each request can make the victim learn an entry for the sender. The GUI panel exposes the victim's address, the sender subnet and the rate.
+
+## Lab validation
+
+`scripts/lab/arp_table_exhaustion_lab.sh` puts the victim on a /16 with a gateway, and sends requests from fake senders in a /20. It checks the victim's entries before and after, and whether the gateway's entry survives.
+
+On the kernel where this was tested, the victim learned fewer entries than requests sent and did not reach its table limit, so eviction was not exercised. The lab reports that as inconclusive. The status stays 🔨 Implemented until a run reaches the limit and shows whether a legitimate entry is evicted. Testing on the target device also decides the limits, since other systems use other defaults.
