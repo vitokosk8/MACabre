@@ -72,6 +72,7 @@ from macabre.gui.dhcp_relay_option82_panel import DhcpRelayOption82Panel
 from macabre.gui.rogue_dhcpv6_server_panel import RogueDhcpv6ServerPanel
 from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
 from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
+from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -108,6 +109,7 @@ PANELS = {
     "Rogue DHCPv6 Server": RogueDhcpv6ServerPanel,
     "DHCPv6 Starvation": Dhcpv6StarvationPanel,
     "IGMP Spoofing": IgmpSpoofingPanel,
+    "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
