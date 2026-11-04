@@ -31,6 +31,16 @@ Unicast frames for addresses that are not in the table, or that have aged out, a
 - Adequate table size and aging times.
 - Port security to bound the number of learned addresses.
 
+## Implementation status
+
+The module is passive. It captures for a set time and counts the unicast frames that are addressed to other hosts, and their destinations. It sends nothing, so it cannot fill the switch's table. The GUI panel exposes the listening time.
+
+## Lab validation
+
+`scripts/lab/unknown_unicast_flooding_lab.sh` builds a Linux bridge with a victim, a monitor and an idle attacker port. The victim sends unicast frames to a destination the switch has never learned. The listener on the monitor port should capture all of them. The lab also checks that the unknown destination is not learned, and that the victim's address is the only one learned on its port.
+
+The lab shows that the switch floods unknown unicast frames to other ports on this bridge. It does not test rate limiting, storm control or table aging, which need a real switch.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

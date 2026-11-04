@@ -44,7 +44,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='Static MAC Impersonation', description='Impersonating a statically registered MAC', priority='P2', status=Status.TESTED),
             Technique(name='Port Security Exhaustion', description='Exhausting port security learning limits', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='MAC Move / Mobility Abuse', description='Abusing MAC mobility mechanisms', priority='P2', status=Status.TESTED),
-            Technique(name='Unknown Unicast Flooding', description='Exploiting flooding of unknown destinations', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='Unknown Unicast Flooding', description='Exploiting flooding of unknown destinations', priority='P2', status=Status.TESTED),
         ),
     ),
     Family(
