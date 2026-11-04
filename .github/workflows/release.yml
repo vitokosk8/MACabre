@@ -16,8 +16,8 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install Qt system libraries
@@ -43,8 +43,8 @@ jobs:
             label: linux-x86_64
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install MACabre and PyInstaller
@@ -83,7 +83,7 @@ jobs:
         run: |
           mkdir -p dist/release
           tar -czf "dist/release/MACabre-${VERSION}-${{ matrix.label }}.tar.gz" -C dist MACabre
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: macabre-${{ matrix.label }}
           path: dist/release/*
@@ -96,8 +96,8 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v5
         with:
           path: artifacts
           merge-multiple: true
