@@ -31,6 +31,16 @@ The attacker sends a DISCOVER with a forged Option 82 that names a port or circu
 - Pool selection tied to the port identity the switch provides.
 - DHCP snooping on access ports.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/dhcp_relay_option82.py`. It sends DHCPDISCOVER messages with a forged Option 82: sub-option 1 (circuit ID) and sub-option 2 (remote ID).
+- GUI panel: "DHCP Relay / Option 82 Abuse".
+- Status: 🔨 Implemented. The lab validates the server's pool choice; relay behavior is not tested.
+
+## Lab validation
+
+`scripts/lab/dhcp_relay_option82_lab.sh` runs dnsmasq with a default pool and a pool selected by circuit ID. A DISCOVER without Option 82 is offered from the default pool; one with the forged circuit ID `pool-a` is offered from that pool. Relays that replace client-supplied Option 82 need the target device.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

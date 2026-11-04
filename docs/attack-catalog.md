@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 29 tested, 0 tested in GUI, 0 not working yet, 17 implemented only, 82 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 29 tested, 0 tested in GUI, 0 not working yet, 18 implemented only, 81 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -101,7 +101,7 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 17 implemented onl
 | DHCP NAK Injection | Fraudulent DHCP denials | P1 | 🧪 Tested |
 | DHCP Release Spoofing | Fraudulent lease releases | P2 | 🔨 Implemented |
 | DHCP Option Manipulation | Manipulating configuration options | P2 | 🔨 Implemented |
-| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 📋 To implement |
+| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 🔨 Implemented |
 | DHCP Snooping Binding Abuse | Manipulating snooping bindings | P3 | 📋 To implement |
 | Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 📋 To implement |
 | DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 📋 To implement |
