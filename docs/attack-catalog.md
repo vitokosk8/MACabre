@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 27 tested, 0 tested in GUI, 0 not working yet, 13 implemented only, 88 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 28 tested, 0 tested in GUI, 0 not working yet, 13 implemented only, 87 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -41,7 +41,7 @@ Current count: 27 tested, 0 tested in GUI, 0 not working yet, 13 implemented onl
 | Static MAC Impersonation | Impersonating a statically registered MAC | P2 | 🧪 Tested |
 | Port Security Exhaustion | Exhausting port security learning limits | P2 | 🔨 Implemented |
 | MAC Move / Mobility Abuse | Abusing MAC mobility mechanisms | P2 | 🧪 Tested |
-| Unknown Unicast Flooding | Exploiting flooding of unknown destinations | P2 | 📋 To implement |
+| Unknown Unicast Flooding | Exploiting flooding of unknown destinations | P2 | 🧪 Tested |
 
 ### ARP (9)
 
