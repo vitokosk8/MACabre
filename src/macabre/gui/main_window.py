@@ -61,6 +61,7 @@ from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 from macabre.gui.dtp_audit_panel import DtpAuditPanel
 from macabre.gui.mab_bypass_panel import MabBypassPanel
 from macabre.gui.arp_table_exhaustion_panel import ArpTableExhaustionPanel
+from macabre.gui.proxy_arp_abuse_panel import ProxyArpAbusePanel
 from macabre.gui.mac_move_panel import MacMovePanel
 from macabre.gui.unknown_unicast_flooding_panel import UnknownUnicastFloodingPanel
 from macabre.gui.port_security_exhaustion_panel import PortSecurityExhaustionPanel
@@ -92,6 +93,7 @@ PANELS = {
     "MAC Move / Mobility Abuse": MacMovePanel,
     "Unknown Unicast Flooding": UnknownUnicastFloodingPanel,
     "ARP Table Exhaustion": ArpTableExhaustionPanel,
+    "Proxy ARP Abuse": ProxyArpAbusePanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
