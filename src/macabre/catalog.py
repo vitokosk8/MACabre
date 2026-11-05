@@ -72,7 +72,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='VLAN Translation Abuse', description='Abusing VLAN translation', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='QinQ / VLAN Stacking Abuse', description='Manipulating 802.1ad tags', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='VLAN Pruning Abuse', description='Exploiting VLAN propagation', priority='P2', status=Status.TO_IMPLEMENT),
-            Technique(name='Private VLAN Isolation Bypass', description='Bypassing private VLAN isolation', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='Private VLAN Isolation Bypass', description='Bypassing private VLAN isolation', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='VLAN ID Exhaustion', description='Exhausting VLAN resources', priority='P3', status=Status.TO_IMPLEMENT),
         ),
     ),
