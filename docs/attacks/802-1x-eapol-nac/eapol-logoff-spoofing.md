@@ -30,6 +30,16 @@ The attacker sends an EAPOL-Logoff with the victim's source address. The authent
 - Monitoring of logoffs.
 - MACsec for ports where session integrity matters.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/eapol_logoff_spoofing.py` (sends EAPOL-Logoff frames that claim the MAC the operator gives).
+- GUI panel: "EAPOL Logoff Spoofing".
+- Status: 🔨 Implemented. The lab validates that hostapd deauthorizes an authenticated supplicant after logoffs that claim its MAC (1 disconnect), and that logoffs from another MAC or no logoff leave it authorized.
+
+## Lab validation
+
+`scripts/lab/eapol_logoff_spoofing_lab.sh` runs FreeRADIUS, hostapd in wired mode, and a wpa_supplicant victim with EAP-MD5 on a Linux bridge. Control: no disconnects during a quiet wait, and none after logoffs from the attacker's own MAC. Attack: the victim is disconnected after logoffs that claim its MAC.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

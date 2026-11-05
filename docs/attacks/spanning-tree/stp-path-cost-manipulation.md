@@ -31,6 +31,14 @@ The attacker advertises a root path cost that is lower than the real one. Switch
 - Root Guard and BPDU Guard on edge ports.
 - Monitoring of topology changes.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry, "STP Path Cost Manipulation". It uses the root bridge impersonation sender and sets the advertised root path cost, so it shares code with [Root Bridge Impersonation](root-bridge-impersonation.md). Real switches are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/root_bridge_impersonation_lab.sh`. Advertising a cost of 0 moves the switch's root port to the attacker's port (phase 2). Advertising a cost of 1000, above the real path cost, leaves the root port on the real root (phase 4). Exit 0 when both hold.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

@@ -31,6 +31,16 @@ The attacker answers the client's PADI with a PADO before the real concentrator 
 - CHAP or stronger methods, never PAP.
 - Discovery filters on the access switch.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/rogue_pppoe_access_concentrator.py` (answers PADI with a PADO carrying a new AC-Cookie, and answers a PADR only when it carries that cookie with a PADS).
+- GUI panel: "Rogue PPPoE Access Concentrator".
+- Status: 🔨 Implemented. The lab validates the handshake: a client that chooses the rogue's PADO completes PADR/PADS with it (10 of 10 trials). It also measures the race on this host: the rogue's PADO came first in 0 of 10 trials, because the legitimate concentrator answered faster. The lab does not validate PAP or CHAP capture, since no PPP session runs.
+
+## Lab validation
+
+`scripts/lab/rogue_pppoe_access_concentrator_lab.sh` runs `pppoe-server` and the rogue on a Linux bridge with a probe client, in three phases: a control with the legitimate server only; a race in which the client takes the first PADO; and a handshake in which the client takes the rogue's PADO. The race result depends on timing, so the lab reports it without forcing it.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

@@ -9,12 +9,15 @@
 #   root:     a bridge (rb0, priority 8192), the real root of the spanning tree.
 #   switch:   a bridge running 802.1D Spanning Tree (kernel STP).
 #   attacker: sends BPDUs with the real root's bridge ID, from its own bridge ID
-#             (priority 0), with a root path cost of 0.
+#             (priority 0), with the root path cost set by COST (default 0).
 #
 #   Phase 1 (baseline): the switch's root port is sw-r, the port toward the real root.
 #   Phase 2: the attacker holds the impersonated root. The root port should move to
 #            sw-a, the attacker's port, while the impostor is refreshed.
 #   Phase 3: the impersonation stops. The root port should return to sw-r.
+#   Phase 4 (control): the same impersonation advertising COST_CONTROL (1000), above the
+#            real path cost. The root port must stay on sw-r, which shows that the
+#            advertised cost, not the identity alone, decides the port.
 #
 # The attacker reads the real root's ID from the BPDUs it can see. Here the lab reads
 # it from the root bridge, which is the same value.
@@ -51,6 +54,9 @@ INTERVAL=2.0
 SETTLE_SECONDS=12
 RECOVER_SECONDS=30
 ATTACKER_MAC="02:00:00:00:00:30"
+COST="${COST:-0}"                       # root path cost advertised in phase 2 (the attack)
+COST_CONTROL="${COST_CONTROL:-1000}"    # higher than the real path cost, so it must not win
+CONTROL_CLAIMS="${CONTROL_CLAIMS:-6}"
 
 stop_lab() {
     for ns in attacker root switch; do
@@ -122,7 +128,7 @@ stats = run_root_bridge_impersonation(
         iface="a-sw",
         root_priority=8192,
         root_mac=os.environ["ROOT_MAC"],
-        root_path_cost=0,
+        root_path_cost=int(os.environ["COST"]),
         bridge_priority=0,
         count=int(os.environ["CLAIMS"]),
         interval=float(os.environ["INTERVAL"]),
@@ -146,7 +152,7 @@ echo
 # --- Phase 2: impersonate the root -----------------------------------------
 
 echo "Phase 2: attacker impersonates root $ROOT_MAC, sending $CLAIMS BPDUs every ${INTERVAL}s"
-ip netns exec attacker env PYTHONPATH="$ROOT/src" ROOT_MAC="$ROOT_MAC" CLAIMS="$CLAIMS" INTERVAL="$INTERVAL" \
+ip netns exec attacker env PYTHONPATH="$ROOT/src" ROOT_MAC="$ROOT_MAC" CLAIMS="$CLAIMS" INTERVAL="$INTERVAL" COST="$COST" \
     "$PY" -c "$IMPERSONATE_CODE" &
 ATTACKER_PID=$!
 
@@ -169,6 +175,18 @@ RECOVERED="$(root_port_name)"
 echo "  switch root port: $RECOVERED"
 echo
 
+# --- Phase 4: control, same impersonation with a cost above the real path ----
+
+echo "Phase 4: control, attacker impersonates root with root path cost $COST_CONTROL (above the real path cost)"
+ip netns exec attacker env PYTHONPATH="$ROOT/src" ROOT_MAC="$ROOT_MAC" CLAIMS="$CONTROL_CLAIMS" INTERVAL="$INTERVAL" COST="$COST_CONTROL" \
+    "$PY" -c "$IMPERSONATE_CODE" >/dev/null &
+CONTROL_PID=$!
+sleep 4
+CONTROL_PORT="$(root_port_name)"
+echo "  t+4s switch root port: $CONTROL_PORT"
+wait "$CONTROL_PID"
+echo
+
 # --- Verdict ---------------------------------------------------------------
 
 if [[ "$BASE" == "sw-r" ]]; then
@@ -189,4 +207,9 @@ if [[ "$RECOVERED" == "sw-r" ]]; then
     echo "Recovery: the root port returned to the real root (sw-r) once the impersonation stopped. OK"
 else
     echo "Recovery: the root port is $RECOVERED, not sw-r."
+fi
+if [[ "$CONTROL_PORT" == "sw-r" ]]; then
+    echo "Control: with root path cost $COST_CONTROL the root port stayed on the real root (sw-r). The cost decides the port. OK"
+else
+    echo "Control: with root path cost $COST_CONTROL the root port moved to $CONTROL_PORT. Result unreliable."
 fi

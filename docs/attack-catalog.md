@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented only, 76 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 29 tested, 0 tested in GUI, 0 not working yet, 35 implemented only, 64 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -69,7 +69,7 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented onl
 | VLAN Translation Abuse | Abusing VLAN translation | P3 | 📋 To implement |
 | QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 🔨 Implemented |
 | VLAN Pruning Abuse | Exploiting VLAN propagation | P2 | 📋 To implement |
-| Private VLAN Isolation Bypass | Bypassing private VLAN isolation | P2 | 📋 To implement |
+| Private VLAN Isolation Bypass | Bypassing private VLAN isolation | P2 | 🔨 Implemented |
 | VLAN ID Exhaustion | Exhausting VLAN resources | P3 | 📋 To implement |
 
 ### Spanning Tree (STP / RSTP / MSTP / PVST+) (12)
@@ -82,10 +82,10 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented onl
 | Topology Change Flooding | Flooding topology change notifications | P1 | 🔨 Implemented |
 | TCN Spoofing | Fraudulent topology change notifications | P1 | 🔨 Implemented |
 | BPDU Flooding | Flooding with BPDUs | P1 | 🔨 Implemented |
-| STP Path Cost Manipulation | Manipulating path costs | P2 | 📋 To implement |
-| STP Priority Manipulation | Altering bridge priorities | P2 | 📋 To implement |
+| STP Path Cost Manipulation | Manipulating path costs | P2 | 🔨 Implemented |
+| STP Priority Manipulation | Altering bridge priorities | P2 | 🔨 Implemented |
 | STP Loop Induction | Inducing Layer 2 loops | P2 | 📋 To implement |
-| BPDU Guard Trigger Abuse | Triggering port shutdowns through BPDU Guard | P2 | 📋 To implement |
+| BPDU Guard Trigger Abuse | Triggering port shutdowns through BPDU Guard | P2 | 🔨 Implemented |
 | RSTP Proposal/Agreement Abuse | Manipulating RSTP convergence | P3 | 📋 To implement |
 | MST Region Spoofing | Spoofing MST region parameters | P3 | 📋 To implement |
 
@@ -129,14 +129,14 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented onl
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| EAPOL Start Flooding | Flooding authentication start requests | P2 | 📋 To implement |
-| EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 📋 To implement |
-| EAPOL Replay | Replaying captured authentication exchanges | P2 | 📋 To implement |
-| 802.1X Identity Spoofing | Spoofing client identity | P2 | 📋 To implement |
+| EAPOL Start Flooding | Flooding authentication start requests | P2 | 🔨 Implemented |
+| EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 🔨 Implemented |
+| EAPOL Replay | Replaying captured authentication exchanges | P2 | 🔨 Implemented |
+| 802.1X Identity Spoofing | Spoofing client identity | P2 | 🔨 Implemented |
 | EAP Downgrade / Weak Method Abuse | Exploiting weak authentication methods | P3 | 📋 To implement |
 | EAP Relay / Evil Authenticator | Relay or rogue authenticator | P3 | 📋 To implement |
 | MAB Bypass / MAC Spoofing | Abusing MAC-based authentication | P1 | 🧪 Tested |
-| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 📋 To implement |
+| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 🔨 Implemented |
 | Post-Authentication Session Hijacking | Abusing an already authorized session | P3 | 📋 To implement |
 | NAC VLAN Assignment Abuse | Manipulating authorization VLAN assignment | P3 | 📋 To implement |
 
@@ -180,7 +180,7 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented onl
 | IGMP Query Spoofing | Fraudulent multicast queries | P2 | 📋 To implement |
 | IGMP Leave Spoofing | Fraudulent group leave | P2 | 🔨 Implemented |
 | IGMP Snooping Table Exhaustion | Exhausting the group table | P3 | 📋 To implement |
-| Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 📋 To implement |
+| Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 🔨 Implemented |
 | L2 Loop Amplification | Amplifying traffic through loops | P2 | 📋 To implement |
 
 ### MACsec / IEEE 802.1AE (6)
@@ -198,8 +198,8 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 23 implemented onl
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 📋 To implement |
-| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 📋 To implement |
+| PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 🔨 Implemented |
+| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 🔨 Implemented |
 | PPPoE Session Spoofing | Spoofing PPPoE sessions | P2 | 📋 To implement |
 | 802.1ad QinQ Abuse | Manipulating provider VLANs | P2 | 📋 To implement |
 | 802.1ah PBB Encapsulation Abuse | Manipulating backbone encapsulation | P3 | 📋 To implement |

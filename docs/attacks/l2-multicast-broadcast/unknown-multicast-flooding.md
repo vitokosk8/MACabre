@@ -31,6 +31,14 @@ The attacker sends frames for groups that nobody has joined. Each one is flooded
 - Rate limits for multicast on access ports.
 - Monitoring of unknown multicast.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry, "Unknown Multicast Flooding". It uses the multicast flooding sender with the same stream to groups nobody joined. Real switches are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/multicast_flooding_lab.sh`, the same lab as Multicast flooding. A receiver that joined no group gets the flood to unknown groups (flood phase). With flooding of unknown multicast turned off on its port, it gets none (control). Exit 0 when both hold.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
