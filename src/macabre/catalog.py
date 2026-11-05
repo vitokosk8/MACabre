@@ -85,7 +85,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='Topology Change Flooding', description='Flooding topology change notifications', priority='P1', status=Status.IMPLEMENTED),
             Technique(name='TCN Spoofing', description='Fraudulent topology change notifications', priority='P1', status=Status.IMPLEMENTED),
             Technique(name='BPDU Flooding', description='Flooding with BPDUs', priority='P1', status=Status.IMPLEMENTED),
-            Technique(name='STP Path Cost Manipulation', description='Manipulating path costs', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='STP Path Cost Manipulation', description='Manipulating path costs', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='STP Priority Manipulation', description='Altering bridge priorities', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='STP Loop Induction', description='Inducing Layer 2 loops', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='BPDU Guard Trigger Abuse', description='Triggering port shutdowns through BPDU Guard', priority='P2', status=Status.IMPLEMENTED),

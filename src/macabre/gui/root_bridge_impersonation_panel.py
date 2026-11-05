@@ -73,3 +73,14 @@ class RootBridgeImpersonationPanel(AttackPanel):
 
     def _format_status(self, stats: RootBridgeImpersonationStats) -> str:
         return stats.status or f"BPDUs sent: {stats.frames}"
+
+
+class StpPathCostManipulationPanel(RootBridgeImpersonationPanel):
+    """The same attack, presented as a path cost change: the advertised root path cost decides the root port."""
+
+    title = "STP Path Cost Manipulation"
+    description = (
+        "Advertises a root path cost lower than the real path on this port, so a switch may choose this port "
+        "as its root port and send traffic toward it. Uses the impersonation sender with the real root's ID; "
+        "set the cost to decide the port. Use only with authorization."
+    )

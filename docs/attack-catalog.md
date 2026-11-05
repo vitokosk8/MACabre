@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 29 tested, 0 tested in GUI, 0 not working yet, 32 implemented only, 67 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 29 tested, 0 tested in GUI, 0 not working yet, 33 implemented only, 66 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -82,7 +82,7 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 32 implemented onl
 | Topology Change Flooding | Flooding topology change notifications | P1 | 🔨 Implemented |
 | TCN Spoofing | Fraudulent topology change notifications | P1 | 🔨 Implemented |
 | BPDU Flooding | Flooding with BPDUs | P1 | 🔨 Implemented |
-| STP Path Cost Manipulation | Manipulating path costs | P2 | 📋 To implement |
+| STP Path Cost Manipulation | Manipulating path costs | P2 | 🔨 Implemented |
 | STP Priority Manipulation | Altering bridge priorities | P2 | 📋 To implement |
 | STP Loop Induction | Inducing Layer 2 loops | P2 | 📋 To implement |
 | BPDU Guard Trigger Abuse | Triggering port shutdowns through BPDU Guard | P2 | 🔨 Implemented |

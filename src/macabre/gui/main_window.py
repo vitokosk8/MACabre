@@ -25,7 +25,7 @@ from macabre.catalog import FAMILIES
 from macabre.gui.arp_gateway_impersonation_panel import ArpGatewayImpersonationPanel
 from macabre.gui.bpdu_spoofing_panel import BpduSpoofingPanel
 from macabre.gui.root_bridge_takeover_panel import RootBridgeTakeoverPanel
-from macabre.gui.root_bridge_impersonation_panel import RootBridgeImpersonationPanel
+from macabre.gui.root_bridge_impersonation_panel import RootBridgeImpersonationPanel, StpPathCostManipulationPanel
 from macabre.gui.topology_change_flooding_panel import TopologyChangeFloodingPanel
 from macabre.gui.tcn_spoofing_panel import TcnSpoofingPanel
 from macabre.gui.bpdu_flooding_panel import BpduFloodingPanel
@@ -132,6 +132,7 @@ PANELS = {
     "802.1X Identity Spoofing": EapolIdentitySpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
+    "STP Path Cost Manipulation": StpPathCostManipulationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
     "TCN Spoofing": TcnSpoofingPanel,
     "BPDU Flooding": BpduFloodingPanel,
