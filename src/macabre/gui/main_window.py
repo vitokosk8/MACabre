@@ -81,6 +81,7 @@ from macabre.gui.pppoe_discovery_flooding_panel import PppoeDiscoveryFloodingPan
 from macabre.gui.rogue_pppoe_access_concentrator_panel import RoguePppoeAccessConcentratorPanel
 from macabre.gui.eapol_start_flooding_panel import EapolStartFloodingPanel
 from macabre.gui.eapol_logoff_spoofing_panel import EapolLogoffSpoofingPanel
+from macabre.gui.eapol_replay_panel import EapolReplayPanel
 from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -126,6 +127,7 @@ PANELS = {
     "Rogue PPPoE Access Concentrator": RoguePppoeAccessConcentratorPanel,
     "EAPOL Start Flooding": EapolStartFloodingPanel,
     "EAPOL Logoff Spoofing": EapolLogoffSpoofingPanel,
+    "EAPOL Replay": EapolReplayPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,

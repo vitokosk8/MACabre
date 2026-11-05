@@ -31,6 +31,16 @@ The attacker records EAPOL frames from a legitimate exchange and sends them agai
 - Current EAP methods with replay protection.
 - Monitoring of duplicate EAP frames.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/eapol_replay.py` (captures the EAP responses one supplicant sends during a window, then sends them again).
+- GUI panel: "EAPOL Replay".
+- Status: 🔨 Implemented. In the lab, the replayed responses produced no activity: hostapd did not reopen the victim's session and FreeRADIUS got no new request, while a fresh EAPOL-Start from the same MAC did get a reaction. This configuration rejects replayed responses after authorization. Replay during an active exchange is not tested.
+
+## Lab validation
+
+`scripts/lab/eapol_replay_lab.sh` runs FreeRADIUS, hostapd in wired mode, and a wpa_supplicant victim with EAP-MD5 on a Linux bridge. The attacker captures the victim's two EAP responses during its authentication, then replays them after authorization. Control: one fresh EAPOL-Start from the victim's MAC, which the authenticator processes.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
