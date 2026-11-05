@@ -57,3 +57,13 @@ class MulticastFloodingPanel(AttackPanel):
 
     def _format_status(self, stats: MulticastFloodingStats) -> str:
         return stats.status or f"Frames sent: {stats.frames}"
+
+
+class UnknownMulticastFloodingPanel(MulticastFloodingPanel):
+    """The same stream to groups nobody joined, presented as unknown multicast: the switch floods it to every port."""
+
+    title = "Unknown Multicast Flooding"
+    description = (
+        "Sends frames to multicast groups that no host has joined. A switch that has no entry for a group floods "
+        "the frames to every port. Use only with authorization."
+    )

@@ -45,7 +45,7 @@ from macabre.gui.lldp_flooding_panel import LldpFloodingPanel
 from macabre.gui.mndp_spoofing_panel import MndpSpoofingPanel
 from macabre.gui.mndp_flooding_panel import MndpFloodingPanel
 from macabre.gui.broadcast_storm_panel import BroadcastStormPanel
-from macabre.gui.multicast_flooding_panel import MulticastFloodingPanel
+from macabre.gui.multicast_flooding_panel import MulticastFloodingPanel, UnknownMulticastFloodingPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -154,6 +154,7 @@ PANELS = {
     "MNDP Flooding": MndpFloodingPanel,
     "Broadcast Storm": BroadcastStormPanel,
     "Multicast Flooding": MulticastFloodingPanel,
+    "Unknown Multicast Flooding": UnknownMulticastFloodingPanel,
 }
 
 
