@@ -78,6 +78,7 @@ from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
 from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
 from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
+from macabre.gui.lacp_spoofing_panel import LacpSpoofingPanel
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
 from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPanel
 from macabre.gui.private_vlan_bypass_panel import PrivateVlanBypassPanel
@@ -125,6 +126,7 @@ PANELS = {
     "IGMP Spoofing": IgmpSpoofingPanel,
     "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
     "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
+    "LACP Spoofing": LacpSpoofingPanel,
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
     "Unauthorized Mini-Switch / Hub": UnauthorizedMiniSwitchPanel,
     "Private VLAN Isolation Bypass": PrivateVlanBypassPanel,
