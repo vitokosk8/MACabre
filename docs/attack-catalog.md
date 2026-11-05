@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 29 tested, 0 tested in GUI, 0 not working yet, 28 implemented only, 71 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 29 tested, 0 tested in GUI, 0 not working yet, 29 implemented only, 70 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -129,7 +129,7 @@ Current count: 29 tested, 0 tested in GUI, 0 not working yet, 28 implemented onl
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| EAPOL Start Flooding | Flooding authentication start requests | P2 | 📋 To implement |
+| EAPOL Start Flooding | Flooding authentication start requests | P2 | 🔨 Implemented |
 | EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 📋 To implement |
 | EAPOL Replay | Replaying captured authentication exchanges | P2 | 📋 To implement |
 | 802.1X Identity Spoofing | Spoofing client identity | P2 | 📋 To implement |
