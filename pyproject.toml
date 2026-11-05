@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "macabre"
-version = "0.1.0"
+version = "0.2.0"
 description = "Layer 2 network auditing suite with Scapy and a PySide6 GUI"
 readme = "README.md"
 requires-python = ">=3.10"
