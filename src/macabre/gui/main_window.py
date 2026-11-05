@@ -77,6 +77,7 @@ from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPane
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
 from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPanel
 from macabre.gui.private_vlan_bypass_panel import PrivateVlanBypassPanel
+from macabre.gui.pppoe_discovery_flooding_panel import PppoeDiscoveryFloodingPanel
 from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -118,6 +119,7 @@ PANELS = {
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
     "Unauthorized Mini-Switch / Hub": UnauthorizedMiniSwitchPanel,
     "Private VLAN Isolation Bypass": PrivateVlanBypassPanel,
+    "PPPoE Discovery Flooding": PppoeDiscoveryFloodingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
