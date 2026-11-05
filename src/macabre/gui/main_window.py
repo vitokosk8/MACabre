@@ -75,6 +75,7 @@ from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
 from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
+from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPanel
 from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
@@ -114,6 +115,7 @@ PANELS = {
     "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
     "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
+    "Unauthorized Mini-Switch / Hub": UnauthorizedMiniSwitchPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,

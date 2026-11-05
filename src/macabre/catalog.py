@@ -139,7 +139,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='EAP Downgrade / Weak Method Abuse', description='Exploiting weak authentication methods', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EAP Relay / Evil Authenticator', description='Relay or rogue authenticator', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='MAB Bypass / MAC Spoofing', description='Abusing MAC-based authentication', priority='P1', status=Status.TESTED),
-            Technique(name='Unauthorized Mini-Switch / Hub', description='Connecting several clients to one access port', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='Unauthorized Mini-Switch / Hub', description='Connecting several clients to one access port', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='Post-Authentication Session Hijacking', description='Abusing an already authorized session', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='NAC VLAN Assignment Abuse', description='Manipulating authorization VLAN assignment', priority='P3', status=Status.TO_IMPLEMENT),
         ),
