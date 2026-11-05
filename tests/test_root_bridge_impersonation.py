@@ -96,3 +96,10 @@ def test_dry_run_sends_nothing_and_reads_nothing():
                                               run=lambda argv: calls.append(argv) or "", send=capture(sent))
     assert calls == [] and sent == []
     assert stats.status.startswith("Dry run")
+
+
+def test_bridge_priority_is_carried_in_the_bpdu():
+    sent = []
+    rbi.run_root_bridge_impersonation(config(bridge_priority=4096), threading.Event(), lambda _s: None,
+                                      run=fake_run, send=capture(sent))
+    assert fields(sent[0][1])["bridge_priority"] == 4096
