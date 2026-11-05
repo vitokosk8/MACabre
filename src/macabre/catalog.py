@@ -202,7 +202,7 @@ FAMILIES: tuple[Family, ...] = (
         name='Carrier Ethernet & Data Center',
         techniques=(
             Technique(name='PPPoE Discovery Flooding', description='Flooding PPPoE discovery', priority='P2', status=Status.IMPLEMENTED),
-            Technique(name='Rogue PPPoE Access Concentrator', description='Unauthorized PPPoE access concentrator', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='Rogue PPPoE Access Concentrator', description='Unauthorized PPPoE access concentrator', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='PPPoE Session Spoofing', description='Spoofing PPPoE sessions', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='802.1ad QinQ Abuse', description='Manipulating provider VLANs', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='802.1ah PBB Encapsulation Abuse', description='Manipulating backbone encapsulation', priority='P3', status=Status.TO_IMPLEMENT),
