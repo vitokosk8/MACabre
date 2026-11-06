@@ -32,6 +32,14 @@ The attacker sends an RA that includes a Recursive DNS Server option pointing to
 - Encrypted DNS and verified time sources where possible.
 - Monitoring of DNS configuration on clients.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends Router Advertisements from the operator's MAC, with a link-local source derived from it, hop limit 255, a router lifetime, a current hop limit and an MTU option, all chosen by the operator. Not yet validated on a host.
+
+## Lab validation
+
+Lab: `scripts/lab/slaac_configuration_abuse_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Control: the victim's link MTU and IPv6 hop limit differ from the advertised values (1280 and 32). Attack: three RAs carrying both values. Exit 0 when the victim applies both. Not validated yet: the lab is pending a run on Ubuntu (VM).
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
