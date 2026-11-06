@@ -123,7 +123,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='SLAAC Prefix Spoofing', description='Advertising fraudulent prefixes', priority='P2', status=Status.TESTED),
             Technique(name='SLAAC Configuration Abuse', description='Manipulating stateless autoconfiguration', priority='P2', status=Status.TESTED),
             Technique(name='Duplicate Address Detection DoS', description='Interfering with duplicate address detection', priority='P2', status=Status.TO_IMPLEMENT),
-            Technique(name='NDP Neighbor Cache Exhaustion', description='Exhausting the neighbor cache', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='NDP Neighbor Cache Exhaustion', description='Exhausting the neighbor cache', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='Redirect Spoofing', description='Forged ICMPv6 Redirect messages', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='IPv6 RA Guard Evasion', description='Attempts to evade RA Guard', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='MLD Spoofing / Flooding', description='Manipulating multicast listener membership', priority='P2', status=Status.TO_IMPLEMENT),
