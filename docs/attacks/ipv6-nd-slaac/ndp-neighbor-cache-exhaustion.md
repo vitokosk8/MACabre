@@ -31,6 +31,14 @@ The attacker sends packets to many addresses on the subnet, or sends NS messages
 - Rate limits for neighbor resolution.
 - Monitoring of incomplete entries.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends Neighbor Solicitations to a target on the segment, each from a new source address inside a /64 you choose, with the operator's MAC as the source link-layer option, from the operator's MAC, hop limit 255. Not yet validated on a host.
+
+## Lab validation
+
+Lab: `scripts/lab/ndp_neighbor_cache_exhaustion_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Control: the victim's cache holds no entry for the spoofed sources. Attack: 200 solicitations, each from a new source in 2001:db8:c0::/64. Exit 0 when the victim creates at least 150 entries for those sources. The lab prints the victim's total entries and the kernel's gc_thresh3 limit; it does not reach that limit, so the table-exhaustion effect itself is not measured. Not validated yet: the lab is pending a run on Ubuntu (VM).
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
