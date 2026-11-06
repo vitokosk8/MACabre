@@ -7,11 +7,12 @@
 #   attacker: a host that sends RAs with MACabre's module, carrying a chosen MTU and hop limit.
 #
 # Phases:
-#   Phase 1 (control): no RA has been sent. The victim's link MTU and current hop limit must differ from
+#   Phase 1 (control): no RA has been sent. The victim's IPv6 link MTU and current hop limit must differ from
 #            the values the attacker will advertise. If they already match, the lab cannot tell anything
 #            and exits 2.
 #   Phase 2 (attack): the attacker sends RAs. The victim must apply the advertised MTU to its interface,
-#            and the advertised hop limit to its IPv6 default.
+#            and the advertised hop limit to its IPv6 defaults. The IPv6 link MTU is read from
+#            /proc/sys/net/ipv6/conf/<if>/mtu; the device MTU is not changed by an RA.
 #
 # Exit 0 when the control holds and the victim applied both values. Exit 1 when either does not hold.
 # Exit 2 when the control failed.
@@ -84,8 +85,14 @@ stats = run_slaac_configuration_abuse(
 print(stats.frames)
 '
 
-# Prints the victim's interface MTU.
+# Prints the IPv6 link MTU the victim uses. An RA MTU option sets this value (net.ipv6.conf.<if>.mtu),
+# not the device MTU, which stays the same.
 victim_mtu() {
+    ip netns exec victim cat /proc/sys/net/ipv6/conf/h-vic/mtu 2>/dev/null || echo unknown
+}
+
+# Prints the victim's device MTU, for information only.
+victim_device_mtu() {
     ip netns exec victim cat /sys/class/net/h-vic/mtu 2>/dev/null || echo unknown
 }
 
@@ -98,7 +105,7 @@ echo "Phase 1: control, no RA sent"
 sleep 2
 BASE_MTU="$(victim_mtu)"
 BASE_HOP="$(victim_hop_limit)"
-echo "  victim link MTU: $BASE_MTU (advertised target: $TARGET_MTU)"
+echo "  victim IPv6 link MTU: $BASE_MTU (advertised target: $TARGET_MTU)"
 echo "  victim IPv6 hop limit: $BASE_HOP (advertised target: $TARGET_HOP_LIMIT)"
 echo
 
@@ -108,7 +115,8 @@ echo "  advertisements sent: $SENT"
 sleep 4
 MTU="$(victim_mtu)"
 HOP="$(victim_hop_limit)"
-echo "  victim link MTU: $MTU"
+echo "  victim IPv6 link MTU: $MTU"
+echo "  victim device MTU (unchanged by RA, for information): $(victim_device_mtu)"
 echo "  victim IPv6 hop limit: $HOP"
 echo
 
