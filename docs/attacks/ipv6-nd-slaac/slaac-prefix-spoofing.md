@@ -33,11 +33,11 @@ The attacker sends an RA with a prefix it chooses. Hosts generate addresses from
 
 ## Implementation status
 
-Implemented in MACabre as its own panel entry. The module sends Router Advertisements with router lifetime 0, so the sender is not offered as a default router, and one autonomous Prefix Information option for a fraudulent /64, with valid and preferred lifetimes. Source link-local is derived from the operator's MAC, hop limit 255. Not yet validated on a host.
+Implemented in MACabre as its own panel entry. The module sends Router Advertisements with router lifetime 0, so the sender is not offered as a default router, and one autonomous Prefix Information option for a fraudulent /64, with valid and preferred lifetimes. Source link-local is derived from the operator's MAC, hop limit 255. Validated on Linux IPv6 with a victim host that accepts RAs by default. Real routers and RA Guard are not tested.
 
 ## Lab validation
 
-Lab: `scripts/lab/slaac_prefix_spoofing_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Setup: a legitimate router advertises 2001:db8:5000::/64, and the victim must take its default route and an address there. Control: the victim has no address in the fraudulent 2001:db8:bad:1::/64. Attack: three RAs with router lifetime 0 for the fraudulent prefix. Exit 0 when the victim configures an address in the fraudulent prefix and keeps the legitimate router as its default. Not validated yet: the lab is pending a run on Ubuntu (VM).
+Lab: `scripts/lab/slaac_prefix_spoofing_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Setup: a legitimate router advertises 2001:db8:5000::/64, and the victim must take its default route and an address there. Control: the victim has no address in the fraudulent 2001:db8:bad:1::/64. Attack: three RAs with router lifetime 0 for the fraudulent prefix. Exit 0 when the victim configures an address in the fraudulent prefix and keeps the legitimate router as its default. Validated on Ubuntu (VM) at commit 6f7813d, exit 0: the victim configured an address inside 2001:db8:bad:1::/64 from three RAs with router lifetime 0, and kept the legitimate router as its default route.
 
 ## Related
 
