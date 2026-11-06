@@ -208,7 +208,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='802.1ah PBB Encapsulation Abuse', description='Manipulating backbone encapsulation', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EVPN MAC/IP Advertisement Poisoning', description='Fraudulent MAC/IP advertisements', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EVPN MAC Mobility Abuse', description='Mobility oscillation or spoofing', priority='P3', status=Status.TO_IMPLEMENT),
-            Technique(name='VXLAN VNI / VTEP Spoofing', description='Spoofing overlay elements', priority='P3', status=Status.TO_IMPLEMENT),
+            Technique(name='VXLAN VNI / VTEP Spoofing', description='Spoofing overlay elements', priority='P3', status=Status.TESTED),
             Technique(name='TRILL / SPB Control Abuse', description='Manipulating advanced bridging control', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='Provider Ethernet OAM Abuse', description='Manipulating provider maintenance operations', priority='P3', status=Status.TO_IMPLEMENT),
         ),
