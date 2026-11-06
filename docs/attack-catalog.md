@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 31 tested, 0 tested in GUI, 0 not working yet, 35 implemented only, 62 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 32 tested, 0 tested in GUI, 0 not working yet, 35 implemented only, 61 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -205,7 +205,7 @@ Current count: 31 tested, 0 tested in GUI, 0 not working yet, 35 implemented onl
 | 802.1ah PBB Encapsulation Abuse | Manipulating backbone encapsulation | P3 | 📋 To implement |
 | EVPN MAC/IP Advertisement Poisoning | Fraudulent MAC/IP advertisements | P3 | 📋 To implement |
 | EVPN MAC Mobility Abuse | Mobility oscillation or spoofing | P3 | 📋 To implement |
-| VXLAN VNI / VTEP Spoofing | Spoofing overlay elements | P3 | 📋 To implement |
+| VXLAN VNI / VTEP Spoofing | Spoofing overlay elements | P3 | 🧪 Tested |
 | TRILL / SPB Control Abuse | Manipulating advanced bridging control | P3 | 📋 To implement |
 | Provider Ethernet OAM Abuse | Manipulating provider maintenance operations | P3 | 📋 To implement |
 
