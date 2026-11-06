@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 34 tested, 0 tested in GUI, 0 not working yet, 35 implemented only, 59 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 34 tested, 0 tested in GUI, 0 not working yet, 36 implemented only, 58 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -117,7 +117,7 @@ Current count: 34 tested, 0 tested in GUI, 0 not working yet, 35 implemented onl
 | Rogue Router Advertisement | Unauthorized RA messages | P2 | 🧪 Tested |
 | Router Advertisement Flooding | Flooding with RA messages | P2 | 🧪 Tested |
 | Router Solicitation Flooding | Flooding with RS requests | P2 | 📋 To implement |
-| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P2 | 📋 To implement |
+| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P2 | 🔨 Implemented |
 | SLAAC Configuration Abuse | Manipulating stateless autoconfiguration | P2 | 📋 To implement |
 | Duplicate Address Detection DoS | Interfering with duplicate address detection | P2 | 📋 To implement |
 | NDP Neighbor Cache Exhaustion | Exhausting the neighbor cache | P2 | 📋 To implement |
