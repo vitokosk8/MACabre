@@ -113,7 +113,7 @@ echo "  advertisements sent: $SENT"
 sleep 4
 ROUTERS="$(count_flood_routers)"
 ADDRS="$(count_flood_addresses)"
-MAX_ADDRS="$(cat /proc/sys/net/ipv6/conf/h-vic/max_addresses 2>/dev/null || echo unknown)"
+MAX_ADDRS="$(ip netns exec victim cat /proc/sys/net/ipv6/conf/h-vic/max_addresses 2>/dev/null || echo unknown)"
 echo "  default routes via link-local routers: $ROUTERS"
 echo "  global addresses inside $PREFIX_BASE: $ADDRS (kernel max_addresses on victim: $MAX_ADDRS)"
 echo
