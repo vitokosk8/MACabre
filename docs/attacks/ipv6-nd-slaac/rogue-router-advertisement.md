@@ -31,6 +31,14 @@ The attacker sends RAs advertising itself as a router with a non-zero lifetime. 
 - Monitoring of RAs from unknown sources.
 - Static default routes on critical hosts.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends Router Advertisements from the operator's MAC, with a link-local source derived from that MAC, hop limit 255, a router lifetime, and one SLAAC prefix (/64). Validated on Linux IPv6 with a victim host that accepts RAs by default. Real routers and RA Guard are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/rogue_router_advertisement_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Control: the victim has no default router and no address in the prefix. Attack: three RAs from the attacker add its link-local address as the victim's default router and configure a SLAAC address inside 2001:db8:bad::/64. Exit 0 when both hold. Validated on Ubuntu (VM) at commit 1a329ca, exit 0. Real routers and RA Guard are not tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
