@@ -31,6 +31,14 @@ The attacker uses NA and NS messages to set and refresh false bindings. Hosts an
 - SEND where possible.
 - Shorter reachable times on sensitive segments.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends unsolicited Neighbor Advertisements for a target address you choose, with the Override flag set and the Target Link-Layer Address option carrying the operator's MAC, from the operator's MAC, hop limit 255. Not yet validated on a host.
+
+## Lab validation
+
+Lab: `scripts/lab/ndp_cache_poisoning_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Setup: the victim pings the peer, so its neighbor cache holds the peer's MAC. Control: the entry still holds the peer's MAC. Attack: three unsolicited NAs with the Override flag binding the peer's address to the attacker's MAC. Exit 0 when the entry changes to the attacker's MAC. Not validated yet: the lab is pending a run on Ubuntu (VM).
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

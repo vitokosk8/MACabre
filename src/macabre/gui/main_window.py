@@ -83,6 +83,7 @@ from macabre.gui.rogue_router_advertisement_panel import RogueRouterAdvertisemen
 from macabre.gui.router_advertisement_flooding_panel import RouterAdvertisementFloodingPanel
 from macabre.gui.slaac_prefix_spoofing_panel import SlaacPrefixSpoofingPanel
 from macabre.gui.slaac_configuration_abuse_panel import SlaacConfigurationAbusePanel
+from macabre.gui.ndp_cache_poisoning_panel import NdpCachePoisoningPanel
 from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
 from macabre.gui.lacp_spoofing_panel import LacpSpoofingPanel
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
@@ -137,6 +138,7 @@ PANELS = {
     "Router Advertisement Flooding": RouterAdvertisementFloodingPanel,
     "SLAAC Prefix Spoofing": SlaacPrefixSpoofingPanel,
     "SLAAC Configuration Abuse": SlaacConfigurationAbusePanel,
+    "NDP Cache Poisoning": NdpCachePoisoningPanel,
     "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
     "LACP Spoofing": LacpSpoofingPanel,
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,

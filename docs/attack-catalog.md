@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 36 tested, 0 tested in GUI, 0 not working yet, 35 implemented only, 57 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 36 tested, 0 tested in GUI, 0 not working yet, 36 implemented only, 56 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -113,7 +113,7 @@ Current count: 36 tested, 0 tested in GUI, 0 not working yet, 35 implemented onl
 | --- | --- | --- | --- |
 | Neighbor Advertisement Spoofing | Forging NA messages | P2 | 📋 To implement |
 | Neighbor Solicitation Spoofing | Fraudulent NS requests | P2 | 📋 To implement |
-| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P2 | 📋 To implement |
+| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P2 | 🔨 Implemented |
 | Rogue Router Advertisement | Unauthorized RA messages | P2 | 🧪 Tested |
 | Router Advertisement Flooding | Flooding with RA messages | P2 | 🧪 Tested |
 | Router Solicitation Flooding | Flooding with RS requests | P2 | 📋 To implement |
