@@ -80,6 +80,7 @@ from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.igmp_snooping_exhaustion_panel import IgmpSnoopingExhaustionPanel
 from macabre.gui.vxlan_vtep_spoofing_panel import VxlanVtepSpoofingPanel
 from macabre.gui.rogue_router_advertisement_panel import RogueRouterAdvertisementPanel
+from macabre.gui.router_advertisement_flooding_panel import RouterAdvertisementFloodingPanel
 from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
 from macabre.gui.lacp_spoofing_panel import LacpSpoofingPanel
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
@@ -131,6 +132,7 @@ PANELS = {
     "IGMP Snooping Table Exhaustion": IgmpSnoopingExhaustionPanel,
     "VXLAN VNI / VTEP Spoofing": VxlanVtepSpoofingPanel,
     "Rogue Router Advertisement": RogueRouterAdvertisementPanel,
+    "Router Advertisement Flooding": RouterAdvertisementFloodingPanel,
     "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
     "LACP Spoofing": LacpSpoofingPanel,
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
