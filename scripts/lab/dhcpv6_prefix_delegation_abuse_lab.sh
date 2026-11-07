@@ -128,11 +128,19 @@ cat > "$WORKDIR/kea-dhcp6.conf" <<EOF
 }
 EOF
 
+if ! ip netns exec srv kea-dhcp6 -t "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-test.log" 2>&1; then
+    echo "Control: the Kea configuration is invalid:"
+    cat "$WORKDIR/kea-test.log"
+    exit 2
+fi
+
 ip netns exec srv kea-dhcp6 -c "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-stdout.log" 2>&1 &
 KEA_PID=$!
 sleep 3
 if ! kill -0 "$KEA_PID" 2>/dev/null; then
-    echo "Control: Kea did not start. See $WORKDIR/kea-stdout.log and $WORKDIR/kea.log."
+    echo "Control: Kea did not start. Its output follows."
+    cat "$WORKDIR/kea-stdout.log"
+    [[ -f "$WORKDIR/kea.log" ]] && cat "$WORKDIR/kea.log"
     KEA_PID=""
     exit 2
 fi
