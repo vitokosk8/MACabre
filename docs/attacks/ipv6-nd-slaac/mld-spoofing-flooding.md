@@ -37,7 +37,7 @@ Implemented in MACabre as its own panel entry. The module builds MLDv1 Reports (
 
 ## Lab validation
 
-Lab: `scripts/lab/mld_spoofing_flooding_lab.sh` (Linux, IPv6 kernel, one bridge with multicast snooping, namespaces). Control: the victim reports a legitimate group, which the bridge must learn on the victim's port. Spoof: the attacker reports one group it does not listen to, which the bridge must learn on the attacker's port. Flood: the attacker reports 4200 groups from ff0e::1000. Test: the victim reports a new legitimate group, which must not be learned once the table is full. Exit 0 when all hold, 2 when the control fails. Pending validation on Ubuntu (VM).
+Lab: `scripts/lab/mld_spoofing_flooding_lab.sh` (Linux, IPv6 kernel, one bridge with multicast snooping, namespaces). Control: the victim reports a legitimate group, which the bridge must learn on the victim's port. Spoof: the attacker reports one group it does not listen to, which the bridge must learn on the attacker's port. Flood: the attacker reports 4200 groups from ff0e::1000, then 1000 more. Saturation: the entry count on the attacker's port must stop growing between the two waves and sit close to the table size. The victim's control group must survive the flood. Test: the victim reports a new legitimate group, which must not be learned once the table is saturated. Exit 0 when all hold, 2 when the first control fails. The table does not always hold exactly MCAST_HASH_MAX entries, because hash collisions leave some slots unused; a first run on Ubuntu (VM) with a single 4200-group wave reached 4092 entries and did not learn the new group, which is why the check is a plateau. Pending validation on Ubuntu (VM).
 
 ## Related
 
