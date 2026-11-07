@@ -131,6 +131,21 @@ next_hop_for_dest() {
     fi
 }
 
+# Prints the victim's count of ICMPv6 Redirect messages received (kernel counter Icmp6InRedirects).
+redirects_received() {
+    ip netns exec victim cat /proc/net/snmp6 2>/dev/null | awk '$1 == "Icmp6InRedirects" {print $2}' || true
+}
+
+# Prints the victim's full route lookup for DEST, for diagnosis.
+route_for_dest() {
+    ip netns exec victim ip -6 route get "$DEST" 2>/dev/null | head -n1 || true
+}
+
+# Prints the victim's neighbor entry for the router (state matters: Linux checks the sender of a Redirect).
+router_neighbor() {
+    ip netns exec victim ip -6 neigh show dev h-vic "$ROUTER_LL" 2>/dev/null | head -n1 || true
+}
+
 # Prints "yes" when the victim has a global address inside LEGIT_MATCH, otherwise "no".
 has_legit_address() {
     if ip netns exec victim ip -6 addr show dev h-vic scope global 2>/dev/null | grep -q "inet6 $LEGIT_MATCH"; then
@@ -152,7 +167,10 @@ echo
 
 echo "Phase 1: control, no Redirect sent"
 BASE_HOP="$(next_hop_for_dest)"
+BASE_REDIRECTS="$(redirects_received)"
 echo "  victim next hop for $DEST: $BASE_HOP"
+echo "  victim Icmp6InRedirects: $BASE_REDIRECTS"
+echo "  victim neighbor entry for the router: $(router_neighbor)"
 echo
 
 echo "Phase 2: attacker sends Redirects claiming $ROUTER_LL, naming $ATTACKER_LL as the next hop for $DEST, with MACabre's module"
@@ -160,7 +178,11 @@ SENT="$(ip netns exec attacker env PYTHONPATH="$ROOT/src" "$PY" -c "$REDIRECT_CO
 echo "  redirects sent: $SENT"
 sleep 2
 AFTER_HOP="$(next_hop_for_dest)"
+AFTER_REDIRECTS="$(redirects_received)"
 echo "  victim next hop for $DEST: $AFTER_HOP"
+echo "  victim Icmp6InRedirects: $AFTER_REDIRECTS (received during the attack: $((AFTER_REDIRECTS - BASE_REDIRECTS)))"
+echo "  victim route for $DEST: $(route_for_dest)"
+echo "  victim neighbor entry for the router: $(router_neighbor)"
 echo
 
 if [[ "$SETUP_ROUTER" != "yes" || "$SETUP_ADDR" != "yes" ]]; then
