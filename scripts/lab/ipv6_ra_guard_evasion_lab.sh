@@ -128,12 +128,23 @@ accepted() {
     fi
 }
 
+# Prints the victim's IPv6 reassembly and Router Advertisement counters from /proc/net/snmp6.
+counters() {
+    ip netns exec victim cat /proc/net/snmp6 2>/dev/null \
+        | awk '$1 == "Ip6ReasmOKs" || $1 == "Ip6ReasmFails" || $1 == "Icmp6InRouterAdvertisements" {printf "%s=%s ", $1, $2}'
+}
+
+# Prints "yes|no sent" for one form. The counters go to stderr, so the caller's read sees only the result.
 run_form() {
     local form="$1"
     reset_victim
-    local sent
+    local before sent after
+    before="$(counters)"
     sent="$(send_form "$form")"
     sleep 2
+    after="$(counters)"
+    echo "    victim counters before: $before" >&2
+    echo "    victim counters after:  $after" >&2
     echo "$(accepted)" "$sent"
 }
 
