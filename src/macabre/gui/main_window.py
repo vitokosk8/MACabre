@@ -79,6 +79,7 @@ from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
 from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.igmp_snooping_exhaustion_panel import IgmpSnoopingExhaustionPanel
 from macabre.gui.vxlan_vtep_spoofing_panel import VxlanVtepSpoofingPanel
+from macabre.gui.ipv6_ra_guard_evasion_panel import Ipv6RaGuardEvasionPanel
 from macabre.gui.rogue_router_advertisement_panel import RogueRouterAdvertisementPanel
 from macabre.gui.router_advertisement_flooding_panel import RouterAdvertisementFloodingPanel
 from macabre.gui.slaac_prefix_spoofing_panel import SlaacPrefixSpoofingPanel
@@ -138,6 +139,7 @@ PANELS = {
     "IGMP Snooping Table Exhaustion": IgmpSnoopingExhaustionPanel,
     "VXLAN VNI / VTEP Spoofing": VxlanVtepSpoofingPanel,
     "Rogue Router Advertisement": RogueRouterAdvertisementPanel,
+    "IPv6 RA Guard Evasion": Ipv6RaGuardEvasionPanel,
     "Router Advertisement Flooding": RouterAdvertisementFloodingPanel,
     "SLAAC Prefix Spoofing": SlaacPrefixSpoofingPanel,
     "SLAAC Configuration Abuse": SlaacConfigurationAbusePanel,
