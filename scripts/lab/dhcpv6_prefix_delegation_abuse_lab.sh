@@ -122,8 +122,7 @@ cat > "$WORKDIR/kea-dhcp6.conf" <<EOF
         "pools": [ { "pool": "2001:db8::100-2001:db8::1ff" } ],
         "pd-pools": [ { "prefix": "$PD_PREFIX", "prefix-len": 48, "delegated-len": $PLEN } ]
       }
-    ],
-    "loggers": [ { "name": "kea-dhcp6", "output_options": [ { "output": "$WORKDIR/kea.log" } ], "severity": "WARN" } ]
+    ]
   }
 }
 EOF
@@ -140,7 +139,6 @@ sleep 3
 if ! kill -0 "$KEA_PID" 2>/dev/null; then
     echo "Control: Kea did not start. Its output follows."
     cat "$WORKDIR/kea-stdout.log"
-    [[ -f "$WORKDIR/kea.log" ]] && cat "$WORKDIR/kea.log"
     KEA_PID=""
     exit 2
 fi
