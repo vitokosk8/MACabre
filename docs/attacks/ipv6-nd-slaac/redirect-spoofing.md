@@ -31,6 +31,14 @@ The attacker sends a Redirect to a host, claiming that the router is not the bes
 - Redirect filtering on access switches.
 - Monitoring of route changes.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends ICMPv6 Redirect messages to the victim's link-local address, with the router's link-local address as the IPv6 source, hop limit 255, the operator's MAC as the new next hop and as the Target Link-Layer Address option, and a Redirected Header option. Not yet validated on a host.
+
+## Lab validation
+
+Lab: `scripts/lab/redirect_spoofing_lab.sh` (Linux, IPv6 kernel, one bridge, namespaces). Setup: the legitimate router advertises 2001:db8:5000::/64, and the victim must take its default route and an address there. Control: the victim's next hop for 2001:db8:dead::1 is the router. Attack: three Redirects with the router's address as source, naming the attacker as the next hop. Exit 0 when the victim's next hop for that destination becomes the attacker. Not validated yet: the lab is pending a run on Ubuntu (VM).
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
