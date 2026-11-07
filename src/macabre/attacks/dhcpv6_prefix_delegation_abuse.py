@@ -20,11 +20,12 @@ from __future__ import annotations
 
 import random
 import threading
+import time
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import Any
 
-from scapy.all import Ether, IPv6, UDP, AsyncSniffer, sendp, sniff
+from scapy.all import Ether, IPv6, UDP, AsyncSniffer, sendp
 from scapy.layers.dhcp6 import (
     DHCP6_Advertise,
     DHCP6_Reply,
@@ -157,7 +158,6 @@ def request_prefix_once(
     timeout: float,
     rng: random.Random | None = None,
     send: Callable[..., Any] | None = None,
-    sniff_fn: Callable[..., Any] | None = None,
 ) -> str | None:
     """One legitimate exchange (SOLICIT, REQUEST) for a prefix, from `mac`. Returns the prefix or None.
 
@@ -165,22 +165,30 @@ def request_prefix_once(
     """
     rng = rng or random.Random()
     send = send or sendp
-    sniff_fn = sniff_fn or sniff
     trid = rng.getrandbits(24)
     iaid = rng.getrandbits(32)
 
+    # Start listening before sending, so a fast reply cannot arrive before the sniffer is up.
+    def wait_for(predicate):
+        sniffer = AsyncSniffer(iface=iface, store=True, lfilter=predicate)
+        sniffer.start()
+        time.sleep(0.2)
+        return sniffer
+
+    advert_sniffer = wait_for(lambda p: parse_advertise(p) is not None)
     send(build_solicit(mac, trid, iaid, plen), iface=iface, verbose=False)
-    advertises = sniff_fn(iface=iface, timeout=timeout, lfilter=lambda p: parse_advertise(p) is not None,
-                          count=1)
+    advert_sniffer.join(timeout=timeout)
+    advertises = advert_sniffer.results or []
     if not advertises:
         return None
     offer = parse_advertise(advertises[0])
     if offer is None or offer.trid != trid:
         return None
 
+    reply_sniffer = wait_for(lambda p: reply_confirms_prefix(p) is not None)
     send(build_request(mac, trid, iaid, offer.server_mac, offer.prefix, offer.plen), iface=iface, verbose=False)
-    replies = sniff_fn(iface=iface, timeout=timeout, lfilter=lambda p: reply_confirms_prefix(p) is not None,
-                       count=1)
+    reply_sniffer.join(timeout=timeout)
+    replies = reply_sniffer.results or []
     if not replies:
         return None
     confirmed = reply_confirms_prefix(replies[0])

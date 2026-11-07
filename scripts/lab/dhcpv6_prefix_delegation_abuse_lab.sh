@@ -91,7 +91,7 @@ for pair in "srv:srv" "cli:cli" "atk:atk"; do
     ip link set "p-$name" netns lan
 done
 
-ip netns exec lan ip link add br0 type bridge
+ip netns exec lan ip link add br0 type bridge mcast_snooping 0
 ip netns exec lan ip link set br0 up
 for name in srv cli atk; do
     ip netns exec lan ip link set "p-$name" master br0
