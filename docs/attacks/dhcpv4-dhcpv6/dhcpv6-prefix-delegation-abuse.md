@@ -31,6 +31,14 @@ The attacker requests prefixes from the delegating server and receives a block. 
 - Per-client limits on delegated prefixes.
 - RA Guard on access ports.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry. The module sends DHCPv6 SOLICIT messages with an IA_PD option and a prefix length hint (/48 to /64), with random DUID-LL identities. For each ADVERTISE that offers a prefix, it sends a REQUEST for that prefix, and counts the REPLY messages that confirm it. The count of confirmed prefixes is the measure of how much of the delegation pool it holds. Installing the attacker as a router for those prefixes is not implemented: it needs Router Advertisements, which the RA techniques in this suite cover.
+
+## Lab validation
+
+Lab: `scripts/lab/dhcpv6_prefix_delegation_abuse_lab.sh` (Linux, IPv6 kernel, Kea DHCPv6 server, one bridge, namespaces). Kea delegates /56 prefixes from 2001:db8:f000::/48, a pool of 256. Control: a legitimate requesting router gets a prefix before the attack. Attack: the attacker requests 300 prefixes with random identities; the lab expects at least 255 confirmed (the control holds one). Test: the legitimate router, with a new identity, must get no prefix. Exit 0 when all hold. Pending validation on Ubuntu (VM) with Kea installed.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

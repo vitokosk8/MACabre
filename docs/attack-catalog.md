@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 39 tested, 0 tested in GUI, 1 not working yet, 35 implemented only, 53 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 39 tested, 0 tested in GUI, 1 not working yet, 36 implemented only, 52 to implement (128 techniques; P1: 25 of 37 tested).
 
 ## Techniques by category
 
@@ -105,7 +105,7 @@ Current count: 39 tested, 0 tested in GUI, 1 not working yet, 35 implemented onl
 | DHCP Snooping Binding Abuse | Manipulating snooping bindings | P3 | 📋 To implement |
 | Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 🔨 Implemented |
 | DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 🔨 Implemented |
-| DHCPv6 Prefix Delegation Abuse | Abusing prefix delegation | P3 | 📋 To implement |
+| DHCPv6 Prefix Delegation Abuse | Abusing prefix delegation | P3 | 🔨 Implemented |
 
 ### IPv6 Neighbor Discovery & SLAAC (13)
 
