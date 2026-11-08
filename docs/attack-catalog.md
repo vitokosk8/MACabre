@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 35 tested, 0 tested in GUI, 1 not working yet, 1 implemented only, 91 to implement (128 techniques; P1: 35 of 37 tested).
+Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only, 91 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -80,7 +80,7 @@ Current count: 35 tested, 0 tested in GUI, 1 not working yet, 1 implemented only
 | Root Bridge Takeover | Malicious root bridge election | P1 | 🧪 Tested |
 | Root Bridge Impersonation | Impersonating the root bridge | P1 | 🧪 Tested |
 | Topology Change Flooding | Flooding topology change notifications | P1 | ❌ Tested, not working yet |
-| TCN Spoofing | Fraudulent topology change notifications | P1 | 🧪 Tested |
+| TCN Spoofing | Fraudulent topology change notifications | P1 | 🔨 Implemented |
 | BPDU Flooding | Flooding with BPDUs | P1 | 🧪 Tested |
 | STP Path Cost Manipulation | Manipulating path costs | P2 | 📋 To implement |
 | STP Priority Manipulation | Altering bridge priorities | P2 | 📋 To implement |
@@ -148,8 +148,8 @@ Current count: 35 tested, 0 tested in GUI, 1 not working yet, 1 implemented only
 | CDP Flooding | Flooding with CDP messages | P1 | 🧪 Tested |
 | LLDP Spoofing | Spoofing LLDP information | P1 | 🧪 Tested |
 | LLDP Flooding | Flooding with LLDP advertisements | P1 | 🧪 Tested |
-| MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🧪 Tested |
-| MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🧪 Tested |
+| MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
+| MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
 | LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 📋 To implement |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
