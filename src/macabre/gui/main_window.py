@@ -74,6 +74,7 @@ from macabre.gui.dhcp_release_spoofing_panel import DhcpReleaseSpoofingPanel
 from macabre.gui.dhcp_option_manipulation_panel import DhcpOptionManipulationPanel
 from macabre.gui.dhcp_relay_option82_panel import DhcpRelayOption82Panel
 from macabre.gui.rogue_dhcpv6_server_panel import RogueDhcpv6ServerPanel
+from macabre.gui.dhcpv6_prefix_delegation_abuse_panel import Dhcpv6PrefixDelegationAbusePanel
 from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
 from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
 from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
@@ -133,6 +134,7 @@ PANELS = {
     "DHCP Relay / Option 82 Abuse": DhcpRelayOption82Panel,
     "Rogue DHCPv6 Server": RogueDhcpv6ServerPanel,
     "DHCPv6 Starvation": Dhcpv6StarvationPanel,
+    "DHCPv6 Prefix Delegation Abuse": Dhcpv6PrefixDelegationAbusePanel,
     "IGMP Spoofing": IgmpSpoofingPanel,
     "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
     "IGMP Snooping Table Exhaustion": IgmpSnoopingExhaustionPanel,
