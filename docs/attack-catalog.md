@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 39 tested, 0 tested in GUI, 1 not working yet, 36 implemented only, 52 to implement (128 techniques; P1: 25 of 37 tested).
+Current count: 46 tested, 0 tested in GUI, 2 not working yet, 28 implemented only, 52 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -61,11 +61,11 @@ Current count: 39 tested, 0 tested in GUI, 1 not working yet, 36 implemented onl
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| Switch Spoofing / DTP Spoofing | Improper trunk negotiation | P1 | 🔨 Implemented |
-| VLAN Hopping | Unauthorized access between VLANs | P1 | 🔨 Implemented |
-| Double-Tagging | Double 802.1Q tag insertion | P1 | 🔨 Implemented |
-| Native VLAN Abuse | Exploiting the native VLAN | P1 | 🔨 Implemented |
-| VLAN Tag Injection | Injecting tagged frames | P1 | 🔨 Implemented |
+| Switch Spoofing / DTP Spoofing | Improper trunk negotiation | P1 | 🧪 Tested |
+| VLAN Hopping | Unauthorized access between VLANs | P1 | 🧪 Tested |
+| Double-Tagging | Double 802.1Q tag insertion | P1 | 🧪 Tested |
+| Native VLAN Abuse | Exploiting the native VLAN | P1 | 🧪 Tested |
+| VLAN Tag Injection | Injecting tagged frames | P1 | 🧪 Tested |
 | VLAN Translation Abuse | Abusing VLAN translation | P3 | 📋 To implement |
 | QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 🔨 Implemented |
 | VLAN Pruning Abuse | Exploiting VLAN propagation | P2 | 📋 To implement |
@@ -79,9 +79,9 @@ Current count: 39 tested, 0 tested in GUI, 1 not working yet, 36 implemented onl
 | BPDU Spoofing | Forging BPDUs | P1 | 🧪 Tested |
 | Root Bridge Takeover | Malicious root bridge election | P1 | 🧪 Tested |
 | Root Bridge Impersonation | Impersonating the root bridge | P1 | 🧪 Tested |
-| Topology Change Flooding | Flooding topology change notifications | P1 | 🔨 Implemented |
+| Topology Change Flooding | Flooding topology change notifications | P1 | ❌ Tested, not working yet |
 | TCN Spoofing | Fraudulent topology change notifications | P1 | 🔨 Implemented |
-| BPDU Flooding | Flooding with BPDUs | P1 | 🔨 Implemented |
+| BPDU Flooding | Flooding with BPDUs | P1 | 🧪 Tested |
 | STP Path Cost Manipulation | Manipulating path costs | P2 | 🔨 Implemented |
 | STP Priority Manipulation | Altering bridge priorities | P2 | 🔨 Implemented |
 | STP Loop Induction | Inducing Layer 2 loops | P2 | 📋 To implement |
@@ -97,7 +97,7 @@ Current count: 39 tested, 0 tested in GUI, 1 not working yet, 36 implemented onl
 | Rogue DHCP Server | Unauthorized DHCP server | P1 | 🧪 Tested |
 | DHCP Spoofing | Forging DHCP responses | P1 | 🧪 Tested |
 | DHCP Offer Flooding | Flooding with DHCP offers | P1 | 🧪 Tested |
-| DHCP Discover Flooding | Flooding with DHCP discover requests | P1 | 🔨 Implemented |
+| DHCP Discover Flooding | Flooding with DHCP discover requests | P1 | 🧪 Tested |
 | DHCP NAK Injection | Fraudulent DHCP denials | P1 | 🧪 Tested |
 | DHCP Release Spoofing | Fraudulent lease releases | P2 | 🔨 Implemented |
 | DHCP Option Manipulation | Manipulating configuration options | P2 | 🔨 Implemented |
