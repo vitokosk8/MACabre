@@ -30,6 +30,14 @@ The attacker sends LACPDUs that advertise a partner with a chosen system and key
 - Disable LACP on access ports.
 - Monitoring of aggregate membership.
 
+## Implementation status
+
+Implemented in MACabre as a sender with an actor system ID, key and port number of the operator's choice, and an empty partner. The panel generates a random system ID when the field is empty. Validated on the Linux bonding lab; real switches are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/lacp_spoofing_lab.sh` (Linux bonding driver in 802.3ad mode, in namespaces). Control phase: with no LACPDUs, the bond reports no partner (00:00:00:00:00:00). Attack phase: the bond reports the claimed system ID as its partner. The lab needs the `bonding` kernel module and exits 2 without it. Validated on Ubuntu (VM) at commit 089ec70: control partner 00:00:00:00:00:00, attack partner 02:00:00:00:00:c1, exit 0. Vendor aggregates are not tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

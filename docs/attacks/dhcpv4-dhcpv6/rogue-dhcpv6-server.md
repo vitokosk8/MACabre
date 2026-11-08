@@ -31,6 +31,16 @@ The rogue server listens for SOLICIT messages sent to the DHCPv6 multicast group
 - RA Guard and DHCPv6 guard on the switch.
 - Monitoring for unexpected DHCPv6 servers.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/rogue_dhcpv6_server.py`. It answers SOLICIT with ADVERTISE and REQUEST with REPLY, offering an IA_NA address and the chosen DNS servers (option 23), search domains (option 24) and preference (option 7).
+- GUI panel: "Rogue DHCPv6 Server".
+- Status: 🔨 Implemented. Packet construction and parsing are tested with Scapy. The lab is not validated yet.
+
+## Lab validation
+
+Not validated. `scripts/lab/rogue_dhcpv6_server_lab.sh` reports inconclusive: the development kernel has no IPv6 in network namespaces. The planned check compares the DNS server received with the legitimate server running and stopped. A Linux machine with IPv6, or a MikroTik DHCPv6 client, is needed to run it.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

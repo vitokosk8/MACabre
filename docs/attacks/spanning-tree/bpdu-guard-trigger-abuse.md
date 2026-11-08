@@ -31,6 +31,16 @@ The attacker sends a BPDU from the port of a legitimate host. BPDU Guard shuts t
 - Monitoring of BPDU Guard events.
 - Physical security on edge ports.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/bpdu_guard_trigger_abuse.py` (sends configuration BPDUs from the operator's MAC, one per frame, toward a port with BPDU Guard).
+- GUI panel: "BPDU Guard Trigger Abuse".
+- Status: 🔨 Implemented. The lab validates that a protected port stays up after BPDUs from a host behind it when BPDU Guard is off, and goes to the disabled state with BPDU Guard on. Vendor err-disable recovery and logging are not validated.
+
+## Lab validation
+
+`scripts/lab/bpdu_guard_trigger_abuse_lab.sh` runs a spanning-tree LAN bridge whose protected port faces a hub segment with a victim and an attacker. Control phase: BPDU Guard off, the port stays forwarding after three BPDUs. Attack phase: BPDU Guard on, the same BPDUs put the port in the disabled state. Only the Linux bridge was tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

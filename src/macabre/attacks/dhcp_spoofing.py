@@ -37,6 +37,7 @@ class DhcpSpoofingConfig:
     dns: str = ""                    # DNS the spoofer offers; empty = server_ip
     target_mac: str = ""             # only answer this client; empty = answer every client
     dry_run: bool = False
+    extra_options: tuple = ()       # (code, value) options added to every reply
 
     def __post_init__(self) -> None:
         if not self.server_mac:
@@ -54,6 +55,7 @@ class DhcpSpoofingConfig:
             subnet_mask=self.subnet_mask,
             router=self.router,
             dns=self.dns,
+            extra_options=self.extra_options,
         )
 
 

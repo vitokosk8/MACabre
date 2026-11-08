@@ -77,6 +77,18 @@ def test_root_priority_must_be_a_multiple_of_4096():
         config(root_priority=100)
 
 
+def test_advertised_path_cost_is_carried_in_the_bpdu():
+    sent = []
+    rbi.run_root_bridge_impersonation(config(root_path_cost=7), threading.Event(), lambda _s: None,
+                                      run=fake_run, send=capture(sent))
+    assert fields(sent[0][1])["root_cost"] == 7
+
+
+def test_path_cost_must_fit_in_32_bits():
+    with pytest.raises(ValueError, match="32 bits"):
+        config(root_path_cost=0x1_0000_0000)
+
+
 def test_dry_run_sends_nothing_and_reads_nothing():
     calls = []
     sent = []
@@ -84,3 +96,10 @@ def test_dry_run_sends_nothing_and_reads_nothing():
                                               run=lambda argv: calls.append(argv) or "", send=capture(sent))
     assert calls == [] and sent == []
     assert stats.status.startswith("Dry run")
+
+
+def test_bridge_priority_is_carried_in_the_bpdu():
+    sent = []
+    rbi.run_root_bridge_impersonation(config(bridge_priority=4096), threading.Event(), lambda _s: None,
+                                      run=fake_run, send=capture(sent))
+    assert fields(sent[0][1])["bridge_priority"] == 4096

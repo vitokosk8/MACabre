@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only, 91 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 46 tested, 0 tested in GUI, 2 not working yet, 27 implemented only, 53 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -38,10 +38,10 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | MAC Flooding / CAM Overflow | Saturating the switch learning table | P1 | 🧪 Tested |
 | MAC Flapping | Repeated changes of a MAC address location | P1 | 🧪 Tested |
 | MAC Cloning | Cloning the identity of a device | P1 | 🧪 Tested |
-| Static MAC Impersonation | Impersonating a statically registered MAC | P2 | 📋 To implement |
-| Port Security Exhaustion | Exhausting port security learning limits | P2 | 📋 To implement |
-| MAC Move / Mobility Abuse | Abusing MAC mobility mechanisms | P2 | 📋 To implement |
-| Unknown Unicast Flooding | Exploiting flooding of unknown destinations | P2 | 📋 To implement |
+| Static MAC Impersonation | Impersonating a statically registered MAC | P2 | 🧪 Tested |
+| Port Security Exhaustion | Exhausting port security learning limits | P2 | 🔨 Implemented |
+| MAC Move / Mobility Abuse | Abusing MAC mobility mechanisms | P2 | 🧪 Tested |
+| Unknown Unicast Flooding | Exploiting flooding of unknown destinations | P2 | 🧪 Tested |
 
 ### ARP (9)
 
@@ -52,8 +52,8 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | Gratuitous ARP Spoofing | Fraudulent gratuitous ARP announcements | P1 | 🧪 Tested |
 | ARP Request Flooding | Flooding with ARP requests | P1 | 🧪 Tested |
 | ARP Reply Flooding | Flooding with ARP replies | P1 | 🧪 Tested |
-| ARP Table Exhaustion | Exhausting the ARP table | P2 | 📋 To implement |
-| Proxy ARP Abuse | Abusing proxy ARP responses | P2 | 📋 To implement |
+| ARP Table Exhaustion | Exhausting the ARP table | P2 | 🔨 Implemented |
+| Proxy ARP Abuse | Abusing proxy ARP responses | P2 | 🧪 Tested |
 | ARP-Based Gateway Impersonation | Impersonating the default gateway | P1 | 🧪 Tested |
 | ARP Inspection Evasion | Attempts to evade Dynamic ARP Inspection | P3 | 📋 To implement |
 
@@ -67,9 +67,9 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | Native VLAN Abuse | Exploiting the native VLAN | P1 | 🧪 Tested |
 | VLAN Tag Injection | Injecting tagged frames | P1 | 🧪 Tested |
 | VLAN Translation Abuse | Abusing VLAN translation | P3 | 📋 To implement |
-| QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 📋 To implement |
+| QinQ / VLAN Stacking Abuse | Manipulating 802.1ad tags | P2 | 🔨 Implemented |
 | VLAN Pruning Abuse | Exploiting VLAN propagation | P2 | 📋 To implement |
-| Private VLAN Isolation Bypass | Bypassing private VLAN isolation | P2 | 📋 To implement |
+| Private VLAN Isolation Bypass | Bypassing private VLAN isolation | P2 | 🔨 Implemented |
 | VLAN ID Exhaustion | Exhausting VLAN resources | P3 | 📋 To implement |
 
 ### Spanning Tree (STP / RSTP / MSTP / PVST+) (12)
@@ -82,10 +82,10 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | Topology Change Flooding | Flooding topology change notifications | P1 | ❌ Tested, not working yet |
 | TCN Spoofing | Fraudulent topology change notifications | P1 | 🔨 Implemented |
 | BPDU Flooding | Flooding with BPDUs | P1 | 🧪 Tested |
-| STP Path Cost Manipulation | Manipulating path costs | P2 | 📋 To implement |
-| STP Priority Manipulation | Altering bridge priorities | P2 | 📋 To implement |
+| STP Path Cost Manipulation | Manipulating path costs | P2 | 🔨 Implemented |
+| STP Priority Manipulation | Altering bridge priorities | P2 | 🔨 Implemented |
 | STP Loop Induction | Inducing Layer 2 loops | P2 | 📋 To implement |
-| BPDU Guard Trigger Abuse | Triggering port shutdowns through BPDU Guard | P2 | 📋 To implement |
+| BPDU Guard Trigger Abuse | Triggering port shutdowns through BPDU Guard | P2 | 🔨 Implemented |
 | RSTP Proposal/Agreement Abuse | Manipulating RSTP convergence | P3 | 📋 To implement |
 | MST Region Spoofing | Spoofing MST region parameters | P3 | 📋 To implement |
 
@@ -99,12 +99,12 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | DHCP Offer Flooding | Flooding with DHCP offers | P1 | 🧪 Tested |
 | DHCP Discover Flooding | Flooding with DHCP discover requests | P1 | 🧪 Tested |
 | DHCP NAK Injection | Fraudulent DHCP denials | P1 | 🧪 Tested |
-| DHCP Release Spoofing | Fraudulent lease releases | P2 | 📋 To implement |
-| DHCP Option Manipulation | Manipulating configuration options | P2 | 📋 To implement |
-| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 📋 To implement |
+| DHCP Release Spoofing | Fraudulent lease releases | P2 | 🔨 Implemented |
+| DHCP Option Manipulation | Manipulating configuration options | P2 | 🔨 Implemented |
+| DHCP Relay / Option 82 Abuse | Abusing relay agent information | P2 | 🔨 Implemented |
 | DHCP Snooping Binding Abuse | Manipulating snooping bindings | P3 | 📋 To implement |
-| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 📋 To implement |
-| DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 📋 To implement |
+| Rogue DHCPv6 Server | Unauthorized DHCPv6 server | P2 | 🔨 Implemented |
+| DHCPv6 Starvation | Exhausting DHCPv6 resources | P2 | 🔨 Implemented |
 | DHCPv6 Prefix Delegation Abuse | Abusing prefix delegation | P3 | 📋 To implement |
 
 ### IPv6 Neighbor Discovery & SLAAC (13)
@@ -113,30 +113,30 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | --- | --- | --- | --- |
 | Neighbor Advertisement Spoofing | Forging NA messages | P2 | 📋 To implement |
 | Neighbor Solicitation Spoofing | Fraudulent NS requests | P2 | 📋 To implement |
-| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P2 | 📋 To implement |
-| Rogue Router Advertisement | Unauthorized RA messages | P2 | 📋 To implement |
-| Router Advertisement Flooding | Flooding with RA messages | P2 | 📋 To implement |
+| NDP Cache Poisoning | Poisoning IPv6 neighbor caches | P2 | 🧪 Tested |
+| Rogue Router Advertisement | Unauthorized RA messages | P2 | 🧪 Tested |
+| Router Advertisement Flooding | Flooding with RA messages | P2 | 🧪 Tested |
 | Router Solicitation Flooding | Flooding with RS requests | P2 | 📋 To implement |
-| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P2 | 📋 To implement |
-| SLAAC Configuration Abuse | Manipulating stateless autoconfiguration | P2 | 📋 To implement |
+| SLAAC Prefix Spoofing | Advertising fraudulent prefixes | P2 | 🧪 Tested |
+| SLAAC Configuration Abuse | Manipulating stateless autoconfiguration | P2 | 🧪 Tested |
 | Duplicate Address Detection DoS | Interfering with duplicate address detection | P2 | 📋 To implement |
-| NDP Neighbor Cache Exhaustion | Exhausting the neighbor cache | P2 | 📋 To implement |
-| Redirect Spoofing | Forged ICMPv6 Redirect messages | P2 | 📋 To implement |
+| NDP Neighbor Cache Exhaustion | Exhausting the neighbor cache | P2 | 🧪 Tested |
+| Redirect Spoofing | Forged ICMPv6 Redirect messages | P2 | ❌ Tested, not working yet |
 | IPv6 RA Guard Evasion | Attempts to evade RA Guard | P3 | 📋 To implement |
-| MLD Spoofing / Flooding | Manipulating multicast listener membership | P2 | 📋 To implement |
+| MLD Spoofing / Flooding | Manipulating multicast listener membership | P2 | 🧪 Tested |
 
 ### 802.1X / EAPOL / NAC (10)
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| EAPOL Start Flooding | Flooding authentication start requests | P2 | 📋 To implement |
-| EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 📋 To implement |
-| EAPOL Replay | Replaying captured authentication exchanges | P2 | 📋 To implement |
-| 802.1X Identity Spoofing | Spoofing client identity | P2 | 📋 To implement |
+| EAPOL Start Flooding | Flooding authentication start requests | P2 | 🔨 Implemented |
+| EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 🔨 Implemented |
+| EAPOL Replay | Replaying captured authentication exchanges | P2 | 🔨 Implemented |
+| 802.1X Identity Spoofing | Spoofing client identity | P2 | 🔨 Implemented |
 | EAP Downgrade / Weak Method Abuse | Exploiting weak authentication methods | P3 | 📋 To implement |
 | EAP Relay / Evil Authenticator | Relay or rogue authenticator | P3 | 📋 To implement |
 | MAB Bypass / MAC Spoofing | Abusing MAC-based authentication | P1 | 🧪 Tested |
-| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 📋 To implement |
+| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 🔨 Implemented |
 | Post-Authentication Session Hijacking | Abusing an already authorized session | P3 | 📋 To implement |
 | NAC VLAN Assignment Abuse | Manipulating authorization VLAN assignment | P3 | 📋 To implement |
 
@@ -150,7 +150,7 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | LLDP Flooding | Flooding with LLDP advertisements | P1 | 🧪 Tested |
 | MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
 | MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
-| LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 📋 To implement |
+| LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 🔨 Implemented |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
 | DTP Negotiation Abuse | Improper trunk negotiation | P1 | 🔨 Implemented |
@@ -162,7 +162,7 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| LACP Spoofing | Forging LACPDUs | P2 | 📋 To implement |
+| LACP Spoofing | Forging LACPDUs | P2 | 🧪 Tested |
 | LACP Partner Impersonation | Impersonating a LAG partner | P2 | 📋 To implement |
 | LACP Negotiation Flooding | Flooding LACP negotiations | P2 | 📋 To implement |
 | LAG Misconfiguration Abuse | Exploiting incorrect link aggregations | P2 | 📋 To implement |
@@ -176,11 +176,11 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 | --- | --- | --- | --- |
 | Broadcast Storm | Broadcast traffic storm | P1 | 🧪 Tested |
 | Multicast Flooding | Multicast flooding | P1 | 🧪 Tested |
-| IGMP Spoofing | Spoofing IGMP memberships | P2 | 📋 To implement |
+| IGMP Spoofing | Spoofing IGMP memberships | P2 | 🔨 Implemented |
 | IGMP Query Spoofing | Fraudulent multicast queries | P2 | 📋 To implement |
-| IGMP Leave Spoofing | Fraudulent group leave | P2 | 📋 To implement |
-| IGMP Snooping Table Exhaustion | Exhausting the group table | P3 | 📋 To implement |
-| Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 📋 To implement |
+| IGMP Leave Spoofing | Fraudulent group leave | P2 | 🔨 Implemented |
+| IGMP Snooping Table Exhaustion | Exhausting the group table | P3 | 🧪 Tested |
+| Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 🔨 Implemented |
 | L2 Loop Amplification | Amplifying traffic through loops | P2 | 📋 To implement |
 
 ### MACsec / IEEE 802.1AE (6)
@@ -198,14 +198,14 @@ Current count: 32 tested, 0 tested in GUI, 1 not working yet, 4 implemented only
 
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
-| PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 📋 To implement |
-| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 📋 To implement |
+| PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 🔨 Implemented |
+| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 🔨 Implemented |
 | PPPoE Session Spoofing | Spoofing PPPoE sessions | P2 | 📋 To implement |
 | 802.1ad QinQ Abuse | Manipulating provider VLANs | P2 | 📋 To implement |
 | 802.1ah PBB Encapsulation Abuse | Manipulating backbone encapsulation | P3 | 📋 To implement |
 | EVPN MAC/IP Advertisement Poisoning | Fraudulent MAC/IP advertisements | P3 | 📋 To implement |
 | EVPN MAC Mobility Abuse | Mobility oscillation or spoofing | P3 | 📋 To implement |
-| VXLAN VNI / VTEP Spoofing | Spoofing overlay elements | P3 | 📋 To implement |
+| VXLAN VNI / VTEP Spoofing | Spoofing overlay elements | P3 | 🧪 Tested |
 | TRILL / SPB Control Abuse | Manipulating advanced bridging control | P3 | 📋 To implement |
 | Provider Ethernet OAM Abuse | Manipulating provider maintenance operations | P3 | 📋 To implement |
 

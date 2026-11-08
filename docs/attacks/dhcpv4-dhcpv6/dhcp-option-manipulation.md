@@ -30,6 +30,16 @@ The attacker answers a request with a server reply that sets a different DNS ser
 - Monitoring of configuration changes on clients.
 - Encrypted DNS and verified time sources where possible.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/dhcp_option_manipulation.py`. It reuses the spoofed reply of DHCP Spoofing and adds the selected options: domain (15), NTP server (42), search domains (119), static routes (121) and WPAD (252).
+- GUI panel: "DHCP Option Manipulation".
+- Status: 🔨 Implemented. The lab validates that a client receives the WPAD option from the attacker alone; the client's handling of the option is not tested.
+
+## Lab validation
+
+`scripts/lab/dhcp_option_manipulation_lab.sh` runs dnsmasq as the legitimate server. Alone, the server sends no WPAD option. With the legitimate server stopped, the attacker's reply carries the WPAD URL, and the client receives it.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

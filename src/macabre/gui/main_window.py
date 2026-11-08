@@ -25,7 +25,11 @@ from macabre.catalog import FAMILIES
 from macabre.gui.arp_gateway_impersonation_panel import ArpGatewayImpersonationPanel
 from macabre.gui.bpdu_spoofing_panel import BpduSpoofingPanel
 from macabre.gui.root_bridge_takeover_panel import RootBridgeTakeoverPanel
-from macabre.gui.root_bridge_impersonation_panel import RootBridgeImpersonationPanel
+from macabre.gui.root_bridge_impersonation_panel import (
+    RootBridgeImpersonationPanel,
+    StpPathCostManipulationPanel,
+    StpPriorityManipulationPanel,
+)
 from macabre.gui.topology_change_flooding_panel import TopologyChangeFloodingPanel
 from macabre.gui.tcn_spoofing_panel import TcnSpoofingPanel
 from macabre.gui.bpdu_flooding_panel import BpduFloodingPanel
@@ -41,7 +45,7 @@ from macabre.gui.lldp_flooding_panel import LldpFloodingPanel
 from macabre.gui.mndp_spoofing_panel import MndpSpoofingPanel
 from macabre.gui.mndp_flooding_panel import MndpFloodingPanel
 from macabre.gui.broadcast_storm_panel import BroadcastStormPanel
-from macabre.gui.multicast_flooding_panel import MulticastFloodingPanel
+from macabre.gui.multicast_flooding_panel import MulticastFloodingPanel, UnknownMulticastFloodingPanel
 from macabre.gui.arp_reply_flooding_panel import ArpReplyFloodingPanel
 from macabre.gui.switch_spoofing_panel import SwitchSpoofingPanel
 from macabre.gui.double_tagging_panel import DoubleTaggingPanel
@@ -60,6 +64,41 @@ from macabre.gui.mac_cloning_panel import MacCloningPanel
 from macabre.gui.mac_spoofing_panel import MacSpoofingPanel
 from macabre.gui.dtp_audit_panel import DtpAuditPanel
 from macabre.gui.mab_bypass_panel import MabBypassPanel
+from macabre.gui.arp_table_exhaustion_panel import ArpTableExhaustionPanel
+from macabre.gui.proxy_arp_abuse_panel import ProxyArpAbusePanel
+from macabre.gui.mac_move_panel import MacMovePanel
+from macabre.gui.unknown_unicast_flooding_panel import UnknownUnicastFloodingPanel
+from macabre.gui.port_security_exhaustion_panel import PortSecurityExhaustionPanel
+from macabre.gui.static_mac_impersonation_panel import StaticMacImpersonationPanel
+from macabre.gui.dhcp_release_spoofing_panel import DhcpReleaseSpoofingPanel
+from macabre.gui.dhcp_option_manipulation_panel import DhcpOptionManipulationPanel
+from macabre.gui.dhcp_relay_option82_panel import DhcpRelayOption82Panel
+from macabre.gui.rogue_dhcpv6_server_panel import RogueDhcpv6ServerPanel
+from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
+from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
+from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
+from macabre.gui.igmp_snooping_exhaustion_panel import IgmpSnoopingExhaustionPanel
+from macabre.gui.vxlan_vtep_spoofing_panel import VxlanVtepSpoofingPanel
+from macabre.gui.rogue_router_advertisement_panel import RogueRouterAdvertisementPanel
+from macabre.gui.router_advertisement_flooding_panel import RouterAdvertisementFloodingPanel
+from macabre.gui.slaac_prefix_spoofing_panel import SlaacPrefixSpoofingPanel
+from macabre.gui.slaac_configuration_abuse_panel import SlaacConfigurationAbusePanel
+from macabre.gui.ndp_cache_poisoning_panel import NdpCachePoisoningPanel
+from macabre.gui.ndp_neighbor_cache_exhaustion_panel import NdpNeighborCacheExhaustionPanel
+from macabre.gui.mld_spoofing_flooding_panel import MldSpoofingFloodingPanel
+from macabre.gui.redirect_spoofing_panel import RedirectSpoofingPanel
+from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
+from macabre.gui.lacp_spoofing_panel import LacpSpoofingPanel
+from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
+from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPanel
+from macabre.gui.private_vlan_bypass_panel import PrivateVlanBypassPanel
+from macabre.gui.pppoe_discovery_flooding_panel import PppoeDiscoveryFloodingPanel
+from macabre.gui.rogue_pppoe_access_concentrator_panel import RoguePppoeAccessConcentratorPanel
+from macabre.gui.eapol_start_flooding_panel import EapolStartFloodingPanel
+from macabre.gui.eapol_logoff_spoofing_panel import EapolLogoffSpoofingPanel
+from macabre.gui.eapol_replay_panel import EapolReplayPanel
+from macabre.gui.eapol_identity_spoofing_panel import EapolIdentitySpoofingPanel
+from macabre.gui.qinq_stacking_panel import QinQStackingPanel
 
 # Panels for implemented techniques, keyed by technique name from the catalog.
 PANELS = {
@@ -82,8 +121,45 @@ PANELS = {
     "BPDU Spoofing": BpduSpoofingPanel,
     "DTP Negotiation Abuse": DtpAuditPanel,
     "MAB Bypass / MAC Spoofing": MabBypassPanel,
+    "Static MAC Impersonation": StaticMacImpersonationPanel,
+    "Port Security Exhaustion": PortSecurityExhaustionPanel,
+    "MAC Move / Mobility Abuse": MacMovePanel,
+    "Unknown Unicast Flooding": UnknownUnicastFloodingPanel,
+    "ARP Table Exhaustion": ArpTableExhaustionPanel,
+    "Proxy ARP Abuse": ProxyArpAbusePanel,
+    "QinQ / VLAN Stacking Abuse": QinQStackingPanel,
+    "DHCP Release Spoofing": DhcpReleaseSpoofingPanel,
+    "DHCP Option Manipulation": DhcpOptionManipulationPanel,
+    "DHCP Relay / Option 82 Abuse": DhcpRelayOption82Panel,
+    "Rogue DHCPv6 Server": RogueDhcpv6ServerPanel,
+    "DHCPv6 Starvation": Dhcpv6StarvationPanel,
+    "IGMP Spoofing": IgmpSpoofingPanel,
+    "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
+    "IGMP Snooping Table Exhaustion": IgmpSnoopingExhaustionPanel,
+    "VXLAN VNI / VTEP Spoofing": VxlanVtepSpoofingPanel,
+    "Rogue Router Advertisement": RogueRouterAdvertisementPanel,
+    "Router Advertisement Flooding": RouterAdvertisementFloodingPanel,
+    "SLAAC Prefix Spoofing": SlaacPrefixSpoofingPanel,
+    "SLAAC Configuration Abuse": SlaacConfigurationAbusePanel,
+    "NDP Cache Poisoning": NdpCachePoisoningPanel,
+    "NDP Neighbor Cache Exhaustion": NdpNeighborCacheExhaustionPanel,
+    "Redirect Spoofing": RedirectSpoofingPanel,
+    "MLD Spoofing / Flooding": MldSpoofingFloodingPanel,
+    "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
+    "LACP Spoofing": LacpSpoofingPanel,
+    "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
+    "Unauthorized Mini-Switch / Hub": UnauthorizedMiniSwitchPanel,
+    "Private VLAN Isolation Bypass": PrivateVlanBypassPanel,
+    "PPPoE Discovery Flooding": PppoeDiscoveryFloodingPanel,
+    "Rogue PPPoE Access Concentrator": RoguePppoeAccessConcentratorPanel,
+    "EAPOL Start Flooding": EapolStartFloodingPanel,
+    "EAPOL Logoff Spoofing": EapolLogoffSpoofingPanel,
+    "EAPOL Replay": EapolReplayPanel,
+    "802.1X Identity Spoofing": EapolIdentitySpoofingPanel,
     "Root Bridge Takeover": RootBridgeTakeoverPanel,
     "Root Bridge Impersonation": RootBridgeImpersonationPanel,
+    "STP Path Cost Manipulation": StpPathCostManipulationPanel,
+    "STP Priority Manipulation": StpPriorityManipulationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
     "TCN Spoofing": TcnSpoofingPanel,
     "BPDU Flooding": BpduFloodingPanel,
@@ -100,6 +176,7 @@ PANELS = {
     "MNDP Flooding": MndpFloodingPanel,
     "Broadcast Storm": BroadcastStormPanel,
     "Multicast Flooding": MulticastFloodingPanel,
+    "Unknown Multicast Flooding": UnknownMulticastFloodingPanel,
 }
 
 

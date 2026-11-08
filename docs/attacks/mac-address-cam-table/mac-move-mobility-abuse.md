@@ -31,6 +31,16 @@ A host sends frames as if it had moved to another port, usually with a MAC addre
 - Port restrictions for addresses that should never move.
 - Use of 802.1X or static entries for sensitive hosts.
 
+## Implementation status
+
+The module sends one or a few frames that carry the target MAC as source, from the attacker's port. Frames are sent once: a move, not a continuous flap. The GUI panel exposes the host MAC and the number of frames.
+
+## Lab validation
+
+`scripts/lab/mac_move_lab.sh` builds a Linux bridge with a victim, an attacker and a monitor port. The victim's entry is dynamic, learned from its own traffic. Phase 0 delivers the monitor's unicast traffic to the victim. Phase 1 sends one move frame from the attacker's port. Phase 2 shows the entry on the attacker's port and all unicast traffic for the victim's MAC arriving at the attacker.
+
+The lab shows that a single frame moves a dynamic entry on this bridge. It does not test move limits, move logging, or allowed-port policies, which the Linux bridge does not have. Those need a real switch.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

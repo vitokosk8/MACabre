@@ -31,6 +31,14 @@ The attacker advertises a bridge priority lower than the current root's. Because
 - Root Guard on access ports.
 - BPDU Guard on edge ports.
 
+## Implementation status
+
+Implemented in MACabre as its own panel entry, "STP Priority Manipulation". It targets the designated port of a shared segment, not the root: the attacker advertises the real root's ID, the switch's root path cost, and a lower bridge priority. It is not the same as Root Bridge Takeover, which changes the root. Real switches are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/stp_priority_manipulation_lab.sh`. On a segment shared with the attacker, the switch's port sw-x forwards with no attacker, and it stays forwarding when the attacker advertises a worse priority (control). With priority 0 it is blocking for the whole run (attack), and it forwards again after the attacker stops. The switch's root port stays on the real root. Exit 0 when all hold.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

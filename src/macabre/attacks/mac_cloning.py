@@ -12,6 +12,7 @@ changes the real interface, so use a lab or a dedicated test adapter.
 
 from __future__ import annotations
 
+import sys
 import threading
 from collections.abc import Callable
 from dataclasses import dataclass, replace
@@ -38,7 +39,13 @@ class CloningStats:
 
 
 def set_mac_commands(iface: str, mac: str) -> list[list[str]]:
-    """Commands that change the hardware address; the interface is down while changed."""
+    """Commands that change the hardware address.
+
+    Linux takes the interface down while changing it. macOS changes the address in place,
+    which works on wired interfaces; many Wi-Fi adapters refuse it.
+    """
+    if sys.platform == "darwin":
+        return [["ifconfig", iface, "ether", mac]]
     return [
         ["ip", "link", "set", "dev", iface, "down"],
         ["ip", "link", "set", "dev", iface, "address", mac],

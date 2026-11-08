@@ -30,6 +30,14 @@ The attacker copies the root's bridge ID and sends BPDUs with it. The switches s
 - Monitoring of root port changes and of advertisements from unexpected ports.
 - BPDU Guard on access ports.
 
+## Implementation status
+
+Implemented in MACabre as a sender with the root's copied ID. The panel sets the real root's priority and MAC, and the advertised root path cost. The cost option covers the path-cost variant of this attack, so no separate STP Path Cost Manipulation module is needed. Real switches are not tested.
+
+## Lab validation
+
+Lab: `scripts/lab/root_bridge_impersonation_lab.sh` (Linux bridge with kernel STP, three namespaces). Phase 2 advertises cost 0 and the switch's root port moves to the attacker's port for the whole run. Phase 4 advertises cost 1000, above the real path cost, and the root port stays on the real root. Exit 0 when both results hold. This shows that the advertised cost decides the port. Real Cisco or other vendor switches are not tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

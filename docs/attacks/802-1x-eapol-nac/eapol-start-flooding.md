@@ -31,6 +31,16 @@ The attacker sends EAPOL-Start frames from many MAC addresses, or repeatedly fro
 - Port security to bound MAC addresses per port.
 - Monitoring of session counts.
 
+## Implementation status
+
+- Module: `src/macabre/attacks/eapol_start_flooding.py` (sends EAPOL-Start frames from random or fixed supplicant MACs to the PAE group address, with no EAP exchange).
+- GUI panel: "EAPOL Start Flooding".
+- Status: 🔨 Implemented. The lab validates that a hostapd wired authenticator answers each EAPOL-Start in a flood with an EAP-Request/Identity (200 of 200 supplicants), and that a legitimate supplicant still gets one afterwards. It does not measure authenticator state or limits.
+
+## Lab validation
+
+`scripts/lab/eapol_start_flooding_lab.sh` runs hostapd in wired mode on a Linux bridge, with no RADIUS server, and a probe supplicant. The bridge forwards the PAE group address (`group_fwd_mask 8`). Baseline: the probe gets an identity request. Flood: 200 supplicants from 200 EAPOL-Start frames each get one; hostapd also retransmits, which the lab reports separately.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
