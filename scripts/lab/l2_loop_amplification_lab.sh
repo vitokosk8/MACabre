@@ -11,8 +11,9 @@
 #
 # Phases:
 #   baseline: one link, no loop. The injected frame must not come back to the switch.
-#   control:  two links. The switch and the attacker bridge run STP. One port is blocked, so the
-#             frame must not multiply.
+#   control:  two links. The switch and the attacker bridge run STP. The attacker bridge blocks
+#             its own port, so no loop forms and the frame must not multiply. Both switch ports
+#             stay in forwarding in this case.
 #   attack:   two links, no STP anywhere. The attacker bridge drops STP BPDUs. The frame multiplies.
 #
 # Evidence per phase: copies, that is frames with the injected destination that re-enter the
