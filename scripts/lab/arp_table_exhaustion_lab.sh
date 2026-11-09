@@ -3,31 +3,32 @@
 #
 # Topology, all inside network namespaces:
 #
-#   victim   --(veth)-- [switch: bridge br0, port p-vic]   10.77.0.10, small neighbor table
+#   victim   --(veth)-- [switch: bridge br0, port p-vic]   10.77.0.10
 #   gateway  --(veth)-- [switch: bridge br0, port p-gw ]   10.77.0.1, a legitimate neighbor
 #   attacker --(veth)-- [switch: bridge br0, port p-att]   MACabre's ARP table exhaustion sender
 #
-#   victim:   10.77.0.10/16. Its neighbor table limit (gc_thresh3) is lowered to 6 when the kernel
-#             allows it; otherwise the system default (1024) applies.
 #   attacker: sends ARP requests for the victim's address from fake senders in 10.77.16.0/20.
 #
+# The limit of the victim's neighbor table is not set or read here. Some kernels, including the
+# OrbStack VM kernel, do not expose net.ipv4.neigh.default.gc_thresh3. Instead, the lab measures the
+# limit the kernel enforces:
+#
 #   Phase 0 (baseline): the victim pings the gateway, so it holds a legitimate entry for it.
-#   Phase 1 (exhaustion): the attacker sends FRAMES requests from new fake senders. Checked: how
-#                         many fake entries the victim learns, the total table size, and whether
-#                         the gateway's entry survives.
+#   Phase 1 (exhaustion): the attacker sends ROUND_FRAMES requests per round. After each round the
+#                         lab counts the victim's entries. When the count stops growing for two rounds
+#                         in a row, that count is the observed limit of the table.
 #
-# What this shows: the victim learns entries from requests for its own address, and its table
-# stays within the configured limit. Whether the gateway's entry survives depends on the kernel's
-# eviction, and the lab reports what happened instead of assuming it.
-#
-# What it does not show: the limits and eviction of other operating systems and of routers,
-# which use other defaults. Those need the target device.
+# Result: the observed limit, how many fake entries it took to reach it, and whether the gateway's
+# entry survived. Other systems use other limits and eviction rules; test the target device.
 #
 # Nothing here touches the host's real network interfaces.
 #
 # Usage:
 #   sudo scripts/lab/arp_table_exhaustion_lab.sh
-#   sudo FRAMES=40 scripts/lab/arp_table_exhaustion_lab.sh
+#   sudo ROUND_FRAMES=100 MAX_ROUNDS=40 scripts/lab/arp_table_exhaustion_lab.sh
+#
+# Exit 0 when the table stops growing and fake entries were learned. Exit 2 when it does not stop
+# growing within MAX_ROUNDS (inconclusive). Exit 1 when the setup or the baseline did not match.
 #
 # Requirements: iproute2 (ip, bridge) and the project virtualenv (.venv).
 # Override the interpreter with PYTHON=/path/to/python.
@@ -39,7 +40,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
     exit 1
 fi
 
-for tool in ip bridge sysctl ping; do
+for tool in ip bridge ping; do
     if ! command -v "$tool" >/dev/null 2>&1; then
         echo "Missing required tool: $tool" >&2
         exit 1
@@ -48,7 +49,8 @@ done
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
-FRAMES="${FRAMES:-1100}"
+ROUND_FRAMES="${ROUND_FRAMES:-200}"
+MAX_ROUNDS="${MAX_ROUNDS:-30}"
 VICTIM_IP="10.77.0.10"
 GATEWAY_IP="10.77.0.1"
 SENDER_SUBNET="10.77.16.0/20"
@@ -98,26 +100,13 @@ for name in vic gw att; do
     ip netns exec switch ip link set "p-$name" master br0
 done
 
-# Try to set a small neighbor table on the victim, so the limit is reached with a few entries.
-# Some kernels do not expose these settings in a new network namespace. Then the system default
-# limit is used, and the flood is sized to reach it.
-if ip netns exec victim sh -c 'echo 6 > /proc/sys/net/ipv4/neigh/default/gc_thresh3' 2>/dev/null; then
-    GC_MAX=6
-    LIMIT_NOTE="set to $GC_MAX in the victim's namespace"
-else
-    GC_MAX="$(cat /proc/sys/net/ipv4/neigh/default/gc_thresh3)"
-    LIMIT_NOTE="not settable in the victim's namespace, using the system default of $GC_MAX"
-fi
-echo "Neighbor table limit (gc_thresh3): $LIMIT_NOTE"
-echo
-
-# Sends FRAMES requests for the victim's address, from new fake senders in SENDER_SUBNET.
+# Sends ROUND_FRAMES requests for the victim's address, from new fake senders in SENDER_SUBNET.
 SEND_CODE='
 import os, threading
 from macabre.attacks.arp_table_exhaustion import ArpTableExhaustionConfig, run_arp_table_exhaustion
 run_arp_table_exhaustion(
     ArpTableExhaustionConfig(iface="h-att", victim_ip=os.environ["VICTIM_IP"], subnet=os.environ["SENDER_SUBNET"],
-                             rate=100, count=int(os.environ["FRAMES"])),
+                             rate=100, count=int(os.environ["ROUND_FRAMES"])),
     threading.Event(),
     lambda _s: None,
 )
@@ -142,31 +131,47 @@ echo "  entries in the victim's neighbor table: $BASE_ENTRIES"
 echo "  gateway entry present: $([[ "$BASE_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-echo "Phase 1: exhaustion, the attacker sends $FRAMES requests for $VICTIM_IP from new senders in $SENDER_SUBNET"
-ip netns exec attacker env PYTHONPATH="$ROOT/src" VICTIM_IP="$VICTIM_IP" SENDER_SUBNET="$SENDER_SUBNET" FRAMES="$FRAMES" \
-    "$PY" -c "$SEND_CODE" >/dev/null 2>&1
-sleep 1
-AFTER_ENTRIES="$(entries)"
+echo "Phase 1: exhaustion, $ROUND_FRAMES requests per round for $VICTIM_IP from new senders in $SENDER_SUBNET"
+prev=-1
+same=0
+observed=0
+plateau=0
+rounds=0
+for round in $(seq 1 "$MAX_ROUNDS"); do
+    rounds=$round
+    ip netns exec attacker env PYTHONPATH="$ROOT/src" VICTIM_IP="$VICTIM_IP" SENDER_SUBNET="$SENDER_SUBNET" \
+        ROUND_FRAMES="$ROUND_FRAMES" "$PY" -c "$SEND_CODE" >/dev/null 2>&1
+    sleep 1
+    cur="$(entries)"
+    echo "  round $round: $((round * ROUND_FRAMES)) requests sent, $cur entries in the victim's table"
+    if (( cur > observed )); then observed=$cur; fi
+    if (( round > 1 && cur <= prev )); then same=$((same + 1)); else same=0; fi
+    prev=$cur
+    if (( same >= 2 )); then plateau=1; break; fi
+done
+echo
+
 AFTER_FAKE="$(fake_entries)"
 AFTER_GATEWAY="$(gateway_entry)"
-echo "  entries in the victim's neighbor table: $AFTER_ENTRIES (limit gc_thresh3 = $GC_MAX)"
+SENT=$((rounds * ROUND_FRAMES))
+echo "  observed limit (entries when the table stopped growing): $observed"
+echo "  requests sent until then: $SENT"
 echo "  fake sender entries learned: $AFTER_FAKE"
 echo "  gateway entry present: $([[ "$AFTER_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-if [[ "$BASE_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$AFTER_ENTRIES" -le "$GC_MAX" ]]; then
-    if [[ "$AFTER_ENTRIES" -ge $(( GC_MAX * 9 / 10 )) ]]; then
+if [[ "$BASE_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$observed" -gt "$BASE_ENTRIES" ]]; then
+    if (( plateau )); then
         if [[ "$AFTER_GATEWAY" -gt 0 ]]; then
             GW_NOTE="The gateway's entry survived the flood."
         else
             GW_NOTE="The gateway's entry was evicted by the flood."
         fi
-        echo "Result: the victim learned $AFTER_FAKE entries from requests for its own address, and its table reached its limit of $GC_MAX. $GW_NOTE Other systems use other limits and eviction rules; test the target device."
-    else
-        echo "Result: inconclusive. The victim learned $AFTER_FAKE entries and its table held $AFTER_ENTRIES of its limit of $GC_MAX, so the limit was not reached and eviction was not exercised. The kernel learned fewer entries than requests sent in this run."
-        exit 2
+        echo "Result: the victim's table stopped growing at $observed entries after $SENT requests from new senders, and it learned $AFTER_FAKE fake entries. $GW_NOTE Other systems use other limits and eviction rules; test the target device."
+        exit 0
     fi
-else
-    echo "Result: the outcome did not match the expected phases. Result unreliable."
-    exit 1
+    echo "Result: inconclusive. The table was still growing after $SENT requests (observed $observed entries), so no limit was reached within MAX_ROUNDS=$MAX_ROUNDS."
+    exit 2
 fi
+echo "Result: the outcome did not match the expected phases. Result unreliable."
+exit 1
