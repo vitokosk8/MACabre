@@ -38,8 +38,13 @@ def test_redirect_carries_the_attacker_mac_as_target_link_layer_option():
     assert option.lladdr == ATTACKER
 
 
-def test_redirect_carries_a_redirected_header_option():
+def test_redirect_carries_a_redirected_header_option_by_default():
     assert rs.build_redirect(config()).getlayer(ICMPv6NDOptRedirectedHdr) is not None
+
+
+def test_redirect_can_omit_the_redirected_header_option():
+    frame = rs.build_redirect(config(include_redirected_header=False))
+    assert frame.getlayer(ICMPv6NDOptRedirectedHdr) is None
 
 
 def test_redirect_uses_hop_limit_255_and_goes_to_the_victim_link_local_address():
