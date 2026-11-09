@@ -30,6 +30,7 @@ from macabre.gui.root_bridge_impersonation_panel import (
     StpPathCostManipulationPanel,
     StpPriorityManipulationPanel,
 )
+from macabre.gui.stp_loop_induction_panel import StpLoopInductionPanel
 from macabre.gui.topology_change_flooding_panel import TopologyChangeFloodingPanel
 from macabre.gui.tcn_spoofing_panel import TcnSpoofingPanel
 from macabre.gui.bpdu_flooding_panel import BpduFloodingPanel
@@ -163,6 +164,7 @@ PANELS = {
     "STP Path Cost Manipulation": StpPathCostManipulationPanel,
     "STP Priority Manipulation": StpPriorityManipulationPanel,
     "Topology Change Flooding": TopologyChangeFloodingPanel,
+    "STP Loop Induction": StpLoopInductionPanel,
     "TCN Spoofing": TcnSpoofingPanel,
     "BPDU Flooding": BpduFloodingPanel,
     "Rogue DHCP Server": RogueDhcpServerPanel,

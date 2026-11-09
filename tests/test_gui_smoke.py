@@ -61,13 +61,13 @@ def test_menu_is_built_from_catalog():
     assert not dhcp.isDisabled()
     assert dhcp.data(0, Qt.ItemDataRole.UserRole) == "DHCP Starvation"
 
-    cloning = next(
+    unimplemented = next(
         tree.topLevelItem(i).child(j)
         for i, f in enumerate(FAMILIES)
         for j, t in enumerate(f.techniques)
-        if t.name == "STP Loop Induction"
+        if t.name == "L2 Loop Amplification"
     )
-    assert cloning.isDisabled()
+    assert unimplemented.isDisabled()
 
     window.close()
     app.processEvents()
