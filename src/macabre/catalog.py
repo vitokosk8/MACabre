@@ -184,7 +184,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='IGMP Leave Spoofing', description='Fraudulent group leave', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='IGMP Snooping Table Exhaustion', description='Exhausting the group table', priority='P3', status=Status.TESTED),
             Technique(name='Unknown Multicast Flooding', description='Exploiting unknown multicast traffic', priority='P2', status=Status.IMPLEMENTED),
-            Technique(name='L2 Loop Amplification', description='Amplifying traffic through loops', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='L2 Loop Amplification', description='Amplifying traffic through loops', priority='P2', status=Status.IMPLEMENTED),
         ),
     ),
     Family(
