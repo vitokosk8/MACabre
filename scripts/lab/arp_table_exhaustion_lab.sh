@@ -13,12 +13,14 @@
 # expose it. The lab observes the table instead:
 #
 #   Phase 0 (baseline): the victim pings the gateway, so it holds a legitimate entry for it.
-#   Phase 1 (exhaustion): one burst of FRAMES requests from new senders. Then the victim's entry count
-#                         is sampled every second for SAMPLE_SECONDS.
+#   Phase 1 (control): no flood. The victim's table is sampled every second for SAMPLE_SECONDS, and the
+#                      victim pings the gateway every 10 s, so the gateway entry stays in use.
+#   Phase 2 (exhaustion): one burst of FRAMES requests from new senders, then the same sampling and pings.
 #
-# Result: the peak entry count seen during the sampling, the sustained level (median of the last 30
-# samples), and whether the gateway's entry survived. The kernel may evict entries under pressure, so a
-# peak is not a configured limit. Other systems use other limits and eviction rules; test the target device.
+# Result: the peak entry count in phase 2, its sustained level (median of the last 30 samples), and
+# whether the gateway's entry survived phase 2 compared with phase 1. Without the pings, the gateway's
+# entry would expire on its own, so the control isolates the flood's effect on that entry.
+# Other systems use other limits and eviction rules; test the target device.
 #
 # Nothing here touches the host's real network interfaces.
 #
@@ -26,8 +28,8 @@
 #   sudo scripts/lab/arp_table_exhaustion_lab.sh
 #   sudo FRAMES=600 SAMPLE_SECONDS=30 scripts/lab/arp_table_exhaustion_lab.sh
 #
-# Exit 0 when the flood adds fake entries and raises the victim's table above its baseline. Exit 1 when
-# the setup or the baseline did not match.
+# Exit 0 when the control keeps the gateway's entry, and the flood adds fake entries and raises the
+# victim's table above its baseline. Exit 1 when the setup, the baseline or the control did not match.
 #
 # Requirements: iproute2 (ip, bridge), ping, and the project virtualenv (.venv).
 # Override the interpreter with PYTHON=/path/to/python.
@@ -131,39 +133,53 @@ echo "  entries in the victim's neighbor table: $BASE_ENTRIES"
 echo "  gateway entry present: $([[ "$BASE_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-echo "Phase 1: exhaustion, $FRAMES requests for $VICTIM_IP at $RATE/s from new senders in $SENDER_SUBNET"
+# Samples the victim's table every second for SAMPLE_SECONDS, pinging the gateway every 10 s so its entry
+# stays in use. Writes the counts to the file given as the first argument.
+sample_table() {
+    : > "$1"
+    for s in $(seq 1 "$SAMPLE_SECONDS"); do
+        cur="$(entries)"
+        echo "$cur" >> "$1"
+        if (( s % 10 == 0 )); then
+            echo "  t=${s}s: $cur entries"
+            ip netns exec victim ping -c 1 -W 1 "$GATEWAY_IP" >/dev/null 2>&1 || true
+        fi
+        sleep 1
+    done
+}
+
+echo "Phase 1: control, no flood. Sampling the victim's table for $SAMPLE_SECONDS s:"
+CONTROL_SAMPLES="$WORK/control"
+sample_table "$CONTROL_SAMPLES"
+CONTROL_GATEWAY="$(gateway_entry)"
+echo "  gateway entry present at the end: $([[ "$CONTROL_GATEWAY" -gt 0 ]] && echo yes || echo no)"
+echo
+
+echo "Phase 2: exhaustion, $FRAMES requests for $VICTIM_IP at $RATE/s from new senders in $SENDER_SUBNET"
 ip netns exec attacker env PYTHONPATH="$ROOT/src" VICTIM_IP="$VICTIM_IP" SENDER_SUBNET="$SENDER_SUBNET" \
     FRAMES="$FRAMES" RATE="$RATE" "$PY" -c "$SEND_CODE" >/dev/null 2>&1
-echo "Sampling the victim's table every second for $SAMPLE_SECONDS s:"
-SAMPLES="$WORK/samples"
-: > "$SAMPLES"
-for s in $(seq 1 "$SAMPLE_SECONDS"); do
-    cur="$(entries)"
-    echo "$cur" >> "$SAMPLES"
-    if (( s % 10 == 0 )); then
-        echo "  t=${s}s: $cur entries"
-    fi
-    sleep 1
-done
+echo "Sampling the victim's table for $SAMPLE_SECONDS s:"
+ATTACK_SAMPLES="$WORK/attack"
+sample_table "$ATTACK_SAMPLES"
 echo
 
-PEAK="$(sort -n "$SAMPLES" | tail -1)"
-SUSTAINED="$(tail -30 "$SAMPLES" | sort -n | awk '{a[NR]=$1} END {print a[int((NR+1)/2)]}')"
+PEAK="$(sort -n "$ATTACK_SAMPLES" | tail -1)"
+SUSTAINED="$(tail -30 "$ATTACK_SAMPLES" | sort -n | awk '{a[NR]=$1} END {print a[int((NR+1)/2)]}')"
 AFTER_FAKE="$(fake_entries)"
 AFTER_GATEWAY="$(gateway_entry)"
-echo "  peak entries in the victim's table: $PEAK"
-echo "  sustained level (median of the last 30 s): $SUSTAINED"
-echo "  fake sender entries left at the end: $AFTER_FAKE"
-echo "  gateway entry present: $([[ "$AFTER_GATEWAY" -gt 0 ]] && echo yes || echo no)"
+echo "  peak entries in the victim's table during the flood: $PEAK"
+echo "  median of the last 30 samples: $SUSTAINED"
+echo "  fake sender entries at the end: $AFTER_FAKE"
+echo "  gateway entry present at the end: $([[ "$AFTER_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-if [[ "$BASE_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$PEAK" -gt "$BASE_ENTRIES" ]]; then
+if [[ "$BASE_GATEWAY" -gt 0 && "$CONTROL_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$PEAK" -gt "$BASE_ENTRIES" ]]; then
     if [[ "$AFTER_GATEWAY" -gt 0 ]]; then
-        GW_NOTE="The gateway's entry survived the flood."
+        GW_NOTE="The gateway's entry survived the flood, as it did without it."
     else
-        GW_NOTE="The gateway's entry was evicted by the flood."
+        GW_NOTE="The gateway's entry was lost during the flood, while it was kept without the flood."
     fi
-    echo "Result: the flood raised the victim's table to a peak of $PEAK entries, and it settled at about $SUSTAINED. $GW_NOTE The kernel may evict entries under pressure, so these numbers are observations, not a configured limit. Other systems use other limits and eviction rules; test the target device."
+    echo "Result: the flood raised the victim's table to a peak of $PEAK entries. $GW_NOTE The kernel may evict entries under pressure and expire them on its own timers, so these numbers are observations, not a configured limit. Other systems use other limits and eviction rules; test the target device."
     exit 0
 fi
 echo "Result: the outcome did not match the expected phases. Result unreliable."
