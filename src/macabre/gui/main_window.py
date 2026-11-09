@@ -90,6 +90,7 @@ from macabre.gui.ndp_cache_poisoning_panel import NdpCachePoisoningPanel
 from macabre.gui.neighbor_solicitation_spoofing_panel import NeighborSolicitationSpoofingPanel
 from macabre.gui.duplicate_address_detection_dos_panel import DuplicateAddressDetectionDosPanel
 from macabre.gui.router_solicitation_flooding_panel import RouterSolicitationFloodingPanel
+from macabre.gui.neighbor_advertisement_spoofing_panel import NeighborAdvertisementSpoofingPanel
 from macabre.gui.ndp_neighbor_cache_exhaustion_panel import NdpNeighborCacheExhaustionPanel
 from macabre.gui.mld_spoofing_flooding_panel import MldSpoofingFloodingPanel
 from macabre.gui.redirect_spoofing_panel import RedirectSpoofingPanel
@@ -152,6 +153,7 @@ PANELS = {
     "Neighbor Solicitation Spoofing": NeighborSolicitationSpoofingPanel,
     "Duplicate Address Detection DoS": DuplicateAddressDetectionDosPanel,
     "Router Solicitation Flooding": RouterSolicitationFloodingPanel,
+    "Neighbor Advertisement Spoofing": NeighborAdvertisementSpoofingPanel,
     "NDP Neighbor Cache Exhaustion": NdpNeighborCacheExhaustionPanel,
     "Redirect Spoofing": RedirectSpoofingPanel,
     "MLD Spoofing / Flooding": MldSpoofingFloodingPanel,
