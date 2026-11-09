@@ -138,9 +138,14 @@ echo "  addresses learned on the attacker's port: $LEARNED"
 echo "  switch entry for the victim's MAC after the flood: $VICTIM_AFTER"
 echo
 
-if [[ "$BASE_LEARNED" == "0" && "$BASE_VICTIM" == "p-vic" \
-    && "$LEARNED" == "$FRAMES" && "$VICTIM_AFTER" == "p-vic" ]]; then
-    echo "Result: the attacker's port learned $LEARNED distinct addresses from $FRAMES frames, and the legitimate host's entry on its own port was kept. The Linux bridge has no per-port MAC limit, so no violation action was triggered. Port security behavior needs a real switch."
+# The attacker's port already holds its own address from the attacker's IPv6 traffic before the flood, so
+# the verdict counts the addresses the flood adds, not the total.
+NEW_LEARNED=$((LEARNED - BASE_LEARNED))
+echo "  addresses added by the flood: $NEW_LEARNED"
+echo
+
+if [[ "$BASE_VICTIM" == "p-vic" && "$NEW_LEARNED" == "$FRAMES" && "$VICTIM_AFTER" == "p-vic" ]]; then
+    echo "Result: the attacker's port learned $NEW_LEARNED distinct addresses from $FRAMES frames, and the legitimate host's entry on its own port was kept. The Linux bridge has no per-port MAC limit, so no violation action was triggered. Port security behavior needs a real switch."
 else
     echo "Result: the outcome did not match the expected phases. Result unreliable."
     exit 1
