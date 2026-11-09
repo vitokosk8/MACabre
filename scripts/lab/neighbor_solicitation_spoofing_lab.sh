@@ -17,8 +17,7 @@
 #                     MAC. This is the verdict: the attack plants a binding before the victim learns
 #                     the real one.
 #   attack_stale:     informational. The victim pings the server and its entry is forced to STALE. The
-#                     forged NSs must replace the MAC. On Linux they do not, because the kernel does
-#                     not replace the link-layer address of a valid entry.
+#                     forged NSs must also replace the MAC.
 #   attack_reachable: informational. Same as attack_stale, without forcing STALE.
 #
 # Addresses are static, with no duplicate address detection, so the lab checks only the cache.
