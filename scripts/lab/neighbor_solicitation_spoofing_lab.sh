@@ -3,19 +3,23 @@
 #
 # Topology, all inside network namespaces, on one bridge (sw):
 #
-#   victim:   the host whose neighbor cache is checked. It has VICTIM_ADDR, and it pings the server.
+#   victim:   the host whose neighbor cache is checked. It has VICTIM_ADDR, and it pings the server
+#             when a phase says so.
 #   server:   the host whose address is impersonated (SERVER_ADDR). It answers the victim's pings.
 #   attacker: sends forged Neighbor Solicitations with MACabre's module. The NS uses SERVER_ADDR as
 #             its IPv6 source and the attacker's MAC as the Source Link-Layer Address option.
 #
 # Phases:
-#   control:        the victim pings the server. Its cache entry for SERVER_ADDR must hold the
-#                   server's MAC.
-#   attack_stale:   the victim pings the server, then its entry is forced to STALE, the state RFC 4861
-#                   leaves a neighbor in after the reachability timer. The attacker then sends forged
-#                   NSs. The entry must now hold the attacker's MAC. This is the verdict.
-#   attack_reachable: the same, without forcing STALE, so the entry stays REACHABLE right after the
-#                   ping. Informational: it shows whether Linux accepts the NS while REACHABLE.
+#   control:          the victim pings the server. Its cache entry for SERVER_ADDR must hold the
+#                     server's MAC.
+#   attack_empty:     the victim has no cache entry for SERVER_ADDR, because it never pinged the
+#                     server. The attacker sends forged NSs. The entry must now hold the attacker's
+#                     MAC. This is the verdict: the attack plants a binding before the victim learns
+#                     the real one.
+#   attack_stale:     informational. The victim pings the server and its entry is forced to STALE. The
+#                     forged NSs must replace the MAC. On Linux they do not, because the kernel does
+#                     not replace the link-layer address of a valid entry.
+#   attack_reachable: informational. Same as attack_stale, without forcing STALE.
 #
 # Addresses are static, with no duplicate address detection, so the lab checks only the cache.
 #
@@ -24,7 +28,7 @@
 # Usage:
 #   sudo scripts/lab/neighbor_solicitation_spoofing_lab.sh
 #
-# Exit 0 when the control holds the server's MAC and attack_stale replaces it with the attacker's MAC.
+# Exit 0 when the control holds the server's MAC and attack_empty plants the attacker's MAC.
 # Exit 1 when either does not. Exit 2 when the setup failed.
 #
 # Requirements: iproute2 (ip), IPv6 in the kernel, and the project virtualenv (.venv) with scapy.
@@ -121,7 +125,15 @@ learn_server
 control_lladdr=$(cache_lladdr)
 echo "victim's cache for $SERVER_ADDR: lladdr=${control_lladdr:-none} state=$(cache_state)"
 
-echo "=== attack_stale ==="
+echo "=== attack_empty ==="
+build_topology
+empty_before=$(cache_lladdr)
+echo "before the attack: lladdr=${empty_before:-none}"
+send_forged_ns
+empty_lladdr=$(cache_lladdr)
+echo "after the attack:  lladdr=${empty_lladdr:-none} state=$(cache_state)"
+
+echo "=== attack_stale (informational) ==="
 build_topology
 learn_server
 force_stale
@@ -140,12 +152,13 @@ echo "after the attack:  lladdr=${reachable_lladdr:-none} state=$(cache_state)"
 
 echo
 echo "control:          the cache holds the server's MAC ($SERVER_MAC): $([[ "$control_lladdr" == "$SERVER_MAC" ]] && echo yes || echo no)"
-echo "attack_stale:     the cache holds the attacker's MAC ($ATTACKER_MAC): $([[ "$stale_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no)"
+echo "attack_empty:     the cache holds the attacker's MAC ($ATTACKER_MAC): $([[ "$empty_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no)"
+echo "attack_stale:     the cache holds the attacker's MAC: $([[ "$stale_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no) (informational)"
 echo "attack_reachable: the cache holds the attacker's MAC: $([[ "$reachable_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no) (informational)"
 
-if [[ "$control_lladdr" == "$SERVER_MAC" && "$stale_lladdr" == "$ATTACKER_MAC" ]]; then
-    echo "PASS: a forged Neighbor Solicitation replaces the victim's cached MAC for a STALE entry."
+if [[ "$control_lladdr" == "$SERVER_MAC" && "$empty_lladdr" == "$ATTACKER_MAC" ]]; then
+    echo "PASS: a forged Neighbor Solicitation plants the attacker's MAC when the victim has no entry for the server."
     exit 0
 fi
-echo "FAIL: the victim's cache did not change as expected for a STALE entry."
+echo "FAIL: the victim's cache did not change as expected when it had no entry for the server."
 exit 1
