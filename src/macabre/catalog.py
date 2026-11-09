@@ -119,7 +119,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='NDP Cache Poisoning', description='Poisoning IPv6 neighbor caches', priority='P2', status=Status.TESTED),
             Technique(name='Rogue Router Advertisement', description='Unauthorized RA messages', priority='P2', status=Status.TESTED),
             Technique(name='Router Advertisement Flooding', description='Flooding with RA messages', priority='P2', status=Status.TESTED),
-            Technique(name='Router Solicitation Flooding', description='Flooding with RS requests', priority='P2', status=Status.IMPLEMENTED),
+            Technique(name='Router Solicitation Flooding', description='Flooding with RS requests', priority='P2', status=Status.TESTED),
             Technique(name='SLAAC Prefix Spoofing', description='Advertising fraudulent prefixes', priority='P2', status=Status.TESTED),
             Technique(name='SLAAC Configuration Abuse', description='Manipulating stateless autoconfiguration', priority='P2', status=Status.TESTED),
             Technique(name='Duplicate Address Detection DoS', description='Interfering with duplicate address detection', priority='P2', status=Status.TESTED),
