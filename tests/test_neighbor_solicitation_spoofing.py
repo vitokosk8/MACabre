@@ -82,7 +82,8 @@ def test_a_receiver_moves_the_frame_to_its_solicited_node_group():
     frame = ns.build_solicitation(config(receiver="2001:db8:1::10"))
     assert frame[IPv6].dst == "ff02::1:ff00:10"
     assert frame.dst == "33:33:ff:00:00:10"
-    assert frame[ICMPv6ND_NS].tgt == TARGET
+    assert frame[ICMPv6ND_NS].tgt == "2001:db8:1::10"
+    assert frame[IPv6].src == TARGET
     assert frame[IPv6].src == TARGET
 
 
