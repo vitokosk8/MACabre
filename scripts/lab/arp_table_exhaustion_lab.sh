@@ -3,33 +3,35 @@
 #
 # Topology, all inside network namespaces:
 #
-#   victim   --(veth)-- [switch: bridge br0, port p-vic]   10.77.0.10, small neighbor table
+#   victim   --(veth)-- [switch: bridge br0, port p-vic]   10.77.0.10
 #   gateway  --(veth)-- [switch: bridge br0, port p-gw ]   10.77.0.1, a legitimate neighbor
 #   attacker --(veth)-- [switch: bridge br0, port p-att]   MACabre's ARP table exhaustion sender
 #
-#   victim:   10.77.0.10/16. Its neighbor table limit (gc_thresh3) is lowered to 6 when the kernel
-#             allows it; otherwise the system default (1024) applies.
 #   attacker: sends ARP requests for the victim's address from fake senders in 10.77.16.0/20.
 #
+# The kernel's own neighbor table limit (gc_thresh3) is not set or read here: the VM kernel does not
+# expose it. The lab observes the table instead:
+#
 #   Phase 0 (baseline): the victim pings the gateway, so it holds a legitimate entry for it.
-#   Phase 1 (exhaustion): the attacker sends FRAMES requests from new fake senders. Checked: how
-#                         many fake entries the victim learns, the total table size, and whether
-#                         the gateway's entry survives.
+#   Phase 1 (control): no flood. The victim's table is sampled every second for SAMPLE_SECONDS, and the
+#                      victim pings the gateway every 10 s, so the gateway entry stays in use.
+#   Phase 2 (exhaustion): one burst of FRAMES requests from new senders, then the same sampling and pings.
 #
-# What this shows: the victim learns entries from requests for its own address, and its table
-# stays within the configured limit. Whether the gateway's entry survives depends on the kernel's
-# eviction, and the lab reports what happened instead of assuming it.
-#
-# What it does not show: the limits and eviction of other operating systems and of routers,
-# which use other defaults. Those need the target device.
+# Result: the peak entry count in phase 2, its sustained level (median of the last 30 samples), and
+# whether the gateway's entry survived phase 2 compared with phase 1. Without the pings, the gateway's
+# entry would expire on its own, so the control isolates the flood's effect on that entry.
+# Other systems use other limits and eviction rules; test the target device.
 #
 # Nothing here touches the host's real network interfaces.
 #
 # Usage:
 #   sudo scripts/lab/arp_table_exhaustion_lab.sh
-#   sudo FRAMES=40 scripts/lab/arp_table_exhaustion_lab.sh
+#   sudo FRAMES=600 SAMPLE_SECONDS=30 scripts/lab/arp_table_exhaustion_lab.sh
 #
-# Requirements: iproute2 (ip, bridge) and the project virtualenv (.venv).
+# Exit 0 when the control keeps the gateway's entry, and the flood adds fake entries and raises the
+# victim's table above its baseline. Exit 1 when the setup, the baseline or the control did not match.
+#
+# Requirements: iproute2 (ip, bridge), ping, and the project virtualenv (.venv).
 # Override the interpreter with PYTHON=/path/to/python.
 
 set -euo pipefail
@@ -39,7 +41,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
     exit 1
 fi
 
-for tool in ip bridge sysctl ping; do
+for tool in ip bridge ping sort; do
     if ! command -v "$tool" >/dev/null 2>&1; then
         echo "Missing required tool: $tool" >&2
         exit 1
@@ -49,6 +51,8 @@ done
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
 FRAMES="${FRAMES:-1100}"
+RATE="${RATE:-100}"
+SAMPLE_SECONDS="${SAMPLE_SECONDS:-60}"
 VICTIM_IP="10.77.0.10"
 GATEWAY_IP="10.77.0.1"
 SENDER_SUBNET="10.77.16.0/20"
@@ -98,26 +102,13 @@ for name in vic gw att; do
     ip netns exec switch ip link set "p-$name" master br0
 done
 
-# Try to set a small neighbor table on the victim, so the limit is reached with a few entries.
-# Some kernels do not expose these settings in a new network namespace. Then the system default
-# limit is used, and the flood is sized to reach it.
-if ip netns exec victim sh -c 'echo 6 > /proc/sys/net/ipv4/neigh/default/gc_thresh3' 2>/dev/null; then
-    GC_MAX=6
-    LIMIT_NOTE="set to $GC_MAX in the victim's namespace"
-else
-    GC_MAX="$(cat /proc/sys/net/ipv4/neigh/default/gc_thresh3)"
-    LIMIT_NOTE="not settable in the victim's namespace, using the system default of $GC_MAX"
-fi
-echo "Neighbor table limit (gc_thresh3): $LIMIT_NOTE"
-echo
-
-# Sends FRAMES requests for the victim's address, from new fake senders in SENDER_SUBNET.
+# Sends FRAMES requests for the victim's address, from new fake senders in SENDER_SUBNET, at RATE per second.
 SEND_CODE='
 import os, threading
 from macabre.attacks.arp_table_exhaustion import ArpTableExhaustionConfig, run_arp_table_exhaustion
 run_arp_table_exhaustion(
     ArpTableExhaustionConfig(iface="h-att", victim_ip=os.environ["VICTIM_IP"], subnet=os.environ["SENDER_SUBNET"],
-                             rate=100, count=int(os.environ["FRAMES"])),
+                             rate=int(os.environ["RATE"]), count=int(os.environ["FRAMES"])),
     threading.Event(),
     lambda _s: None,
 )
@@ -142,31 +133,54 @@ echo "  entries in the victim's neighbor table: $BASE_ENTRIES"
 echo "  gateway entry present: $([[ "$BASE_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-echo "Phase 1: exhaustion, the attacker sends $FRAMES requests for $VICTIM_IP from new senders in $SENDER_SUBNET"
-ip netns exec attacker env PYTHONPATH="$ROOT/src" VICTIM_IP="$VICTIM_IP" SENDER_SUBNET="$SENDER_SUBNET" FRAMES="$FRAMES" \
-    "$PY" -c "$SEND_CODE" >/dev/null 2>&1
-sleep 1
-AFTER_ENTRIES="$(entries)"
-AFTER_FAKE="$(fake_entries)"
-AFTER_GATEWAY="$(gateway_entry)"
-echo "  entries in the victim's neighbor table: $AFTER_ENTRIES (limit gc_thresh3 = $GC_MAX)"
-echo "  fake sender entries learned: $AFTER_FAKE"
-echo "  gateway entry present: $([[ "$AFTER_GATEWAY" -gt 0 ]] && echo yes || echo no)"
+# Samples the victim's table every second for SAMPLE_SECONDS, pinging the gateway every 10 s so its entry
+# stays in use. Writes the counts to the file given as the first argument.
+sample_table() {
+    : > "$1"
+    for s in $(seq 1 "$SAMPLE_SECONDS"); do
+        cur="$(entries)"
+        echo "$cur" >> "$1"
+        if (( s % 10 == 0 )); then
+            echo "  t=${s}s: $cur entries"
+            ip netns exec victim ping -c 1 -W 1 "$GATEWAY_IP" >/dev/null 2>&1 || true
+        fi
+        sleep 1
+    done
+}
+
+echo "Phase 1: control, no flood. Sampling the victim's table for $SAMPLE_SECONDS s:"
+CONTROL_SAMPLES="$WORK/control"
+sample_table "$CONTROL_SAMPLES"
+CONTROL_GATEWAY="$(gateway_entry)"
+echo "  gateway entry present at the end: $([[ "$CONTROL_GATEWAY" -gt 0 ]] && echo yes || echo no)"
 echo
 
-if [[ "$BASE_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$AFTER_ENTRIES" -le "$GC_MAX" ]]; then
-    if [[ "$AFTER_ENTRIES" -ge $(( GC_MAX * 9 / 10 )) ]]; then
-        if [[ "$AFTER_GATEWAY" -gt 0 ]]; then
-            GW_NOTE="The gateway's entry survived the flood."
-        else
-            GW_NOTE="The gateway's entry was evicted by the flood."
-        fi
-        echo "Result: the victim learned $AFTER_FAKE entries from requests for its own address, and its table reached its limit of $GC_MAX. $GW_NOTE Other systems use other limits and eviction rules; test the target device."
+echo "Phase 2: exhaustion, $FRAMES requests for $VICTIM_IP at $RATE/s from new senders in $SENDER_SUBNET"
+ip netns exec attacker env PYTHONPATH="$ROOT/src" VICTIM_IP="$VICTIM_IP" SENDER_SUBNET="$SENDER_SUBNET" \
+    FRAMES="$FRAMES" RATE="$RATE" "$PY" -c "$SEND_CODE" >/dev/null 2>&1
+echo "Sampling the victim's table for $SAMPLE_SECONDS s:"
+ATTACK_SAMPLES="$WORK/attack"
+sample_table "$ATTACK_SAMPLES"
+echo
+
+PEAK="$(sort -n "$ATTACK_SAMPLES" | tail -1)"
+SUSTAINED="$(tail -30 "$ATTACK_SAMPLES" | sort -n | awk '{a[NR]=$1} END {print a[int((NR+1)/2)]}')"
+AFTER_FAKE="$(fake_entries)"
+AFTER_GATEWAY="$(gateway_entry)"
+echo "  peak entries in the victim's table during the flood: $PEAK"
+echo "  median of the last 30 samples: $SUSTAINED"
+echo "  fake sender entries at the end: $AFTER_FAKE"
+echo "  gateway entry present at the end: $([[ "$AFTER_GATEWAY" -gt 0 ]] && echo yes || echo no)"
+echo
+
+if [[ "$BASE_GATEWAY" -gt 0 && "$CONTROL_GATEWAY" -gt 0 && "$AFTER_FAKE" -gt 0 && "$PEAK" -gt "$BASE_ENTRIES" ]]; then
+    if [[ "$AFTER_GATEWAY" -gt 0 ]]; then
+        GW_NOTE="The gateway's entry survived the flood, as it did without it."
     else
-        echo "Result: inconclusive. The victim learned $AFTER_FAKE entries and its table held $AFTER_ENTRIES of its limit of $GC_MAX, so the limit was not reached and eviction was not exercised. The kernel learned fewer entries than requests sent in this run."
-        exit 2
+        GW_NOTE="The gateway's entry was lost during the flood, while it was kept without the flood."
     fi
-else
-    echo "Result: the outcome did not match the expected phases. Result unreliable."
-    exit 1
+    echo "Result: the flood raised the victim's table to a peak of $PEAK entries. $GW_NOTE The kernel may evict entries under pressure and expire them on its own timers, so these numbers are observations, not a configured limit. Other systems use other limits and eviction rules; test the target device."
+    exit 0
 fi
+echo "Result: the outcome did not match the expected phases. Result unreliable."
+exit 1
