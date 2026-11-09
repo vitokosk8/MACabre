@@ -87,6 +87,7 @@ from macabre.gui.router_advertisement_flooding_panel import RouterAdvertisementF
 from macabre.gui.slaac_prefix_spoofing_panel import SlaacPrefixSpoofingPanel
 from macabre.gui.slaac_configuration_abuse_panel import SlaacConfigurationAbusePanel
 from macabre.gui.ndp_cache_poisoning_panel import NdpCachePoisoningPanel
+from macabre.gui.neighbor_solicitation_spoofing_panel import NeighborSolicitationSpoofingPanel
 from macabre.gui.ndp_neighbor_cache_exhaustion_panel import NdpNeighborCacheExhaustionPanel
 from macabre.gui.mld_spoofing_flooding_panel import MldSpoofingFloodingPanel
 from macabre.gui.redirect_spoofing_panel import RedirectSpoofingPanel
@@ -146,6 +147,7 @@ PANELS = {
     "SLAAC Prefix Spoofing": SlaacPrefixSpoofingPanel,
     "SLAAC Configuration Abuse": SlaacConfigurationAbusePanel,
     "NDP Cache Poisoning": NdpCachePoisoningPanel,
+    "Neighbor Solicitation Spoofing": NeighborSolicitationSpoofingPanel,
     "NDP Neighbor Cache Exhaustion": NdpNeighborCacheExhaustionPanel,
     "Redirect Spoofing": RedirectSpoofingPanel,
     "MLD Spoofing / Flooding": MldSpoofingFloodingPanel,
