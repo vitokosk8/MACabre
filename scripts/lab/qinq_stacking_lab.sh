@@ -119,8 +119,12 @@ def keep(p):
 pkts = sniff(iface="h-prov", timeout=float(os.environ["WAIT_SECONDS"]), lfilter=keep)
 print(len(pkts))
 if pkts:
-    outer = pkts[0][Dot1Q]
-    print(f"{outer.vlan} {outer.payload.vlan}")
+    # Read the tags from the bytes: outer TPID 0x88a8 at offset 12, outer TCI at 14,
+    # inner TPID 0x8100 at 16, inner TCI at 18. the Dot1Q layer does not expose the inner tag here.
+    raw = bytes(pkts[0])
+    outer = int.from_bytes(raw[14:16], "big") & 0x0FFF
+    inner = int.from_bytes(raw[18:20], "big") & 0x0FFF
+    print(f"{outer} {inner}")
 '
 
 run_phase() {
