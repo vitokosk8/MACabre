@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 57 tested, 0 tested in GUI, 0 not working yet, 25 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 58 tested, 0 tested in GUI, 0 not working yet, 24 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -199,7 +199,7 @@ Current count: 57 tested, 0 tested in GUI, 0 not working yet, 25 implemented onl
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
 | PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 🧪 Tested |
-| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 🔨 Implemented |
+| Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 🧪 Tested |
 | PPPoE Session Spoofing | Spoofing PPPoE sessions | P2 | 📋 To implement |
 | 802.1ad QinQ Abuse | Manipulating provider VLANs | P2 | 📋 To implement |
 | 802.1ah PBB Encapsulation Abuse | Manipulating backbone encapsulation | P3 | 📋 To implement |
