@@ -194,8 +194,10 @@ NEW_OK="$(grep -c 'address 2001:db8::' "$WORK/newcomer.txt" || true)"
 
 if (( BASE_OK > 0 )); then
     echo "Baseline: the legitimate client got an address from the pool. OK"
-    if (( NEW_OK == 0 )); then
-        echo "Starvation: after the attack the new client got no address in $ROUNDS of $ROUNDS rounds. Vulnerable."
+    if (( LEASES_AFTER <= LEASES_BEFORE )); then
+        echo "Starvation: not reproduced. The attack created no bindings (leases before $LEASES_BEFORE, after $LEASES_AFTER), so the pool was never used up. The new client's result says nothing about starvation."
+    elif (( NEW_OK == 0 )); then
+        echo "Starvation: the attack created bindings (leases before $LEASES_BEFORE, after $LEASES_AFTER) and the new client got no address in $ROUNDS of $ROUNDS rounds. Vulnerable."
     else
         echo "Starvation: the new client still got an address in $NEW_OK of $ROUNDS rounds. Not reproduced with this pool and duration."
     fi
