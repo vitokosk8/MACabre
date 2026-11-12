@@ -55,6 +55,7 @@ fi
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
 ATTACK_REQUESTS="${ATTACK_REQUESTS:-300}"
+ATTACK_SEED="${ATTACK_SEED:-4242}"
 POOL_SIZE=256
 PD_PREFIX="2001:db8:f000::"
 PLEN=56
@@ -181,16 +182,44 @@ print(prefix if prefix else "none")
 
 # Runs the attack from namespace atk and prints the bindings it counted.
 attack() {
-    ip netns exec atk env PYTHONPATH="$ROOT/src" "$PY" -c '
-import sys, threading
+    ip netns exec atk env PYTHONPATH="$ROOT/src" ATTACK_SEED="$ATTACK_SEED" "$PY" -c '
+import os, random, sys, threading
 from macabre.attacks.dhcpv6_prefix_delegation_abuse import Dhcpv6PrefixDelegationAbuseConfig, run_dhcpv6_prefix_delegation_abuse
 stats = run_dhcpv6_prefix_delegation_abuse(
     Dhcpv6PrefixDelegationAbuseConfig(iface=sys.argv[1], count=int(sys.argv[2]), interval=0.01, plen=56),
     threading.Event(), lambda _s: None,
+    rng=random.Random(int(os.environ["ATTACK_SEED"])),
 )
 print(stats.bindings)
 ' h-atk "$ATTACK_REQUESTS" 2>"$WORKDIR/attack.err" || echo 0
 }
+
+# Kea sends each ADVERTISE to the client's link-local address, and the kernel needs the client's
+# MAC for that. A host on a real link has a neighbour entry from its neighbour discovery traffic;
+# the lab adds one for the two legitimate clients.
+ip netns exec srv ip -6 neigh replace fe80::ff:fe00:40 lladdr "$CLIENT_MAC" dev h-srv nud permanent
+ip netns exec srv ip -6 neigh replace fe80::ff:fe00:41 lladdr "$CLIENT_MAC_AFTER" dev h-srv nud permanent
+
+# The attack module draws its client identities from a seeded generator, so the lab replays the
+# same sequence and gives the server a neighbour entry for each identity the attack will use.
+SEED_CODE='
+import os, random
+from macabre.attacks.common import random_mac
+from macabre.attacks.dhcpv6_prefix_delegation_abuse import link_local_from_mac
+rng = random.Random(int(os.environ["ATTACK_SEED"]))
+for _ in range(int(os.environ["ATTACK_REQUESTS"])):
+    mac = random_mac(rng)
+    rng.getrandbits(24)
+    rng.getrandbits(32)
+    print(link_local_from_mac(mac), mac)
+'
+seed_identities() {
+    local ll mac
+    while read -r ll mac; do
+        ip netns exec srv ip -6 neigh replace "$ll" lladdr "$mac" dev h-srv nud permanent
+    done < <(ATTACK_SEED="$ATTACK_SEED" ATTACK_REQUESTS="$ATTACK_REQUESTS" PYTHONPATH="$ROOT/src" "$PY" -c "$SEED_CODE")
+}
+seed_identities
 
 # Capture DHCPv6 on the client interface for the whole run, so a failed exchange can be inspected.
 if command -v tcpdump >/dev/null 2>&1; then
