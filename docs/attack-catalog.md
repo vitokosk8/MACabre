@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 74 tested, 0 tested in GUI, 0 not working yet, 8 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 76 tested, 0 tested in GUI, 0 not working yet, 6 implemented only, 46 to implement (128 techniques; P1: 34 of 37 tested).
 
 ## Techniques by category
 
@@ -148,8 +148,8 @@ Current count: 74 tested, 0 tested in GUI, 0 not working yet, 8 implemented only
 | CDP Flooding | Flooding with CDP messages | P1 | 🧪 Tested |
 | LLDP Spoofing | Spoofing LLDP information | P1 | 🧪 Tested |
 | LLDP Flooding | Flooding with LLDP advertisements | P1 | 🧪 Tested |
-| MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
-| MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🔨 Implemented |
+| MNDP Spoofing | Forged MikroTik Neighbor Discovery advertisements | P1 | 🧪 Tested |
+| MNDP Flooding | Flooding with MikroTik Neighbor Discovery advertisements | P1 | 🧪 Tested |
 | LLDP-MED Policy Spoofing | Forging LLDP-MED policies | P2 | 🧪 Tested |
 | VTP Spoofing | Spoofing VTP advertisements | P2 | 📋 To implement |
 | VTP Revision Abuse | Manipulating VLAN database revisions | P2 | 📋 To implement |
