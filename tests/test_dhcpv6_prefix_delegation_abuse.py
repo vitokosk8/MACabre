@@ -33,6 +33,16 @@ def config(**overrides):
     return Dhcpv6PrefixDelegationAbuseConfig(**values)
 
 
+def test_request_copies_the_server_duid_from_the_advertise():
+    from scapy.layers.dhcp6 import DUID_LLT
+
+    advertised = DUID_LLT(lladdr=SERVER, timeval=0x32889123)
+    frame = build_request(ATTACKER, trid=5, iaid=9, server_mac=SERVER, prefix="2001:db8:f000:100::",
+                          plen=56, server_duid=advertised)
+    assert frame[DHCP6OptServerId].duid.timeval == 0x32889123
+    assert frame[DHCP6OptServerId].duid.lladdr == SERVER
+
+
 def test_solicit_asks_for_a_prefix_with_the_length_hint():
     frame = build_solicit(ATTACKER, trid=0x123456, iaid=7, plen=56)
     solicit = frame.getlayer(DHCP6_Solicit)
