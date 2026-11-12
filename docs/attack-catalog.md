@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 65 tested, 0 tested in GUI, 0 not working yet, 17 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 66 tested, 0 tested in GUI, 0 not working yet, 16 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -178,7 +178,7 @@ Current count: 65 tested, 0 tested in GUI, 0 not working yet, 17 implemented onl
 | Multicast Flooding | Multicast flooding | P1 | 🧪 Tested |
 | IGMP Spoofing | Spoofing IGMP memberships | P2 | 🧪 Tested |
 | IGMP Query Spoofing | Fraudulent multicast queries | P2 | 📋 To implement |
-| IGMP Leave Spoofing | Fraudulent group leave | P2 | 🔨 Implemented |
+| IGMP Leave Spoofing | Fraudulent group leave | P2 | 🧪 Tested |
 | IGMP Snooping Table Exhaustion | Exhausting the group table | P3 | 🧪 Tested |
 | Unknown Multicast Flooding | Exploiting unknown multicast traffic | P2 | 🔨 Implemented |
 | L2 Loop Amplification | Amplifying traffic through loops | P2 | 🧪 Tested |
