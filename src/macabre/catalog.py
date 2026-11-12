@@ -106,7 +106,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='DHCP Option Manipulation', description='Manipulating configuration options', priority='P2', status=Status.TESTED),
             Technique(name='DHCP Relay / Option 82 Abuse', description='Abusing relay agent information', priority='P2', status=Status.TESTED),
             Technique(name='DHCP Snooping Binding Abuse', description='Manipulating snooping bindings', priority='P3', status=Status.TO_IMPLEMENT),
-            Technique(name='Rogue DHCPv6 Server', description='Unauthorized DHCPv6 server', priority='P2', status=Status.IMPLEMENTED),
+            Technique(name='Rogue DHCPv6 Server', description='Unauthorized DHCPv6 server', priority='P2', status=Status.TESTED),
             Technique(name='DHCPv6 Starvation', description='Exhausting DHCPv6 resources', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='DHCPv6 Prefix Delegation Abuse', description='Abusing prefix delegation', priority='P3', status=Status.IMPLEMENTED),
         ),
