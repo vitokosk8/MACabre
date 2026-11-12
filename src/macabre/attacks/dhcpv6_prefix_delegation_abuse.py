@@ -193,6 +193,8 @@ def request_prefix_once(
     advert_sniffer = wait_for(lambda p: parse_advertise(p) is not None)
     send(build_solicit(mac, trid, iaid, plen), iface=iface, verbose=False)
     advert_sniffer.join(timeout=timeout)
+    # AsyncSniffer publishes its results only when it stops, so stop it before reading them.
+    advert_sniffer.stop()
     advertises = advert_sniffer.results or []
     if not advertises:
         return None
@@ -204,6 +206,7 @@ def request_prefix_once(
     send(build_request(mac, trid, iaid, offer.server_mac, offer.prefix, offer.plen,
                        server_duid=offer.server_duid), iface=iface, verbose=False)
     reply_sniffer.join(timeout=timeout)
+    reply_sniffer.stop()
     replies = reply_sniffer.results or []
     if not replies:
         return None
