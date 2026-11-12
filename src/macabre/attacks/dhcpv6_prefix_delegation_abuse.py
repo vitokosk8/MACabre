@@ -128,6 +128,12 @@ class OfferedPrefix:
     server_duid: Packet | None = None
 
 
+def _first_prefix(ia: Packet) -> Packet | None:
+    """The first IA Prefix option of an IA_PD, or None. A server that has no prefix left answers
+    with a status code instead, and that must not be read as a prefix."""
+    return next((option for option in ia.iapdopt if isinstance(option, DHCP6OptIAPrefix)), None)
+
+
 def parse_advertise(packet: Packet) -> OfferedPrefix | None:
     """Fields of an ADVERTISE that offers a delegated prefix, or None."""
     if not (packet.haslayer(DHCP6_Advertise) and packet.haslayer(DHCP6OptIA_PD)):
@@ -135,9 +141,9 @@ def parse_advertise(packet: Packet) -> OfferedPrefix | None:
     if not (packet.haslayer(DHCP6OptServerId) and packet.haslayer(DHCP6OptClientId)):
         return None
     ia = packet[DHCP6OptIA_PD]
-    if not ia.iapdopt:
+    offered = _first_prefix(ia)
+    if offered is None:
         return None
-    offered = ia.iapdopt[0]
     return OfferedPrefix(
         trid=packet[DHCP6_Advertise].trid,
         client_mac=packet[DHCP6OptClientId].duid.lladdr,
@@ -154,9 +160,10 @@ def reply_confirms_prefix(packet: Packet) -> tuple[int, str] | None:
     if not (packet.haslayer(DHCP6_Reply) and packet.haslayer(DHCP6OptIA_PD)):
         return None
     ia = packet[DHCP6OptIA_PD]
-    if not ia.iapdopt:
+    offered = _first_prefix(ia)
+    if offered is None:
         return None
-    return packet[DHCP6_Reply].trid, ia.iapdopt[0].prefix
+    return packet[DHCP6_Reply].trid, offered.prefix
 
 
 def request_prefix_once(

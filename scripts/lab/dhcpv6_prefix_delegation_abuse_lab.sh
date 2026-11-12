@@ -177,7 +177,7 @@ import sys
 from macabre.attacks.dhcpv6_prefix_delegation_abuse import request_prefix_once
 prefix = request_prefix_once(sys.argv[1], sys.argv[2], 56, 3.0)
 print(prefix if prefix else "none")
-' "$iface" "$mac" 2>"$WORKDIR/legit.err" || echo "none"
+' "$iface" "$mac" 2>"$WORKDIR/legit-${mac//:/}.err" || echo "none"
 }
 
 # Runs the attack from namespace atk and prints the bindings it counted.
@@ -190,6 +190,7 @@ stats = run_dhcpv6_prefix_delegation_abuse(
     threading.Event(), lambda _s: None,
     rng=random.Random(int(os.environ["ATTACK_SEED"])),
 )
+print(f"solicits={stats.solicits} advertises={stats.advertises} requests={stats.requests}", file=sys.stderr)
 print(stats.bindings)
 ' h-atk "$ATTACK_REQUESTS" 2>"$WORKDIR/attack.err" || echo 0
 }
@@ -236,6 +237,7 @@ echo
 
 echo "Phase 2: attacker asks for $ATTACK_REQUESTS prefixes with random identities"
 BINDINGS="$(attack)"
+grep '^solicits=' "$WORKDIR/attack.err" | sed 's/^/  attacker counters: /' || true
 echo "  prefixes held by the attacker (confirmed by the server): $BINDINGS"
 echo "  pool size: $POOL_SIZE prefixes"
 echo
@@ -256,7 +258,11 @@ if [[ "$CONTROL" == "none" || "$AFTER" == "none" ]] && [[ -s "$CAPTURE_FILE" ]];
 fi
 if [[ "$CONTROL" == "none" ]]; then
     echo "Error from the legitimate client helper:"
-    tail -n 20 "$WORKDIR/legit.err" || true
+    for f in "$WORKDIR/legit-${CLIENT_MAC//:/}.err" "$WORKDIR/legit-${CLIENT_MAC_AFTER//:/}.err"; do
+        if [[ -s "$f" ]]; then
+            tail -n 20 "$f"
+        fi
+    done
     echo "Last lines of the Kea log:"
     tail -n 20 "$WORKDIR/kea-stdout.log" || true
     echo "Control: the legitimate client got no prefix before the attack. Result unreliable."
