@@ -106,6 +106,12 @@ ip netns exec server dnsmasq \
     --log-facility="$LOG" &
 sleep 2
 
+# dnsmasq looks up the MAC of an IPv6 client in the server's neighbour table. A host on a real
+# link has one from its neighbour discovery traffic; the lab adds it for its two legitimate
+# clients, so the server can answer them. The link-local addresses are the EUI-64 ones.
+ip netns exec server ip -6 neigh replace fe80::ff:fe00:50 lladdr "$CLIENT_MAC" dev h-srv nud permanent
+ip netns exec server ip -6 neigh replace fe80::ff:fe00:51 lladdr "$NEWCOMER_MAC" dev h-srv nud permanent
+
 ATTACK_CODE='
 import os, threading
 from macabre.attacks.dhcpv6_starvation import Dhcpv6StarvationConfig, run_dhcpv6_starvation
