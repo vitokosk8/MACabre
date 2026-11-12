@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 60 tested, 0 tested in GUI, 0 not working yet, 22 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 61 tested, 0 tested in GUI, 0 not working yet, 21 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -131,7 +131,7 @@ Current count: 60 tested, 0 tested in GUI, 0 not working yet, 22 implemented onl
 | --- | --- | --- | --- |
 | EAPOL Start Flooding | Flooding authentication start requests | P2 | 🧪 Tested |
 | EAPOL Logoff Spoofing | Spoofed session logoff | P2 | 🧪 Tested |
-| EAPOL Replay | Replaying captured authentication exchanges | P2 | 🔨 Implemented |
+| EAPOL Replay | Replaying captured authentication exchanges | P2 | 🧪 Tested |
 | 802.1X Identity Spoofing | Spoofing client identity | P2 | 🔨 Implemented |
 | EAP Downgrade / Weak Method Abuse | Exploiting weak authentication methods | P3 | 📋 To implement |
 | EAP Relay / Evil Authenticator | Relay or rogue authenticator | P3 | 📋 To implement |
