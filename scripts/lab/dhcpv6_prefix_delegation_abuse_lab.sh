@@ -152,7 +152,7 @@ import sys
 from macabre.attacks.dhcpv6_prefix_delegation_abuse import request_prefix_once
 prefix = request_prefix_once(sys.argv[1], sys.argv[2], 56, 3.0)
 print(prefix if prefix else "none")
-' "$iface" "$mac" 2>/dev/null || echo "none"
+' "$iface" "$mac" 2>"$WORKDIR/legit.err" || echo "none"
 }
 
 # Runs the attack from namespace atk and prints the bindings it counted.
@@ -165,7 +165,7 @@ stats = run_dhcpv6_prefix_delegation_abuse(
     threading.Event(), lambda _s: None,
 )
 print(stats.bindings)
-' h-atk "$ATTACK_REQUESTS" 2>/dev/null || echo 0
+' h-atk "$ATTACK_REQUESTS" 2>"$WORKDIR/attack.err" || echo 0
 }
 
 echo "Phase 1: control, the legitimate client asks for a /$PLEN prefix"
@@ -185,6 +185,10 @@ echo "  prefix received: $AFTER"
 echo
 
 if [[ "$CONTROL" == "none" ]]; then
+    echo "Error from the legitimate client helper:"
+    tail -n 20 "$WORKDIR/legit.err" || true
+    echo "Last lines of the Kea log:"
+    tail -n 20 "$WORKDIR/kea-stdout.log" || true
     echo "Control: the legitimate client got no prefix before the attack. Result unreliable."
     exit 2
 fi
