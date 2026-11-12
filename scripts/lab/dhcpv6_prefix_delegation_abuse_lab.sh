@@ -64,8 +64,13 @@ CLIENT_MAC_AFTER="02:00:00:00:00:41"
 ATTACKER_MAC="02:00:00:00:00:50"
 WORKDIR="$(mktemp -d)"
 KEA_PID=""
+CAPTURE_PID=""
+CAPTURE_FILE="${CAPTURE_FILE:-$PWD/dhcpv6-pd-cli.pcap}"
 
 stop_lab() {
+    if [[ -n "$CAPTURE_PID" ]]; then
+        kill -INT "$CAPTURE_PID" 2>/dev/null || true
+    fi
     if [[ -n "$KEA_PID" ]]; then
         kill "$KEA_PID" 2>/dev/null || true
     fi
@@ -187,6 +192,14 @@ print(stats.bindings)
 ' h-atk "$ATTACK_REQUESTS" 2>"$WORKDIR/attack.err" || echo 0
 }
 
+# Capture DHCPv6 on the client interface for the whole run, so a failed exchange can be inspected.
+if command -v tcpdump >/dev/null 2>&1; then
+    nsenter --net=/var/run/netns/cli tcpdump -i h-cli -U -n -w "$CAPTURE_FILE" 'udp port 546 or udp port 547' \
+        2>"$WORKDIR/tcpdump.err" &
+    CAPTURE_PID=$!
+    sleep 1
+fi
+
 echo "Phase 1: control, the legitimate client asks for a /$PLEN prefix"
 CONTROL="$(legit_request cli h-cli "$CLIENT_MAC")"
 echo "  prefix received: $CONTROL"
@@ -203,6 +216,15 @@ AFTER="$(legit_request cli h-cli "$CLIENT_MAC_AFTER")"
 echo "  prefix received: $AFTER"
 echo
 
+if [[ -n "$CAPTURE_PID" ]]; then
+    kill -INT "$CAPTURE_PID" 2>/dev/null || true
+    wait "$CAPTURE_PID" 2>/dev/null || true
+    CAPTURE_PID=""
+fi
+if [[ "$CONTROL" == "none" || "$AFTER" == "none" ]] && [[ -s "$CAPTURE_FILE" ]]; then
+    echo "DHCPv6 packets seen on the client interface (also saved to $CAPTURE_FILE):"
+    tcpdump -nr "$CAPTURE_FILE" -vv 2>/dev/null | tail -n 60 || true
+fi
 if [[ "$CONTROL" == "none" ]]; then
     echo "Error from the legitimate client helper:"
     tail -n 20 "$WORKDIR/legit.err" || true
