@@ -44,6 +44,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
 ROUNDS="${ROUNDS:-3}"
 ATTACK_SECONDS="${ATTACK_SECONDS:-20}"
+ATTACK_SEED="${ATTACK_SEED:-4242}"
+SEEDED_IDENTITIES="${SEEDED_IDENTITIES:-64}"
 LEGIT_MAC="02:00:00:00:00:10"
 CLIENT_MAC="02:00:00:00:00:50"
 NEWCOMER_MAC="02:00:00:00:00:51"
@@ -112,13 +114,36 @@ sleep 2
 ip netns exec server ip -6 neigh replace fe80::ff:fe00:50 lladdr "$CLIENT_MAC" dev h-srv nud permanent
 ip netns exec server ip -6 neigh replace fe80::ff:fe00:51 lladdr "$NEWCOMER_MAC" dev h-srv nud permanent
 
+# The starvation module draws its client identities from a seeded generator, so the lab can
+# replay the same MAC sequence and give the server a neighbour entry for each identity.
+SEED_CODE='
+import os, random
+from macabre.attacks.common import random_mac
+from macabre.attacks.dhcpv6_starvation import link_local_from_mac
+rng = random.Random(int(os.environ["ATTACK_SEED"]))
+for _ in range(int(os.environ["SEEDED_IDENTITIES"])):
+    mac = random_mac(rng)
+    rng.getrandbits(24)
+    rng.getrandbits(32)
+    print(link_local_from_mac(mac), mac)
+'
+
+# The lab seeds the server's neighbour table before the attack, as a host on the link would.
+seed_identities() {
+    local ll mac
+    while read -r ll mac; do
+        ip netns exec server ip -6 neigh replace "$ll" lladdr "$mac" dev h-srv nud permanent
+    done < <(ATTACK_SEED="$ATTACK_SEED" SEEDED_IDENTITIES="$SEEDED_IDENTITIES" PYTHONPATH="$ROOT/src" "$PY" -c "$SEED_CODE")
+}
+
 ATTACK_CODE='
-import os, threading
+import os, random, threading
 from macabre.attacks.dhcpv6_starvation import Dhcpv6StarvationConfig, run_dhcpv6_starvation
 stop = threading.Event()
 threading.Timer(float(os.environ["ATTACK_SECONDS"]), stop.set).start()
 config = Dhcpv6StarvationConfig(iface="h-att", interval=0.02, request=True)
-stats = run_dhcpv6_starvation(config, stop, lambda _: None)
+rng = random.Random(int(os.environ["ATTACK_SEED"]))
+stats = run_dhcpv6_starvation(config, stop, lambda _: None, rng=rng)
 print(f"Attacker: sent {stats.solicits} solicits, {stats.advertises} advertises, {stats.requests} requests")
 '
 
@@ -183,7 +208,8 @@ echo
 
 echo "Phase 2: attacker runs for ${ATTACK_SECONDS}s, then a new client tries ($ROUNDS rounds)"
 LEASES_BEFORE="$(lease_count)"
-ip netns exec attacker env PYTHONPATH="$ROOT/src" ATTACK_SECONDS="$ATTACK_SECONDS" "$PY" -c "$ATTACK_CODE" | tee "$WORK/attack.txt"
+seed_identities
+ip netns exec attacker env PYTHONPATH="$ROOT/src" ATTACK_SECONDS="$ATTACK_SECONDS" ATTACK_SEED="$ATTACK_SEED" "$PY" -c "$ATTACK_CODE" | tee "$WORK/attack.txt"
 LEASES_AFTER="$(lease_count)"
 echo "  leases in the server's file: before $LEASES_BEFORE, after $LEASES_AFTER"
 run_client "$NEWCOMER_MAC" | tee "$WORK/newcomer.txt"
