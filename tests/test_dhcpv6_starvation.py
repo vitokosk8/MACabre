@@ -77,3 +77,13 @@ def test_dry_run_sends_nothing():
     )
     assert sent == []
     assert "Nothing sent" in stats.status
+
+
+def test_request_copies_the_server_duid_from_the_advertise():
+    from scapy.layers.dhcp6 import DUID_LLT
+
+    advertised = DUID_LLT(lladdr=SERVER, timeval=0x32889123)
+    frame = build_request(CLIENT, trid=7, iaid=42, server_mac=SERVER,
+                          offered="2001:db8::150", server_duid=advertised)
+    assert frame[DHCP6OptServerId].duid.timeval == 0x32889123
+    assert frame[DHCP6OptServerId].duid.lladdr == SERVER
