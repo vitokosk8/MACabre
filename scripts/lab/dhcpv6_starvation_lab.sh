@@ -154,7 +154,7 @@ for n in range(1, ROUNDS + 1):
         print(f"round {n}: no address (advertise packets seen {advs})")
         continue
     seen.clear()
-    sendp(build_request(MAC, trid, adv.iaid, adv.server_mac, adv.offered), iface="h-cli", verbose=False)
+    sendp(build_request(MAC, trid, adv.iaid, adv.server_mac, adv.offered, server_duid=adv.server_duid), iface="h-cli", verbose=False)
     time.sleep(1.0)
     replies = [p for p in seen if p.haslayer(DHCP6_Reply) and p[DHCP6_Reply].trid == trid]
     if replies and replies[0].haslayer(DHCP6OptIAAddress):
