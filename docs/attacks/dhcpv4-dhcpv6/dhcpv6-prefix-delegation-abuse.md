@@ -37,7 +37,7 @@ Implemented in MACabre as its own panel entry. The module sends DHCPv6 SOLICIT m
 
 ## Lab validation
 
-Lab: `scripts/lab/dhcpv6_prefix_delegation_abuse_lab.sh` (Linux, IPv6 kernel, Kea DHCPv6 server, one bridge, namespaces). Kea delegates /56 prefixes from 2001:db8:f000::/48, a pool of 256. Control: a legitimate requesting router gets a prefix before the attack. Attack: the attacker requests 300 prefixes with random identities; the lab expects at least 255 confirmed (the control holds one). Test: the legitimate router, with a new identity, must get no prefix. Exit 0 when all hold. Pending validation on Ubuntu (VM) with Kea installed.
+Lab: `scripts/lab/dhcpv6_prefix_delegation_abuse_lab.sh` (Linux, IPv6 kernel, Kea DHCPv6 server, one bridge, namespaces). Kea delegates /56 prefixes from 2001:db8:f000::/48, a pool of 256. Control: a legitimate requesting router gets a prefix before the attack. Attack: the attacker requests 300 prefixes with random identities; the lab expects at least 255 confirmed (the control holds one). Test: the legitimate router, with a new identity, must get no prefix. Exit 0 when all hold. Result on an OrbStack Ubuntu VM with Kea 2.6.3: PASS (verdict "Vulnerable"). Control: the legitimate router got 2001:db8:f000::/56 before the attack. Attack: 300 SOLICIT, 255 REQUEST and 255 prefixes confirmed by the server, out of a pool of 256. Test: the legitimate router, with a new identity, got no prefix. Scope: the lab gives the server a neighbour entry for each legitimate client and for each attacker identity (a seeded sequence of 300), so the server can answer them. On a real link that depends on neighbour discovery and is not measured here.
 
 ## Related
 
