@@ -132,7 +132,7 @@ FAMILIES: tuple[Family, ...] = (
     Family(
         name='802.1X / EAPOL / NAC',
         techniques=(
-            Technique(name='EAPOL Start Flooding', description='Flooding authentication start requests', priority='P2', status=Status.IMPLEMENTED),
+            Technique(name='EAPOL Start Flooding', description='Flooding authentication start requests', priority='P2', status=Status.TESTED),
             Technique(name='EAPOL Logoff Spoofing', description='Spoofed session logoff', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='EAPOL Replay', description='Replaying captured authentication exchanges', priority='P2', status=Status.IMPLEMENTED),
             Technique(name='802.1X Identity Spoofing', description='Spoofing client identity', priority='P2', status=Status.IMPLEMENTED),
