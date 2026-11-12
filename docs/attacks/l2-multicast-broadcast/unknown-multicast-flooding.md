@@ -37,7 +37,7 @@ Implemented in MACabre as its own panel entry, "Unknown Multicast Flooding". It 
 
 ## Lab validation
 
-Lab: `scripts/lab/multicast_flooding_lab.sh`, the same lab as Multicast flooding. A receiver that joined no group gets the flood to unknown groups (flood phase). With flooding of unknown multicast turned off on its port, it gets none (control). Exit 0 when both hold.
+Lab: `scripts/lab/multicast_flooding_lab.sh`, the same lab as Multicast flooding. A receiver that joined no group gets the flood to unknown groups (flood phase). With flooding of unknown multicast turned off on its port, it gets none (control). Exit 0 when both hold. Result on an Ubuntu VM: the flood phase delivered 2000 of about 2000 frames to a receiver that joined no group. The control, with flooding of unknown multicast turned off on its port, delivered none. Verdict: vulnerable without snooping that learns the group. The lab uses a Linux bridge, not a real switch, so real switch behavior is not tested.
 
 ## Related
 
