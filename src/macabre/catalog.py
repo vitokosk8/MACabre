@@ -135,7 +135,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='EAPOL Start Flooding', description='Flooding authentication start requests', priority='P2', status=Status.TESTED),
             Technique(name='EAPOL Logoff Spoofing', description='Spoofed session logoff', priority='P2', status=Status.TESTED),
             Technique(name='EAPOL Replay', description='Replaying captured authentication exchanges', priority='P2', status=Status.TESTED),
-            Technique(name='802.1X Identity Spoofing', description='Spoofing client identity', priority='P2', status=Status.IMPLEMENTED),
+            Technique(name='802.1X Identity Spoofing', description='Spoofing client identity', priority='P2', status=Status.TESTED),
             Technique(name='EAP Downgrade / Weak Method Abuse', description='Exploiting weak authentication methods', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EAP Relay / Evil Authenticator', description='Relay or rogue authenticator', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='MAB Bypass / MAC Spoofing', description='Abusing MAC-based authentication', priority='P1', status=Status.TESTED),
