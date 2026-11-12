@@ -133,6 +133,25 @@ if ! ip netns exec srv kea-dhcp6 -t "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-tes
     exit 2
 fi
 
+# Kea binds to the server's link-local address, which exists only once duplicate address
+# detection has finished. Starting Kea before that fails with "Cannot assign requested address".
+wait_for_link_local() {
+    local i addr
+    for i in $(seq 1 40); do
+        addr="$(ip netns exec srv ip -6 addr show dev h-srv scope link)"
+        if grep -q "fe80::ff:fe00:10/" <<<"$addr" && ! grep -q tentative <<<"$addr"; then
+            return 0
+        fi
+        sleep 0.5
+    done
+    echo "The server link-local address is not ready:" >&2
+    ip netns exec srv ip -6 addr show dev h-srv >&2 || true
+    return 1
+}
+if ! wait_for_link_local; then
+    exit 2
+fi
+
 ip netns exec srv kea-dhcp6 -c "$WORKDIR/kea-dhcp6.conf" >"$WORKDIR/kea-stdout.log" 2>&1 &
 KEA_PID=$!
 sleep 3
