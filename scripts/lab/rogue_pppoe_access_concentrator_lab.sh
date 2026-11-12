@@ -18,10 +18,14 @@
 #            sends back. This checks that the rogue completes the exchange when a client
 #            chooses it.
 #
+#   Phase 4 (silent server): the legitimate server is stopped, the rogue runs, and the client takes the
+#            first PADO. Only the rogue answers, so this is the condition in which the rogue captures the
+#            session without a race.
+#
 # Each trial uses a new client MAC, so the concentrators keep no state between trials.
 #
-# What the lab shows: whether the rogue answers a PADI, and whether it completes PADR/PADS for
-# a client that chose it. It also reports how often the rogue wins the first-PADO race on this
+# What the lab shows: whether the rogue answers a PADI, whether it completes PADR/PADS for
+# a client that chose it, and whether it captures sessions when the legitimate server is silent. It also reports how often the rogue wins the first-PADO race on this
 # host; that race depends on timing and is not forced. It does not test PAP or CHAP credential
 # capture (no PPP runs here), and it does not test vendor concentrators or how their clients choose.
 #
@@ -109,6 +113,13 @@ ip netns exec server "$PPPOE_SERVER" \
     -I h-srv -L 10.10.0.1 -R 10.10.0.100 -N 3 -F >"$WORK/server.log" 2>&1 &
 sleep 3
 
+# Stops the legitimate concentrator, for phase 4.
+stop_server() {
+    for pid in $(ip netns pids server 2>/dev/null || true); do
+        kill -TERM "$pid" 2>/dev/null || true
+    done
+}
+
 # One trial. PICK=first takes the first PADO; PICK=rogue takes the PADO from ROGUE_MAC.
 # Prints "<chosen PADO source> <PADS source or none>".
 TRIAL_CODE='
@@ -184,7 +195,7 @@ CONTROL_ROGUE=$RUN_ROGUE_PADS
 echo "  PADS from the legitimate server in $CONTROL_LEGIT of $TRIALS trials; from the rogue in $CONTROL_ROGUE; no PADO in $RUN_NONE"
 echo
 
-ROGUE_SECONDS=$(( TRIALS * 8 + 20 ))
+ROGUE_SECONDS=$(( TRIALS * 12 + 20 ))
 ip netns exec attacker env PYTHONPATH="$ROOT/src" ROGUE_MAC="$ROGUE_MAC" ROGUE_SECONDS="$ROGUE_SECONDS" \
     "$PY" -c "$ROGUE_CODE" >"$WORK/rogue.log" 2>&1 &
 ROGUE_PID=$!
@@ -204,6 +215,15 @@ HANDSHAKE_LEGIT=$RUN_LEGIT_PADS
 echo "  PADS from the rogue in $HANDSHAKE_ROGUE of $TRIALS trials; from the legitimate server in $HANDSHAKE_LEGIT"
 echo
 
+echo "Phase 4: silent server, the legitimate server is stopped, the rogue running, the client takes the first PADO"
+stop_server
+sleep 1
+run_trials first
+SILENT_ROGUE=$RUN_ROGUE_PADS
+SILENT_LEGIT=$RUN_LEGIT_PADS
+echo "  PADS from the rogue in $SILENT_ROGUE of $TRIALS trials; from the legitimate server in $SILENT_LEGIT"
+echo
+
 kill -TERM "$ROGUE_PID" 2>/dev/null || true
 wait "$ROGUE_PID" 2>/dev/null || true
 echo "  rogue concentrator counters: $(tail -1 "$WORK/rogue.log" 2>/dev/null)"
@@ -217,11 +237,16 @@ if (( CONTROL_LEGIT == 0 )); then
     echo "Control: the legitimate server did not complete a session. Result unreliable."
     exit 2
 fi
-if (( HANDSHAKE_ROGUE * 100 >= TRIALS * 90 )); then
+if (( HANDSHAKE_ROGUE * 100 >= TRIALS * 90 && SILENT_ROGUE * 100 >= TRIALS * 90 )); then
     echo "Handshake: the rogue completed PADR/PADS with a client that chose it in $HANDSHAKE_ROGUE of $TRIALS trials (at least 90%)."
     echo "Race: the rogue's PADO came first in $RACE_ROGUE of $TRIALS trials on this host. The legitimate server answered first in the other trials."
-    echo "Result: a client that chooses the rogue's PADO completes the session with it. Whether a client picks the rogue first depends on timing and on the legitimate concentrator's response."
+    echo "Silent server: with the legitimate server stopped, the rogue captured $SILENT_ROGUE of $TRIALS sessions (at least 90%)."
+    echo "Result: a client that chooses the rogue's PADO completes the session with it, and the rogue captures sessions when the legitimate server does not answer first. The race depends on timing and on the legitimate concentrator's response."
     exit 0
+fi
+if (( SILENT_ROGUE * 100 < TRIALS * 90 )); then
+    echo "Silent server: the rogue captured only $SILENT_ROGUE of $TRIALS sessions with the legitimate server stopped. Result unreliable."
+    exit 1
 fi
 echo "Handshake: the rogue completed PADR/PADS in only $HANDSHAKE_ROGUE of $TRIALS trials. Result unreliable."
 exit 1
