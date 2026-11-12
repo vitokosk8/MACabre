@@ -144,7 +144,8 @@ for n in range(1, ROUNDS + 1):
     adverts = [p for p in seen if p.haslayer(DHCP6_Advertise) and p[DHCP6_Advertise].trid == trid]
     adv = parse_advertise(adverts[0]) if adverts else None
     if adv is None:
-        print(f"round {n}: no address")
+        advs = sum(1 for p in seen if p.haslayer(DHCP6_Advertise))
+        print(f"round {n}: no address (advertise packets seen {advs})")
         continue
     seen.clear()
     sendp(build_request(MAC, trid, adv.iaid, adv.server_mac, adv.offered), iface="h-cli", verbose=False)
@@ -155,7 +156,8 @@ for n in range(1, ROUNDS + 1):
         got += 1
         print(f"round {n}: address {addr} from {adv.server_mac}")
     else:
-        print(f"round {n}: no address")
+        reps = sum(1 for p in seen if p.haslayer(DHCP6_Reply))
+        print(f"round {n}: no address (reply packets seen {reps})")
 sniffer.stop()
 print(f"Client: got an address in {got} of {ROUNDS} rounds")
 '
@@ -186,11 +188,13 @@ NEW_OK="$(grep -c 'address 2001:db8::' "$WORK/newcomer.txt" || true)"
 
 if (( BASE_OK > 0 )); then
     echo "Baseline: the legitimate client got an address from the pool. OK"
+    if (( NEW_OK == 0 )); then
+        echo "Starvation: after the attack the new client got no address in $ROUNDS of $ROUNDS rounds. Vulnerable."
+    else
+        echo "Starvation: the new client still got an address in $NEW_OK of $ROUNDS rounds. Not reproduced with this pool and duration."
+    fi
 else
-    echo "Baseline: the legitimate client got no address. Result unreliable."
-fi
-if (( NEW_OK == 0 )); then
-    echo "Starvation: after the attack the new client got no address in $ROUNDS of $ROUNDS rounds. Vulnerable."
-else
-    echo "Starvation: the new client still got an address in $NEW_OK of $ROUNDS rounds. Not reproduced with this pool and duration."
+    echo "Baseline: the legitimate client got no address. Starvation not evaluated: result unreliable."
+    echo "Last lines of the server log:"
+    tail -n 20 "$LOG" || true
 fi
