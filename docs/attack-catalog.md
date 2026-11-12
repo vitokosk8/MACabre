@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 62 tested, 0 tested in GUI, 0 not working yet, 20 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
+Current count: 63 tested, 0 tested in GUI, 0 not working yet, 19 implemented only, 46 to implement (128 techniques; P1: 32 of 37 tested).
 
 ## Techniques by category
 
@@ -136,7 +136,7 @@ Current count: 62 tested, 0 tested in GUI, 0 not working yet, 20 implemented onl
 | EAP Downgrade / Weak Method Abuse | Exploiting weak authentication methods | P3 | 📋 To implement |
 | EAP Relay / Evil Authenticator | Relay or rogue authenticator | P3 | 📋 To implement |
 | MAB Bypass / MAC Spoofing | Abusing MAC-based authentication | P1 | 🧪 Tested |
-| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 🔨 Implemented |
+| Unauthorized Mini-Switch / Hub | Connecting several clients to one access port | P2 | 🧪 Tested |
 | Post-Authentication Session Hijacking | Abusing an already authorized session | P3 | 📋 To implement |
 | NAC VLAN Assignment Abuse | Manipulating authorization VLAN assignment | P3 | 📋 To implement |
 
