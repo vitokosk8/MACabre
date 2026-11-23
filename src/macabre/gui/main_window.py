@@ -104,6 +104,7 @@ from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPan
 from macabre.gui.private_vlan_bypass_panel import PrivateVlanBypassPanel
 from macabre.gui.pppoe_discovery_flooding_panel import PppoeDiscoveryFloodingPanel
 from macabre.gui.rogue_pppoe_access_concentrator_panel import RoguePppoeAccessConcentratorPanel
+from macabre.gui.pppoe_session_spoofing_panel import PppoeSessionSpoofingPanel
 from macabre.gui.eapol_start_flooding_panel import EapolStartFloodingPanel
 from macabre.gui.eapol_logoff_spoofing_panel import EapolLogoffSpoofingPanel
 from macabre.gui.eapol_replay_panel import EapolReplayPanel
@@ -170,6 +171,7 @@ PANELS = {
     "Private VLAN Isolation Bypass": PrivateVlanBypassPanel,
     "PPPoE Discovery Flooding": PppoeDiscoveryFloodingPanel,
     "Rogue PPPoE Access Concentrator": RoguePppoeAccessConcentratorPanel,
+    "PPPoE Session Spoofing": PppoeSessionSpoofingPanel,
     "EAPOL Start Flooding": EapolStartFloodingPanel,
     "EAPOL Logoff Spoofing": EapolLogoffSpoofingPanel,
     "EAPOL Replay": EapolReplayPanel,
