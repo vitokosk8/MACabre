@@ -79,6 +79,7 @@ from macabre.gui.rogue_dhcpv6_server_panel import RogueDhcpv6ServerPanel
 from macabre.gui.dhcpv6_prefix_delegation_abuse_panel import Dhcpv6PrefixDelegationAbusePanel
 from macabre.gui.dhcpv6_starvation_panel import Dhcpv6StarvationPanel
 from macabre.gui.igmp_spoofing_panel import IgmpSpoofingPanel
+from macabre.gui.igmp_query_spoofing_panel import IgmpQuerySpoofingPanel
 from macabre.gui.igmp_leave_spoofing_panel import IgmpLeaveSpoofingPanel
 from macabre.gui.igmp_snooping_exhaustion_panel import IgmpSnoopingExhaustionPanel
 from macabre.gui.vxlan_vtep_spoofing_panel import VxlanVtepSpoofingPanel
@@ -144,6 +145,7 @@ PANELS = {
     "DHCPv6 Starvation": Dhcpv6StarvationPanel,
     "DHCPv6 Prefix Delegation Abuse": Dhcpv6PrefixDelegationAbusePanel,
     "IGMP Spoofing": IgmpSpoofingPanel,
+    "IGMP Query Spoofing": IgmpQuerySpoofingPanel,
     "IGMP Leave Spoofing": IgmpLeaveSpoofingPanel,
     "IGMP Snooping Table Exhaustion": IgmpSnoopingExhaustionPanel,
     "VXLAN VNI / VTEP Spoofing": VxlanVtepSpoofingPanel,
