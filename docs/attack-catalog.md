@@ -26,7 +26,7 @@ The Status column shows how far each technique has come in MACabre:
 - 🖥 Tested in GUI: validated by running the attack from the desktop interface.
 - ❌ Tested, not working yet: tested, and the result does not match the expected behavior.
 
-Current count: 77 tested, 0 tested in GUI, 0 not working yet, 5 implemented only, 46 to implement (128 techniques; P1: 34 of 37 tested).
+Current count: 78 tested, 0 tested in GUI, 0 not working yet, 5 implemented only, 45 to implement (128 techniques; P1: 34 of 37 tested).
 
 ## Techniques by category
 
@@ -164,7 +164,7 @@ Current count: 77 tested, 0 tested in GUI, 0 not working yet, 5 implemented only
 | --- | --- | --- | --- |
 | LACP Spoofing | Forging LACPDUs | P2 | 🧪 Tested |
 | LACP Partner Impersonation | Impersonating a LAG partner (duplicate of LACP Spoofing, not implemented separately) | P2 | 📋 To implement |
-| LACP Negotiation Flooding | Flooding LACP negotiations | P2 | 📋 To implement |
+| LACP Negotiation Flooding | Flooding LACP negotiations | P2 | 🧪 Tested |
 | LAG Misconfiguration Abuse | Exploiting incorrect link aggregations | P2 | 📋 To implement |
 | PAgP Spoofing | Spoofing proprietary negotiation | P3 | 📋 To implement |
 | MC-LAG / vPC Control Abuse | Manipulating multichassis redundancy | P3 | 📋 To implement |
