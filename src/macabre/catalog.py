@@ -168,7 +168,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='LACP Spoofing', description='Forging LACPDUs', priority='P2', status=Status.TESTED),
             Technique(name='LACP Partner Impersonation', description='Impersonating a LAG partner (duplicate of LACP Spoofing, not implemented separately)', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='LACP Negotiation Flooding', description='Flooding LACP negotiations', priority='P2', status=Status.TESTED),
-            Technique(name='LAG Misconfiguration Abuse', description='Exploiting incorrect link aggregations', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='LAG Misconfiguration Abuse', description='Exploiting incorrect link aggregations', priority='P2', status=Status.NOT_WORKING),
             Technique(name='PAgP Spoofing', description='Spoofing proprietary negotiation', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='MC-LAG / vPC Control Abuse', description='Manipulating multichassis redundancy', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='G.8032 ERPS Control Spoofing', description='Spoofing Ethernet ring control messages', priority='P3', status=Status.TO_IMPLEMENT),

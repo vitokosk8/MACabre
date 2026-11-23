@@ -31,6 +31,16 @@ The attacker finds an aggregate whose two ends disagree, for example on the mode
 - Monitoring of member utilization.
 - Alerts on aggregate state changes.
 
+## Implementation
+
+- Module: `src/macabre/attacks/lag_misconfiguration_abuse.py`, panel `LAG Misconfiguration Abuse`.
+- The timeout mode is the Timeout bit of the actor state: `long` sends `0x3D`, `short` sends `0x3F`.
+- Three LACPDUs at one-second intervals (the default), then the attacker stops.
+
+## Lab validation
+
+`scripts/lab/lag_misconfiguration_abuse_lab.sh` runs a bond in 802.3ad mode twice, once per timeout mode, each with a fresh bond. After the last LACPDU it records the second at which the bond stops reporting the claimed partner. Exit 0 means the long-timeout partner stays for more than 10 seconds while the short one expires within 10 seconds. First VM run: the short and the long timeout partners both expired 6 s after the last LACPDU. The bond follows its own rate, not the timeout the partner advertises. Closed as not reproducible on Linux bonding (status not working yet).
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).

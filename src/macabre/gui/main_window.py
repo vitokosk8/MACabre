@@ -96,6 +96,7 @@ from macabre.gui.mld_spoofing_flooding_panel import MldSpoofingFloodingPanel
 from macabre.gui.redirect_spoofing_panel import RedirectSpoofingPanel
 from macabre.gui.lldp_med_policy_spoofing_panel import LldpMedPolicySpoofingPanel
 from macabre.gui.lacp_spoofing_panel import LacpSpoofingPanel
+from macabre.gui.lag_misconfiguration_panel import LagMisconfigurationPanel
 from macabre.gui.lacp_negotiation_flooding_panel import LacpNegotiationFloodingPanel
 from macabre.gui.bpdu_guard_trigger_abuse_panel import BpduGuardTriggerAbusePanel
 from macabre.gui.unauthorized_mini_switch_panel import UnauthorizedMiniSwitchPanel
@@ -160,6 +161,7 @@ PANELS = {
     "MLD Spoofing / Flooding": MldSpoofingFloodingPanel,
     "LLDP-MED Policy Spoofing": LldpMedPolicySpoofingPanel,
     "LACP Spoofing": LacpSpoofingPanel,
+    "LAG Misconfiguration Abuse": LagMisconfigurationPanel,
     "LACP Negotiation Flooding": LacpNegotiationFloodingPanel,
     "BPDU Guard Trigger Abuse": BpduGuardTriggerAbusePanel,
     "Unauthorized Mini-Switch / Hub": UnauthorizedMiniSwitchPanel,
