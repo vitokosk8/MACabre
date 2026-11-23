@@ -204,7 +204,7 @@ FAMILIES: tuple[Family, ...] = (
             Technique(name='PPPoE Discovery Flooding', description='Flooding PPPoE discovery', priority='P2', status=Status.TESTED),
             Technique(name='Rogue PPPoE Access Concentrator', description='Unauthorized PPPoE access concentrator', priority='P2', status=Status.TESTED),
             Technique(name='PPPoE Session Spoofing', description='Spoofing PPPoE sessions', priority='P2', status=Status.TO_IMPLEMENT),
-            Technique(name='802.1ad QinQ Abuse', description='Manipulating provider VLANs', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='802.1ad QinQ Abuse', description='Manipulating provider VLANs (duplicate of QinQ / VLAN Stacking Abuse, validated there)', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='802.1ah PBB Encapsulation Abuse', description='Manipulating backbone encapsulation', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EVPN MAC/IP Advertisement Poisoning', description='Fraudulent MAC/IP advertisements', priority='P3', status=Status.TO_IMPLEMENT),
             Technique(name='EVPN MAC Mobility Abuse', description='Mobility oscillation or spoofing', priority='P3', status=Status.TO_IMPLEMENT),
