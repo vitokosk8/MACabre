@@ -39,7 +39,7 @@ The attacker sends queries from a low source address. The switches elect it as q
 
 ## Lab validation
 
-`scripts/lab/igmp_query_spoofing_lab.sh` puts the attacker and a receiver on one bridge with snooping on. It captures on the receiver's port with no query sent (baseline), then sends three general queries from a low source address and counts the queries the receiver captures. Exit 0 means the receiver captured every query sent and none before. This validates that queries from one port reach the other ports; it does not validate querier election. Not run on the VM yet.
+`scripts/lab/igmp_query_spoofing_lab.sh` puts the attacker and a receiver on one bridge with snooping on. It captures on the receiver's port with no query sent (baseline), then sends three general queries from a low source address and counts the queries the receiver captures. Exit 0 means the receiver captured every query sent and none before. This validates that queries from one port reach the other ports; it does not validate querier election. First VM run: 0 queries in the baseline and 3 of 3 queries from 10.0.0.1 captured on the receiver's port through a Linux bridge with snooping. Status Tested for forwarding only; querier election is not tested.
 
 ## Related
 
