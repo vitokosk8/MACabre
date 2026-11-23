@@ -166,7 +166,7 @@ FAMILIES: tuple[Family, ...] = (
         name='Link Aggregation & Redundancy',
         techniques=(
             Technique(name='LACP Spoofing', description='Forging LACPDUs', priority='P2', status=Status.TESTED),
-            Technique(name='LACP Partner Impersonation', description='Impersonating a LAG partner', priority='P2', status=Status.TO_IMPLEMENT),
+            Technique(name='LACP Partner Impersonation', description='Impersonating a LAG partner (duplicate of LACP Spoofing, not implemented separately)', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='LACP Negotiation Flooding', description='Flooding LACP negotiations', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='LAG Misconfiguration Abuse', description='Exploiting incorrect link aggregations', priority='P2', status=Status.TO_IMPLEMENT),
             Technique(name='PAgP Spoofing', description='Spoofing proprietary negotiation', priority='P3', status=Status.TO_IMPLEMENT),

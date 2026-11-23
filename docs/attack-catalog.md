@@ -163,7 +163,7 @@ Current count: 77 tested, 0 tested in GUI, 0 not working yet, 5 implemented only
 | Technique | Description | Priority | Status |
 | --- | --- | --- | --- |
 | LACP Spoofing | Forging LACPDUs | P2 | 🧪 Tested |
-| LACP Partner Impersonation | Impersonating a LAG partner | P2 | 📋 To implement |
+| LACP Partner Impersonation | Impersonating a LAG partner (duplicate of LACP Spoofing, not implemented separately) | P2 | 📋 To implement |
 | LACP Negotiation Flooding | Flooding LACP negotiations | P2 | 📋 To implement |
 | LAG Misconfiguration Abuse | Exploiting incorrect link aggregations | P2 | 📋 To implement |
 | PAgP Spoofing | Spoofing proprietary negotiation | P3 | 📋 To implement |
