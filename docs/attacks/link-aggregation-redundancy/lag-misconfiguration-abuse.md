@@ -39,7 +39,7 @@ The attacker finds an aggregate whose two ends disagree, for example on the mode
 
 ## Lab validation
 
-`scripts/lab/lag_misconfiguration_abuse_lab.sh` runs a bond in 802.3ad mode twice, once per timeout mode, each with a fresh bond. After the last LACPDU it records the second at which the bond stops reporting the claimed partner. Exit 0 means the long-timeout partner stays for more than 10 seconds while the short one expires within 10 seconds. Not run on the VM yet.
+`scripts/lab/lag_misconfiguration_abuse_lab.sh` runs a bond in 802.3ad mode twice, once per timeout mode, each with a fresh bond. After the last LACPDU it records the second at which the bond stops reporting the claimed partner. Exit 0 means the long-timeout partner stays for more than 10 seconds while the short one expires within 10 seconds. First VM run: the short and the long timeout partners both expired 6 s after the last LACPDU. The bond follows its own rate, not the timeout the partner advertises. Closed as not reproducible on Linux bonding (status not working yet).
 
 ## Related
 
