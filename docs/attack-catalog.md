@@ -201,7 +201,7 @@ Current count: 75 tested, 0 tested in GUI, 0 not working yet, 7 implemented only
 | PPPoE Discovery Flooding | Flooding PPPoE discovery | P2 | 🧪 Tested |
 | Rogue PPPoE Access Concentrator | Unauthorized PPPoE access concentrator | P2 | 🧪 Tested |
 | PPPoE Session Spoofing | Spoofing PPPoE sessions | P2 | 📋 To implement |
-| 802.1ad QinQ Abuse | Manipulating provider VLANs | P2 | 📋 To implement |
+| 802.1ad QinQ Abuse | Manipulating provider VLANs (duplicate of QinQ / VLAN Stacking Abuse, validated there) | P2 | 📋 To implement |
 | 802.1ah PBB Encapsulation Abuse | Manipulating backbone encapsulation | P3 | 📋 To implement |
 | EVPN MAC/IP Advertisement Poisoning | Fraudulent MAC/IP advertisements | P3 | 📋 To implement |
 | EVPN MAC Mobility Abuse | Mobility oscillation or spoofing | P3 | 📋 To implement |
