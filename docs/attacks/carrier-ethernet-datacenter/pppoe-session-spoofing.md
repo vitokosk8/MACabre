@@ -31,6 +31,16 @@ The attacker learns or guesses the session ID of a client and sends a PADT from 
 - Monitoring of session terminations.
 - Access networks that separate PPPoE traffic per customer.
 
+## Implementation
+
+- Module: `src/macabre/attacks/pppoe_session_spoofing.py`, panel `PPPoE Session Spoofing`.
+- PADT frames (EtherType 0x8863, code 0xA7, no tags) to the client's MAC, for one session ID, with the source MAC the operator gives.
+- The module sends PADTs only. It does not sniff sessions, guess IDs or inject session data.
+
+## Lab validation
+
+`scripts/lab/pppoe_session_spoofing_lab.sh` runs a real PPPoE session with rp-pppoe (`pppoe-server` and `pppd`) on a bridge. It records the session ID from the server's PADS, checks that `ppp0` stays up in a control period, then sends three PADTs that claim the server's MAC for that session. Exit 0 means `ppp0` went down after the PADTs. Not run on the VM yet. Vendor concentrators and real access networks are not tested.
+
 ## Related
 
 The other techniques in this family are listed in the [family index](README.md).
